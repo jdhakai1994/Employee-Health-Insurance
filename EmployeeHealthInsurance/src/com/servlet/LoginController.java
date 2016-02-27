@@ -18,14 +18,14 @@ import com.services.LoginService;
 /**
  * Servlet implementation class LoginServlet
  */
-@WebServlet("/LoginServlet")
-public class LoginServlet extends HttpServlet {
+@WebServlet("/LoginController")
+public class LoginController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LoginServlet() {
+    public LoginController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -48,9 +48,9 @@ public class LoginServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-		doService(request, response);
+		request.setAttribute("firstload", 1);
+		RequestDispatcher rd = request.getRequestDispatcher("/jsp/login.jsp");
+		rd.forward(request, response);
 	}
 
 	/**
@@ -63,7 +63,7 @@ public class LoginServlet extends HttpServlet {
 
 	public void doService(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		
-		System.out.println("Entering doService() in LoginServlet Class");
+		System.out.println("Entering doService() in LoginController Class");
 		
 		String action = request.getParameter("action");
 		System.out.println("The action retreived is " + action);
@@ -102,14 +102,18 @@ public class LoginServlet extends HttpServlet {
 		//If/else block for the reply
 		if("not_registered".equals(login_reply)){
 			System.out.println("In not_registered if/else login_reply block");
-			//request.setAttribute("reply", login_reply);
+			request.setAttribute("firstload", 0);
+			request.setAttribute("message", "You need to register yourself first");
 			RequestDispatcher rd = request.getRequestDispatcher("jsp/login.jsp");
 			rd.forward(request, response);
 		}
 		else if("wrong_credentials".equals(login_reply)){
 			System.out.println("In wrong_credentials if/else login_reply block");
+			request.setAttribute("firstload", 0);
+			request.setAttribute("message", "Your username and password doesn't match");
 			RequestDispatcher rd = request.getRequestDispatcher("jsp/login.jsp");
 			rd.forward(request, response);
+			
 		}
 		else if("member".equals(login_reply)){
 			System.out.println("In member if/else login_reply block");
@@ -130,6 +134,8 @@ public class LoginServlet extends HttpServlet {
 		}
 		else if("fail".equals(register_reply)){
 			System.out.println("In fail if/else register_reply block");
+			request.setAttribute("message", "The username is already in use");
+			request.setAttribute("firstload", 0);
 			RequestDispatcher rd = request.getRequestDispatcher("jsp/login.jsp");
 			rd.forward(request, response);
 		}

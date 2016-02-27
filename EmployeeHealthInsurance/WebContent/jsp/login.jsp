@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+    pageEncoding="ISO-8859-1" import="java.util.*, java.lang.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<title>Employee Health Insurance</title>
+<title>Health Insurance Management</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
 <!-- bootstrap -->
@@ -27,10 +27,10 @@
 <body>
 	<div class="container">
     	<div class="row">
-			<div class="col-md-6 col-md-offset-3">
+    		<div class="col-md-6 col-md-offset-3">
 				<div class="panel panel-login">
 				
-					<!-- heading -->
+					<!-- HEADING -->
 					<div class="panel-heading">
 						<div class="row">
 							<div class="col-xs-6">
@@ -42,43 +42,59 @@
 						</div>
 						<hr>
 					</div>
+					<!-- END HEADING -->
 					
-					<!-- body -->
+					<!-- ERROR MESSAGE -->
+					<div>
+					<%if(request.getAttribute("firstload").toString().equals("0")){
+						String message = request.getAttribute("message").toString();
+					%>
+					<p style="color:red;text-align:center;"><%=message%></p>
+					<% } %>
+					</div>
+					<!-- END ERROR MESSAGE -->
+					
+					<!-- BODY -->
 					<div class="panel-body">
 						<div class="row">
 							<div class="col-lg-12">
 							
-							<!-- login form -->
-								<form id="login-form" action="<%=request.getContextPath()%>/LoginServlet" method="post" role="form" data-toggle="validator" style="display: block;">
+								<!-- LOGIN FORM -->
+								<form id="login-form" action="<%=request.getContextPath()%>/LoginController?action=login" method="post" role="form" data-toggle="validator" style="display: block;">
 									<div class="form-group">
-										<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="" required>
+										<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Enter Username" value="" required>
 									</div>
 									<div class="form-group">
-										<input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password" required>
+										<input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Enter Password" required>
 									</div>
 									<div class="form-group">
 										<div class="row">
 											<div class="col-sm-6 col-sm-offset-3">
 												<input type="hidden" name="action" value="login">
-												<input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Log In">
+												<input type="submit" name="login-submit" id="login-submit" tabindex="3" class="form-control btn btn-login" value="Log In">
 											</div>
 										</div>
 									</div>
 								</form>
+								<!-- END LOGIN FORM-->
 								
-								<!-- register form -->
-								<form id="register-form" action="<%=request.getContextPath()%>/LoginServlet" method="post" role="form" data-toggle="validator" style="display: none;">
+								<!-- REGISTER FORM -->
+								<form id="register-form" action="<%=request.getContextPath()%>/LoginController?action=register" method="post" role="form" data-toggle="validator" style="display: none;">
 									<div class="form-group">
-										<input type="text" name="username" id="username" tabindex="1" class="form-control" data-minlength="6" placeholder="Username" value="" required>
+										<input type="text" name="username" id="username" tabindex="1" class="form-control" data-minlength="6" placeholder="Enter Username" value="" required>
 										<span class="help-block">Minimum of 6 characters</span>
 									</div>
 									<div class="form-group">
-										<input type="password" name="password" id="password" tabindex="2" class="form-control" data-minlength="8" placeholder="Password" required>
-										<span class="help-block">Minimum of 8 characters</span>
-									</div>
-									<div class="form-group">
-										<input type="password" name="confirm-password" id="confirm-password" tabindex="2" class="form-control" data-match="#password" data-match-error="Passwords don't match" placeholder="Confirm Password" required>
-										<div class="help-block with-errors"></div>
+										<div class="form-inline row">
+											<div class="form-group col-sm-6">
+												<input type="password" name="password" id="inputpassword" tabindex="2" class="form-control" data-minlength="8" placeholder="Enter Password" required>
+												<span class="help-block">Minimum of 8 characters</span>
+											</div>
+											<div class="form-group col-sm-6">
+												<input type="password" name="confirm-password" id="confirm-password" tabindex="3" class="form-control" data-match="#inputpassword" data-match-error="Passwords don't match" placeholder="Confirm Password" required>
+												<div class="help-block with-errors"></div>
+											</div>
+										</div>
 									</div>
 									<div class="form-group">
 										<div class="row">
@@ -89,11 +105,12 @@
 										</div>
 									</div>
 								</form>
+								<!-- END REGISTER FORM -->
 								
 							</div>
 						</div>
 					</div>
-					<!-- end body -->
+					<!-- END BODY -->
 					
 				</div>
 			</div>
