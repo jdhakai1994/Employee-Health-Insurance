@@ -9,6 +9,9 @@
 	<servlet-name>loginservlet</servlet-name>
 	<url-pattern>/login</url-pattern>
   </servlet-mapping>
+  <session-config>
+  	<session-timeout>1</session-timeout>
+  </session-config>
   <welcome-file-list>
     <welcome-file>login</welcome-file>
     <welcome-file>jsp\login.jsp</welcome-file>
