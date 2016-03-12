@@ -6,23 +6,24 @@
 <title>Health Insurance Management</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
-<!-- bootstrap -->
-<link href="<%=request.getContextPath()%>/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
 <!-- custom CSS -->
 <link href="<%=request.getContextPath()%>/css/login.css" rel="stylesheet" type="text/css" />
 
-<!-- jquery -->
-<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 
 <!-- validation -->
 <script src="http://1000hz.github.io/bootstrap-validator/dist/validator.min.js"></script>
 
-<!-- bootstrap js-->
-<script type="text/javascript" src="<%=request.getContextPath()%>/bootstrap/js/bootstrap.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
-<!-- custom js -->
+<!-- custom JavaScript -->
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/login.js"></script>
+
 </head>
 <body>
 	<div class="container">
