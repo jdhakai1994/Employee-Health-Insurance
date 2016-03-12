@@ -31,7 +31,7 @@ body {
 
 .content-body {
     max-height: calc(100vh - 50px);
-    min-height: calc(100vh - 90px); 
+    min-height: calc(100vh - 90px);
     overflow-y: auto;
     overflow-x: hidden;
     top: 50px !important;
