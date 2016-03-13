@@ -107,7 +107,7 @@
 						<div class="form-group has-feedback">
 							<label for="phNo" class="col-sm-3 control-label">Phone Number  <span style="color:red;">*</span></label>
 							<div class="col-sm-4">
-								<input type="text" pattern="[0-9]{8}" name="phNo" id="phNo" class="form-control" tabindex="8" placeholder="eg:- XXXXXXXXXX" required>
+								<input type="text" pattern="[0-9]{8}" name="phNo" id="phNo" class="form-control" tabindex="8" placeholder="eg:- XXXXXXXX" required>
 								<span class="glyphicon form-control-feedback"></span>
 							</div>							
 						</div>

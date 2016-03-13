@@ -30,15 +30,26 @@ public class HospitalController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String state[] = {"Andaman and Nicobar Islands","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chandigarh",
-				"Chhattisgarh","Dadra and Nagar Haveli","Daman and Diu","Delhi","Goa","Gujarat","Haryana","Himachal Pradesh",
-				"Jammu and Kashmir","Jharkhand","Karnataka","Kerala","Lakshadweep","Madhya Pradesh","Maharashtra","Manipur",
-				"Meghalaya","Mizoram","Nagaland","Orissa","Pondicherry","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana",
-				"Tripura","Uttaranchal","Uttar Pradesh","West Bengal"};
 		
-		ArrayList<String> stateList = new ArrayList<String>(Arrays.asList(state));
-		request.setAttribute("stateList", stateList);
-		RequestDispatcher rd = request.getRequestDispatcher("/jsp/addhospital.jsp");
+		RequestDispatcher rd = null;
+		
+		String action = request.getParameter("action");
+		if("add_hospital".equals(action)){
+			String state[] = {"Andaman and Nicobar Islands","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chandigarh",
+					"Chhattisgarh","Dadra and Nagar Haveli","Daman and Diu","Delhi","Goa","Gujarat","Haryana","Himachal Pradesh",
+					"Jammu and Kashmir","Jharkhand","Karnataka","Kerala","Lakshadweep","Madhya Pradesh","Maharashtra","Manipur",
+					"Meghalaya","Mizoram","Nagaland","Orissa","Pondicherry","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana",
+					"Tripura","Uttaranchal","Uttar Pradesh","West Bengal"};
+			
+			ArrayList<String> stateList = new ArrayList<String>(Arrays.asList(state));
+			request.setAttribute("stateList", stateList);
+			rd = request.getRequestDispatcher("/jsp/addhospital.jsp");
+		}
+		else if("modify_hospital".equals(action))
+			rd = request.getRequestDispatcher("/jsp/modifyhospital.jsp");
+		else if("search_hospital".equals(action))
+			rd = request.getRequestDispatcher("/jsp/searchhospital.jsp");
+				
 		rd.forward(request, response);
 		
 	}
