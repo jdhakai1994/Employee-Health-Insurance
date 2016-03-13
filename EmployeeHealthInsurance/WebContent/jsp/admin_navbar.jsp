@@ -58,7 +58,6 @@
                		<ul class="sub-menu collapse in" id="claims">
                    		<li><a href="<%=request.getContextPath()%>/ClaimsController?action=approve&&value=domiciliary">Approve Domiciliary Claims</a></li>
                    		<li><a href="<%=request.getContextPath()%>/ClaimsController?action=approve&&value=hospitalization">Approve Hospitalization Claims</a></li>
-                   		<li><a href="<%=request.getContextPath()%>/ClaimsController?action=search_claim">Claims Search</a></li>
                    	</ul>
                    	<li data-toggle="collapse" data-target="#hospitals">
                    		<a><span class="glyphicon glyphicon-home"></span>  Hospital Management</a>
@@ -66,7 +65,6 @@
                		<ul class="sub-menu collapse in" id="hospitals">
                    		<li><a href="<%=request.getContextPath()%>/HospitalController?action=add_hospital">Add Hospital</a></li>
                    		<li><a href="<%=request.getContextPath()%>/HospitalController?action=modify_hospital">Modify Hospital</a></li>
-                   		<li><a href="<%=request.getContextPath()%>/HospitalController?action=search_hospital">Search Hospital</a></li>
                    	</ul>
                	</ul>
                     
