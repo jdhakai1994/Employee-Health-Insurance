@@ -85,12 +85,13 @@
 							<label for="stateName" class="col-sm-3 control-label">State Name  <span style="color:red;">*</span></label>
 							<div class="col-sm-4">
 								<select class="form-control" name="stateName" id="stateName" tabindex="4" required>
+									<option value="">Select State</option>
 									<c:forEach items="${stateList}" var="stateValue">
 										<option value="${stateValue}">${stateValue}</option>
 									</c:forEach>
 								</select>
 								<span class="glyphicon form-control-feedback"></span>
-							</div>							
+							</div>				
 						</div>
 						<div class="form-group has-feedback">
 							<label for="pincode" class="col-sm-3 control-label">Pin Code  <span style="color:red;">*</span></label>
