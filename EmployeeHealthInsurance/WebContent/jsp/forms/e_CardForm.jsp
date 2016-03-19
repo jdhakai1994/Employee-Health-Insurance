@@ -11,8 +11,11 @@
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
+<!-- datepicker CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/css/bootstrap-datepicker3.css">
+
 <!-- custom CSS -->
-<link href="<%=request.getContextPath()%>/css/employeeregister.css" rel="stylesheet" type="text/css" />
+<link href="<%=request.getContextPath()%>/css/e-card_generate.css" rel="stylesheet" type="text/css" />
 
 <!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
@@ -23,8 +26,11 @@
 <!-- Latest compiled JavaScript -->
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
+<!-- datepicker JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/js/bootstrap-datepicker.js"></script>
+
 <!-- custom JavaScript -->
-<script type="text/javascript" src="<%=request.getContextPath()%>/js/employeeregister.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/js/dependentregister.js"></script>
 
 </head>
 
@@ -33,7 +39,7 @@
 	<div class="row">
 	
 		<!-- import navbar -->
-		<c:import url="admin_navbar.jsp" />
+		<c:import url="../navbars/member_navbar.jsp" />
 	
 		<!-- CONTENT -->
 		<div class="col-sm-9 no-gutter">
@@ -48,31 +54,33 @@
 				<!-- CONTENT BODY -->
 				<div class="content-body">
 					<div>
-						<h3>Hospital Management</h3>						
+						<h3>Generate E-Card</h3>						
 					</div>
 					
-					<!-- FORM -->
 					<div class="form-content">
-						<!-- ERROR MESSAGE -->
-						<div>
-							<p style="color:red;text-align:center;"><c:out value="${requestScope.message}"></c:out></p>
+					<!-- FORM -->
+					<form id="e_CardForm" action="" method="post" role="form" class="form-horizontal" data-toggle="validator">
+						<div class="form-group">
+  							<label for="e-card"  class="col-sm-3 control-label">Generate E-Card  <span style="color:red;">*</span></label>
+  							<div class="col-sm-3">
+  								<select class="form-control" name="e-card" id="e-card" tabindex="1" required>
+  									<option value="">None</option>
+  									<option value="self">Self</option>
+  									<option value="father">Father</option>
+  									<option value="mother">Mother</option>
+  									<option value="spouse">Spouse</option>
+  									<option value="father-in-law">Father-in-Law</option>
+  									<option value="mother-in-law">Mother-in-Law</option>
+  								</select>
+  							</div>
+  						</div>
+						<div class="form-group">
+							<label for="submit" class="col-sm-3 control-label">&nbsp</span></label>
+							<div class="col-sm-2">
+								<input type="submit" name="submit" id="submit" tabindex="2" class="form-control btn btn-primary" value="Generate">
+							</div>				
 						</div>
-					<!-- END ERROR MESSAGE -->
-						<form id="searchHospitalForm1" action="<%=request.getContextPath()%>/HospitalController?action=search_hospital" method="post" role="form" class="form-horizontal" data-toggle="validator">
-							<div class="form-group">
-								<label for="hospitalId" class="col-sm-3 control-label">Hospital ID  <span style="color:red;">*</span></label>
-								<div class="col-sm-4">
-									<input type="text" name="hospitalId" id="hospitalId" tabindex="1" placeholder="eg:- 55" class="form-control" required>
-								</div>							
-							</div>
-							<div class="form-group">
-								<label for="submit" class="col-sm-3 control-label">&nbsp</span></label>
-								<div class="col-sm-3">
-									<input type="hidden" name="action1" value="searchHospitalById">
-									<input type="submit" name="submit" id="submit" tabindex="2" class="form-control btn btn-primary" value="Submit">
-								</div>							
-							</div>
-						</form>
+					</form>
 					</div>
 					<!-- END FORM -->
 				
@@ -80,7 +88,7 @@
 				<!-- END CONTENT BODY -->
 				
 				<!-- CONTENT FOOTER -->
-				<div class="content-footer">
+					<div class="content-footer">
 					<div class="container">
 						<div class="row">
 							<div class="col-sm-6 copyright"><strong>Copyright &copy 2016.</strong> All Rights Reserved</div>

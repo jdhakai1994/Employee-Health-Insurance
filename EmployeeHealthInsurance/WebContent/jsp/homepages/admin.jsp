@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
 <!-- custom CSS -->
-<link href="<%=request.getContextPath()%>/css/member.css" rel="stylesheet" type="text/css" />
+<link href="<%=request.getContextPath()%>/css/admin.css" rel="stylesheet" type="text/css" />
 
 <!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
@@ -24,14 +24,13 @@
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
 </head>
-
 <body>
 <div class="container-fluid">
 	<div class="row">
 	
 		<!-- import navbar -->
-		<c:import url="member_navbar.jsp" />
-	
+		<c:import url="../navbars/admin_navbar.jsp" />
+		
 		<!-- CONTENT -->
 		<div class="col-sm-9 no-gutter">
 			<div class="content">
@@ -39,7 +38,7 @@
 					<span class="glyphicon glyphicon-align-justify"></span>
 				</div>
 				<div class="content-body">
-					Member Landing Page
+					Admin Landing Page
 				</div>
 				<div class="content-footer">
 					<div class="container">
@@ -51,7 +50,7 @@
 				</div>
 			</div>
 		</div>
-		<!-- END CONTENT -->
+		<!-- CONTENT -->
 		
 	</div>
 </div>

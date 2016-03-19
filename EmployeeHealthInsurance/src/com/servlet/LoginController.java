@@ -48,8 +48,11 @@ public class LoginController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setAttribute("firstload", 1);
-		RequestDispatcher rd = request.getRequestDispatcher("/jsp/login.jsp");
+		System.out.println("Entering doGet() in LoginController Class");
+		
+		RequestDispatcher rd = request.getRequestDispatcher("/jsp/forms/loginForm.jsp");
+				
+		System.out.println("Exiting doGet() in LoginController Class");
 		rd.forward(request, response);
 	}
 
@@ -81,6 +84,7 @@ public class LoginController extends HttpServlet {
 		String login_reply = null;
 		String register_reply = null;
 		
+		RequestDispatcher rd = null;
 		//If/else block for action
 		if("login".equals(action)){
 			System.out.println("In login if/else action block");
@@ -99,46 +103,38 @@ public class LoginController extends HttpServlet {
 			}
 		}
 		
-		//If/else block for the reply
+		//If/else block for the login_reply
 		if("not_registered".equals(login_reply)){
 			System.out.println("In not_registered if/else login_reply block");
-			request.setAttribute("firstload", 0);
 			request.setAttribute("message", "You need to register yourself first");
-			RequestDispatcher rd = request.getRequestDispatcher("jsp/login.jsp");
-			rd.forward(request, response);
+			rd = request.getRequestDispatcher("jsp/forms/loginForm.jsp");
 		}
 		else if("wrong_credentials".equals(login_reply)){
 			System.out.println("In wrong_credentials if/else login_reply block");
-			request.setAttribute("firstload", 0);
 			request.setAttribute("message", "Your username and password doesn't match");
-			RequestDispatcher rd = request.getRequestDispatcher("jsp/login.jsp");
-			rd.forward(request, response);
-			
+			rd = request.getRequestDispatcher("jsp/forms/loginForm.jsp");		
 		}
 		else if("member".equals(login_reply)){
 			System.out.println("In member if/else login_reply block");
-			RequestDispatcher rd = request.getRequestDispatcher("jsp/member.jsp");
-			rd.forward(request, response);
+			rd = request.getRequestDispatcher("jsp/homepages/member.jsp");
 		}
 		else if("admin".equals(login_reply)){
 			System.out.println("In admin if/else login_reply block");
-			RequestDispatcher rd = request.getRequestDispatcher("jsp/admin.jsp");
-			rd.forward(request, response);
+			rd = request.getRequestDispatcher("jsp/homepages/admin.jsp");
 		}
 		
-		//If/else block for the reply
+		//If/else block for the register_reply
 		if("success".equals(register_reply)){
 			System.out.println("In success if/else register_reply block");
-			RequestDispatcher rd = request.getRequestDispatcher("jsp/member.jsp");
-			rd.forward(request, response);
+			rd = request.getRequestDispatcher("jsp/homepages/member.jsp");
 		}
 		else if("fail".equals(register_reply)){
 			System.out.println("In fail if/else register_reply block");
 			request.setAttribute("message", "The username is already in use");
-			request.setAttribute("firstload", 0);
-			RequestDispatcher rd = request.getRequestDispatcher("jsp/login.jsp");
-			rd.forward(request, response);
+			rd = request.getRequestDispatcher("jsp/forms/loginForm.jsp");
 		}
+		
+		rd.forward(request, response);
 	}
 	
 }

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" import="java.util.*, java.lang.*" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -47,11 +48,7 @@
 					
 					<!-- ERROR MESSAGE -->
 					<div>
-					<%if(request.getAttribute("firstload").toString().equals("0")){
-						String message = request.getAttribute("message").toString();
-					%>
-					<p style="color:red;text-align:center;"><%=message%></p>
-					<% } %>
+						<p style="color:red;text-align:center;"><c:out value="${requestScope.message}"></c:out></p>
 					</div>
 					<!-- END ERROR MESSAGE -->
 					
@@ -61,7 +58,7 @@
 							<div class="col-lg-12">
 							
 								<!-- LOGIN FORM -->
-								<form id="login-form" action="<%=request.getContextPath()%>/LoginController?action=login" method="post" role="form" data-toggle="validator" style="display: block;">
+								<form id="loginForm" action="<%=request.getContextPath()%>/LoginController?action=login" method="post" role="form" data-toggle="validator" style="display: block;">
 									<div class="form-group">
 										<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Enter Username" value="" required>
 									</div>
@@ -80,7 +77,7 @@
 								<!-- END LOGIN FORM-->
 								
 								<!-- REGISTER FORM -->
-								<form id="register-form" action="<%=request.getContextPath()%>/LoginController?action=register" method="post" role="form" data-toggle="validator" style="display: none;">
+								<form id="registerForm" action="<%=request.getContextPath()%>/LoginController?action=register" method="post" role="form" data-toggle="validator" style="display: none;">
 									<div class="form-group">
 										<input type="text" name="username" id="username" tabindex="1" class="form-control" data-minlength="6" placeholder="Enter Username" value="" required>
 										<span class="help-block">Minimum of 6 characters</span>

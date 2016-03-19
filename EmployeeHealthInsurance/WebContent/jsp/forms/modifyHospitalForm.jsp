@@ -33,7 +33,7 @@
 	<div class="row">
 	
 		<!-- import navbar -->
-		<c:import url="admin_navbar.jsp" />
+		<c:import url="../navbars/admin_navbar.jsp" />
 	
 		<!-- CONTENT -->
 		<div class="col-sm-9 no-gutter">

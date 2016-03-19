@@ -48,17 +48,17 @@
     	       			<a href="#"><span class="glyphicon glyphicon-user"></span>  Registration Management</a>
                		</li>
                		<ul class="sub-menu collapse in" id="registration">
-                   		<li><a href="<%=request.getContextPath()%>/RegisterController?action=register&&value=employee">Employee Registration</a></li>
-                   		<li><a href="<%=request.getContextPath()%>/RegisterController?action=register&&value=dependent">Dependent Registration</a></li>
-                   		<li><a href="<%=request.getContextPath()%>/RegisterController?action=e-card_generate">Generate E-Card</a></li>
+                   		<li><a href="<%=request.getContextPath()%>/RegisterController?action=getRegisterEmployeeForm">Employee Registration</a></li>
+                   		<li><a href="<%=request.getContextPath()%>/RegisterController?action=getDependentEmployeeForm">Dependent Registration</a></li>
+                   		<li><a href="<%=request.getContextPath()%>/RegisterController?action=getECardForm">Generate E-Card</a></li>
                    	</ul>
                    	<li data-toggle="collapse" data-target="#claims">
                			<a href="#"><span class="glyphicon glyphicon-usd"></span>  Claims Management</a>
                		</li>
                		<ul class="sub-menu collapse in" id="claims">
-                   		<li><a href="<%=request.getContextPath()%>/ClaimsController?action=claim&&value=domiciliary">Domiciliary Claims</a></li>
-                   		<li><a href="<%=request.getContextPath()%>/ClaimsController?action=claim&&value=hospitalization">Hospitalization Claims</a></li>
-                   		<li><a href="<%=request.getContextPath()%>/ClaimsController?action=search_claim">Claims Search</a></li>
+                   		<li><a href="<%=request.getContextPath()%>/ClaimsController?action=getDomiciliaryClaimForm">Domiciliary Claims</a></li>
+                   		<li><a href="<%=request.getContextPath()%>/ClaimsController?action=getHospitalizationClaimForm">Hospitalization Claims</a></li>
+                   		<li><a href="<%=request.getContextPath()%>/ClaimsController?action=searchClaimForm">Claims Search</a></li>
                    	</ul>
                    	<li  data-toggle="collapse" data-target="#hospitals">
                			<a href="#"><span class="glyphicon glyphicon-home"></span>  Hospital Management</a>

@@ -14,6 +14,6 @@
   </session-config>
   <welcome-file-list>
     <welcome-file>login</welcome-file>
-    <welcome-file>jsp\login.jsp</welcome-file>
+    <welcome-file>jsp\forms\loginForm.jsp</welcome-file>
   </welcome-file-list>
 </web-app>

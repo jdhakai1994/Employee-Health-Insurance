@@ -15,7 +15,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/css/bootstrap-datepicker3.css">
 
 <!-- custom CSS -->
-<link href="<%=request.getContextPath()%>/css/employeeregister.css" rel="stylesheet" type="text/css" />
+<link href="<%=request.getContextPath()%>/css/dependentregister.css" rel="stylesheet" type="text/css" />
 
 <!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
@@ -30,7 +30,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/js/bootstrap-datepicker.js"></script>
 
 <!-- custom JavaScript -->
-<script type="text/javascript" src="<%=request.getContextPath()%>/js/employeeregister.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/js/dependentregister.js"></script>
 
 </head>
 
@@ -39,7 +39,7 @@
 	<div class="row">
 	
 		<!-- import navbar -->
-		<c:import url="member_navbar.jsp" />
+		<c:import url="../navbars/member_navbar.jsp" />
 	
 		<!-- CONTENT -->
 		<div class="col-sm-9 no-gutter">
@@ -54,12 +54,12 @@
 				<!-- CONTENT BODY -->
 				<div class="content-body">
 					<div>
-						<h3>Employee Registration</h3>						
+						<h3>Dependent Registration</h3>						
 					</div>
 					
 					<div class="form-content">
 					<!-- FORM -->
-					<form id="employeeregister" action="" method="post" role="form" class="form-horizontal" data-toggle="validator">
+					<form id="dependentRegisterForm" action="" method="post" role="form" class="form-horizontal" data-toggle="validator">
 						<div class="form-group has-feedback">
 							<label for="employeeId" class="col-sm-3 control-label">Employee ID  <span style="color:red;">*</span></label>
 							<div class="col-sm-4">
@@ -68,17 +68,30 @@
 							</div>							
 						</div>
 						<div class="form-group has-feedback">
-							<label for="employeeName" class="col-sm-3 control-label">Employee Name  <span style="color:red;">*</span></label>
+							<label for="beneficiaryName" class="col-sm-3 control-label">Beneficiary Name  <span style="color:red;">*</span></label>
 							<div class="col-sm-6">
-								<input type="text" pattern="[A-z\s]{1,}" name="employeeName" id="employeeName" class="form-control" tabindex="2" placeholder="eg:- Firstname Lastname" required>
+								<input type="text" pattern="[A-z\s]{1,}" name="beneficiaryName" id="beneficiaryName" class="form-control" tabindex="2" placeholder="eg:- Firstname Lastname" required>
 								<span class="glyphicon form-control-feedback"></span>
 							</div>							
 						</div>
 						<div class="form-group">
+  							<label for="relation"  class="col-sm-3 control-label">Relation  <span style="color:red;">*</span></label>
+  							<div class="col-sm-3">
+  								<select class="form-control" name="relation" id="relation" tabindex="3" required>
+  									<option value="">None</option>
+  									<option value="father">Father</option>
+  									<option value="mother">Mother</option>
+  									<option value="spouse">Spouse</option>
+  									<option value="father-in-law">Father-in-Law</option>
+  									<option value="mother-in-law">Mother-in-Law</option>
+  								</select>
+  							</div>
+  						</div>
+						<div class="form-group">
 							<label for="dateOfBirth" class="col-sm-3 control-label">Date Of Birth  <span style="color:red;">*</span></label>
 							<div class="col-sm-4"> 
 								<div class="input-group date" id="datepicker">
-									<input type="text" name="dateOfBirth" id="dateOfBirth" class="form-control" tabindex="3" placeholder="DD-MM-YYYY" required>
+									<input type="text" name="dateOfBirth" id="dateOfBirth" class="form-control" tabindex="4" placeholder="DD-MM-YYYY" required>
 									<div class="input-group-addon">
 										<span class="glyphicon glyphicon-th"></span>
 									</div>
@@ -89,44 +102,18 @@
 							<label for="gender" class="col-sm-3 control-label">Gender  <span style="color:red;">*</span></label>
 							<div class="col-sm-6">
 								<label class="radio-inline">
-									<input type="radio" name="gender" tabindex="4" value="M" required>Male
+									<input type="radio" name="gender" tabindex="5" value="M" required>Male
 								</label>
 								<label class="radio-inline">
-									<input type="radio" name="gender" tabindex="5" value="F" required>Female
+									<input type="radio" name="gender" tabindex="6" value="F" required>Female
 								</label>
-							</div>							
-						</div>
-						<div class="form-group">
-							<label for="email" class="col-sm-3 control-label">Email  <span style="color:red;">*</span></label>
-							<div class="col-sm-6"> 
-								<input type="email"  name="email" id="email" class="form-control" tabindex="6" placeholder="eg:- someone@example.com" required>
-								<span class="glyphicon form-control-feedback"></span>				
-							</div>
-						</div>
-						<div class="form-group has-feedback">
-							<label for="altEmailId" class="col-sm-3 control-label">Alternate Email</label>
-							<div class="col-sm-6"> 
-								<input type="email" name="altEmailId" id="altEmailId" class="form-control" tabindex="7" placeholder="Enter Alternate Email Address">
-							</div>
-						</div>
-						<div class="form-group has-feedback">
-							<label for="mobNo" class="col-sm-3 control-label">Mobile Number  <span style="color:red;">*</span></label>
-							<div class="col-sm-4">
-								<input type="text" pattern="[0-9]{10}" name="mobNo" id="mobNo" class="form-control" tabindex="8" placeholder="eg:- XXXXXXXXXX" required>
-								<span class="glyphicon form-control-feedback"></span>
-							</div>							
-						</div>
-						<div class="form-group">
-							<label for="altMobNo" class="col-sm-3 control-label">Alternate Mobile Number</label>
-							<div class="col-sm-4">
-								<input type="text" pattern="[0-9]{10}" name="altMobNo" id="altMobNo" class="form-control" tabindex="9" placeholder="Enter Alternate Mobile Number">
 							</div>							
 						</div>
 						<div class="form-group">
 							<label for="policyStartDate" class="col-sm-3 control-label">Policy Start Date  <span style="color:red;">*</span></label>
 							<div class="col-sm-4"> 
 								<div class="input-group date" id="datepicker">
-									<input type="text" name="policyStartDate" id="policyStartDate" class="form-control" tabindex="10" placeholder="DD-MM-YYYY" required>
+									<input type="text" name="policyStartDate" id="policyStartDate" class="form-control" tabindex="7" placeholder="DD-MM-YYYY" required>
 									<div class="input-group-addon">
 										<span class="glyphicon glyphicon-th"></span>
 									</div>
@@ -136,14 +123,14 @@
 						<div class="form-group has-feedback">
 							<label for="policyPeriod" class="col-sm-3 control-label">Policy Period  <span style="color:red;">*</span></label>
 							<div class="col-sm-3">
-								<input type="text" pattern="[0-9]{1,2}" class="form-control" name="policyPeriod" id="policyPeriod" tabindex="11" placeholder="eg:- 1-99" required>
+								<input type="text" pattern="[0-9]{1,2}" class="form-control" name="policyPeriod" id="policyPeriod" tabindex="8" placeholder="eg:- 1-99" required>
 								<span class="glyphicon form-control-feedback"></span>
 							</div>							
 						</div>
 						<div class="form-group has-feedback">
 							<label for="totalSumInsured" class="col-sm-3 control-label">Total Sum Insured (per year)  <span style="color:red;">*</span></label>
 							<div class="col-sm-4">
-								<input type="text" pattern="[0-9]+[.]+[0-9]{2}" class="form-control" name="totalSumInsured" id="totalSumInsured" tabindex="12" placeholder="eg:- XXXXX.XX" required>
+								<input type="text" pattern="[0-9]+[.]+[0-9]{2}" class="form-control" name="totalSumInsured" id="totalSumInsured" tabindex="9" placeholder="eg:- XXXXX.XX" required>
 								<span class="glyphicon form-control-feedback"></span>
 							</div>							
 						</div>
@@ -153,29 +140,17 @@
 								<input type="text" class="form-control" name="premiumAmount" id="premiumAmount" readonly>
 							</div>							
 						</div>
-						<div class="form-group has-feedback">
-							<label for="accountNo" class="col-sm-3 control-label">Account Number  <span style="color:red;">*</span></label>
-							<div class="col-sm-4">
-								<input type="text" pattern="[0-9]" class="form-control" name="accountNo" id="accountNo" tabindex="13" placeholder="eg:- XXXXXXXXXXXXXXXXX" required>
-							</div>							
-						</div>
-						<div class="form-group has-feedback">
-							<label for="bankName" class="col-sm-3 control-label">Bank Name  <span style="color:red;">*</span></label>
-							<div class="col-sm-6">
-								<input type="text" pattern="[A-z]" class="form-control" name="bankName" id="bankName" tabindex="14" placeholder="eg: Axis Bank Of India" required>
-							</div>							
-						</div>
-						<div class="form-group has-feedback">
-							<label for="ifscCode" class="col-sm-3 control-label">IFSC Code  <span style="color:red;">*</span></label>
-							<div class="col-sm-4">
-								<input type="text" pattern="[A-Z0-9]" class="form-control" name="ifscCode" id="ifscCode" tabindex="15" placeholder="Enter IFSC Code" required>
-							</div>							
-						</div>
 						<div class="form-group">
 							<label for="submit" class="col-sm-3 control-label">&nbsp</span></label>
-							<div class="col-sm-3">
-								<input type="submit" name="submit" id="submit" tabindex="16" class="form-control btn btn-primary" value="Submit">
-							</div>							
+							<div class="col-sm-2">
+								<input type="submit" name="submit" id="submit" tabindex="10" class="form-control btn btn-primary" value="Add">
+							</div>
+							<div class="col-sm-2">
+								<input type="submit" name="submit" id="submit" tabindex="11" class="form-control btn btn-warning" value="Update">
+							</div>
+							<div class="col-sm-2">
+								<input type="submit" name="submit" id="submit" tabindex="12" class="form-control btn btn-danger" value="Delete">
+							</div>					
 						</div>
 					</form>
 					</div>

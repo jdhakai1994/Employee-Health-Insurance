@@ -39,7 +39,7 @@
 	<div class="row">
 	
 		<!-- import navbar -->
-		<c:import url="member_navbar.jsp" />
+		<c:import url="../navbars/member_navbar.jsp" />
 	
 		<!-- CONTENT -->
 		<div class="col-sm-9 no-gutter">
@@ -59,7 +59,7 @@
 					
 					<div class="form-content">
 					<!-- FORM -->
-						<form id="hospitalizationclaim" action="" method="post" role="form" class="form-horizontal" data-toggle="validator">
+						<form id="hospitalizationClaimForm" action="" method="post" role="form" class="form-horizontal" data-toggle="validator">
 							<div class="form-group">
 							<label for="employeeId" class="col-sm-3 control-label">Employee ID  <span style="color:red;">*</span></label>
 							<div class="col-sm-4">

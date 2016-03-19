@@ -33,7 +33,7 @@
 	<div class="row">
 	
 		<!-- import navbar -->
-		<c:import url="admin_navbar.jsp" />
+		<c:import url="../navbars/admin_navbar.jsp" />
 	
 		<!-- CONTENT -->
 		<div class="col-sm-9 no-gutter">
@@ -53,7 +53,7 @@
 					
 					<!-- FORM -->
 					<div class="form-content">
-						<form id="addhospital" action="<%=request.getContextPath()%>/HospitalController?action=add_hospital" method="post" role="form" class="form-horizontal" data-toggle="validator">
+						<form id="addHospitalForm" action="<%=request.getContextPath()%>/HospitalController?action=add_hospital" method="post" role="form" class="form-horizontal" data-toggle="validator">
 							<div class="form-group">
 								<label for="hospitalId" class="col-sm-3 control-label">Hospital ID  <span style="color:red;">*</span></label>
 								<div class="col-sm-4">

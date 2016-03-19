@@ -63,7 +63,7 @@
                    		<a><span class="glyphicon glyphicon-home"></span>  Hospital Management</a>
                		</li>
                		<ul class="sub-menu collapse in" id="hospitals">
-                   		<li><a href="<%=request.getContextPath()%>/HospitalController?action=add_hospital">Add Hospital</a></li>
+                   		<li><a href="<%=request.getContextPath()%>/HospitalController?action=getAddHospitalForm">Add Hospital</a></li>
                    		<li><a href="<%=request.getContextPath()%>/HospitalController?action=getModifyHospitalForm">Modify Hospital</a></li>
                    	</ul>
                	</ul>

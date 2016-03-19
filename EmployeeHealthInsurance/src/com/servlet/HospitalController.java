@@ -42,7 +42,7 @@ public class HospitalController extends HttpServlet {
 		System.out.println("The action retreived is " + action);
 		
 		//If/else block for action
-		if("add_hospital".equals(action)){
+		if("getAddHospitalForm".equals(action)){
 			
 			System.out.println("In add_hospital if/else action block");
 			String state[] = {"Andaman and Nicobar Islands","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chandigarh",
@@ -62,17 +62,13 @@ public class HospitalController extends HttpServlet {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			rd = request.getRequestDispatcher("/jsp/addhospital.jsp");
+			rd = request.getRequestDispatcher("/jsp/forms/addHospitalForm.jsp");
 		}
 		else if("getModifyHospitalForm".equals(action)){
 			System.out.println("In modify_hospital if/else action block");
-			rd = request.getRequestDispatcher("/jsp/searchHospitalForm1.jsp");
+			rd = request.getRequestDispatcher("/jsp/forms/searchHospitalForm1.jsp");
 		}
-		else if("search_hospital".equals(action)){
-			System.out.println("In search_hospital if/else action block");
-			rd = request.getRequestDispatcher("/jsp/searchhospital.jsp");
-		}
-				
+		System.out.println("Exiting doGet() in HospitalController Class");				
 		rd.forward(request, response);
 		
 	}
@@ -144,12 +140,12 @@ public class HospitalController extends HttpServlet {
 					Hospital hospital = hs.searchHospital(hospitalId);
 					if(hospital == null){
 						request.setAttribute("message", "The hospital details doesn't exist");
-						RequestDispatcher rd = request.getRequestDispatcher("/jsp/searchHospitalForm1.jsp");
+						RequestDispatcher rd = request.getRequestDispatcher("/jsp/forms/searchHospitalForm1.jsp");
 						rd.forward(request, response);
 					}
 					else{
 						request.setAttribute("hospitaldetails", hospital);
-						RequestDispatcher rd = request.getRequestDispatcher("/jsp/modifyHospitalForm.jsp");
+						RequestDispatcher rd = request.getRequestDispatcher("/jsp/forms/modifyHospitalForm.jsp");
 						rd.forward(request, response);
 					}
 				} catch (Exception e) {

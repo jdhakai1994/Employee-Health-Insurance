@@ -29,16 +29,13 @@ public class ClaimsController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action = request.getParameter("action");
-		String value = request.getParameter("value");
 		RequestDispatcher rd = null;
-		if("claim".equals(action)){
-			if("domiciliary".equals(value))
-				rd = request.getRequestDispatcher("/jsp/domiciliaryclaim.jsp");
-			else if("hospitalization".equals(value))
-				rd = request.getRequestDispatcher("/jsp/hospitalizationclaim.jsp");				
-		}
-		else if("search_claim".equals(action))
-			rd = request.getRequestDispatcher("/jsp/search_claim.jsp");
+		if("getDomiciliaryClaimForm".equals(action))
+			rd = request.getRequestDispatcher("/jsp/forms/domiciliaryClaimForm.jsp");
+		else if("getHospitalizationClaimForm".equals(action))
+				rd = request.getRequestDispatcher("/jsp/forms/hospitalizationClaimForm.jsp");				
+		else if("searchClaimForm".equals(action))
+			rd = request.getRequestDispatcher("/jsp/forms/searchClaimForm.jsp");
 		rd.forward(request, response);
 	}
 

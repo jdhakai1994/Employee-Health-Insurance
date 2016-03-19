@@ -29,16 +29,13 @@ public class RegisterController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action = request.getParameter("action");
-		String value = request.getParameter("value");
 		RequestDispatcher rd = null;
-		if("register".equals(action)){
-			if("employee".equals(value))
-				rd = request.getRequestDispatcher("/jsp/employeeregister.jsp");
-			else if("dependent".equals(value))
-				rd = request.getRequestDispatcher("/jsp/dependentregister.jsp");				
-		}
-		else if("e-card_generate".equals(action))
-			rd = request.getRequestDispatcher("/jsp/e-card_generate.jsp");
+		if("getRegisterEmployeeForm".equals(action))
+			rd = request.getRequestDispatcher("/jsp/forms/employeeRegisterForm.jsp");
+		else if("getDependentEmployeeForm".equals(action))
+			rd = request.getRequestDispatcher("/jsp/forms/dependentRegisterForm.jsp");				
+		else if("getECardForm".equals(action))
+			rd = request.getRequestDispatcher("/jsp/forms/e_CardForm.jsp");
 		rd.forward(request, response);
 	}
 
