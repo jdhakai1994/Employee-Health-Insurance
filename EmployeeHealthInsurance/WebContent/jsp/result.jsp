@@ -30,5 +30,6 @@
 
 <body>
 	<c:out value='${requestScope.message}'/>
+	<c:out value='${requestScope.hospitaldetails.hospitalId}'></c:out>
 </body>
 </html>

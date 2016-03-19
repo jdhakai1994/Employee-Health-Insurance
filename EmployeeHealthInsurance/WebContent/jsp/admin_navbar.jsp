@@ -64,7 +64,7 @@
                		</li>
                		<ul class="sub-menu collapse in" id="hospitals">
                    		<li><a href="<%=request.getContextPath()%>/HospitalController?action=add_hospital">Add Hospital</a></li>
-                   		<li><a href="<%=request.getContextPath()%>/HospitalController?action=modify_hospital">Modify Hospital</a></li>
+                   		<li><a href="<%=request.getContextPath()%>/HospitalController?action=getModifyHospitalForm">Modify Hospital</a></li>
                    	</ul>
                	</ul>
                     

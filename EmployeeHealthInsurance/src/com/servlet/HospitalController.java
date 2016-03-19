@@ -64,9 +64,9 @@ public class HospitalController extends HttpServlet {
 			}
 			rd = request.getRequestDispatcher("/jsp/addhospital.jsp");
 		}
-		else if("modify_hospital".equals(action)){
+		else if("getModifyHospitalForm".equals(action)){
 			System.out.println("In modify_hospital if/else action block");
-			rd = request.getRequestDispatcher("/jsp/modifyhospital.jsp");
+			rd = request.getRequestDispatcher("/jsp/searchHospitalForm1.jsp");
 		}
 		else if("search_hospital".equals(action)){
 			System.out.println("In search_hospital if/else action block");
@@ -88,40 +88,40 @@ public class HospitalController extends HttpServlet {
 		String action = request.getParameter("action");
 		System.out.println("The action retreived is " + action);
 		
-		//Retrieving data
-		String hospitalName = request.getParameter("hospitalName");
-		String address = request.getParameter("address");
-		String cityName = request.getParameter("cityName");
-		String stateName = request.getParameter("stateName");
-		String pincode = request.getParameter("pincode");
-		String stdcode = request.getParameter("stdcode");
-		String phNo = request.getParameter("phNo");
-		
-//		System.out.println(hospitalName);
-//		System.out.println(address);
-//		System.out.println(cityName);
-//		System.out.println(stateName);
-//		System.out.println(pincode);
-//		System.out.println(stdcode);
-//		System.out.println(phNo);
-		
-		//Making a bean
-		Hospital hospital = new Hospital();
-		hospital.setHospitalName(hospitalName);
-		hospital.setAddress(address);
-		hospital.setCityName(cityName);
-		hospital.setStateName(stateName);
-		hospital.setPincode(pincode);
-		hospital.setStdcode(stdcode);
-		hospital.setPhNo(phNo);
-		
 		HospitalService hs = new HospitalService();
-		String reply = null;
-		
+				
 		if("add_hospital".equals(action)){
 			System.out.println("In add_hospital if/else action block");
+			
+			//Retrieving data
+			String hospitalName = request.getParameter("hospitalName");
+			String address = request.getParameter("address");
+			String cityName = request.getParameter("cityName");
+			String stateName = request.getParameter("stateName");
+			String pincode = request.getParameter("pincode");
+			String stdcode = request.getParameter("stdcode");
+			String phNo = request.getParameter("phNo");
+			
+//			System.out.println(hospitalName);
+//			System.out.println(address);
+//			System.out.println(cityName);
+//			System.out.println(stateName);
+//			System.out.println(pincode);
+//			System.out.println(stdcode);
+//			System.out.println(phNo);
+			
+			//Making a bean
+			Hospital hospital = new Hospital();
+			hospital.setHospitalName(hospitalName);
+			hospital.setAddress(address);
+			hospital.setCityName(cityName);
+			hospital.setStateName(stateName);
+			hospital.setPincode(pincode);
+			hospital.setStdcode(stdcode);
+			hospital.setPhNo(phNo);
+			
 			try {
-				reply = hs.addHospital(hospital);
+				String reply = hs.addHospital(hospital);
 				if("success".equals(reply))
 					request.setAttribute("message", "The hospital details have been successfully added");
 				else if("fail".equals(reply))
@@ -132,11 +132,88 @@ public class HospitalController extends HttpServlet {
 			e.printStackTrace();
 			}
 		}
+		else if("search_hospital".equals(action)){
+			System.out.println("In search_hospital if/else action block");
+			String action1 = request.getParameter("action1");
+			System.out.println("The action1 retreived is " + action1);
+			
+			if("searchHospitalById".equals(action1)){
+				int hospitalId = Integer.parseInt(request.getParameter("hospitalId"));
+				System.out.println(hospitalId);
+				try {
+					Hospital hospital = hs.searchHospital(hospitalId);
+					if(hospital == null){
+						request.setAttribute("message", "The hospital details doesn't exist");
+						RequestDispatcher rd = request.getRequestDispatcher("/jsp/searchHospitalForm1.jsp");
+						rd.forward(request, response);
+					}
+					else{
+						request.setAttribute("hospitaldetails", hospital);
+						RequestDispatcher rd = request.getRequestDispatcher("/jsp/modifyHospitalForm.jsp");
+						rd.forward(request, response);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		else if("modify_hospital".equals(action)){
+			System.out.println("In modify_hospital if/else action block");
+			String submit = request.getParameter("submit");
+			System.out.println("The submit button pressed is " + submit);
+			
+			if("Delete".equals(submit)){
+				System.out.println("In delete if/else action block");
+				int hospitalId = Integer.parseInt(request.getParameter("hospitalId"));
+				System.out.println(hospitalId);
+				try {
+					String reply = hs.deleteHospital(hospitalId);
+					if("success".equals(reply)){
+						request.setAttribute("message", "The hospital details have been deleted");
+					}
+					else
+						request.setAttribute("message", "The hospital details couldn't be deleted");
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			else if("Update".equals(submit)){
+				System.out.println("In update if/else action block");
+				int hospitalId = Integer.parseInt(request.getParameter("hospitalId"));
+				String hospitalName = request.getParameter("hospitalName");
+				String address = request.getParameter("address");
+				String cityName = request.getParameter("cityName");
+				String stateName = request.getParameter("stateName");
+				String pincode = request.getParameter("pincode");
+				String stdcode = request.getParameter("stdcode");
+				String phNo = request.getParameter("phNo");
+				
+				Hospital hospital = new Hospital();
+				hospital.setHospitalId(hospitalId);
+				hospital.setHospitalName(hospitalName);
+				hospital.setAddress(address);
+				hospital.setCityName(cityName);
+				hospital.setStateName(stateName);
+				hospital.setPincode(pincode);
+				hospital.setStdcode(stdcode);
+				hospital.setPhNo(phNo);
+				
+				try {
+					String reply = hs.updateHospital(hospital);
+					if("success".equals(reply)){
+						request.setAttribute("message", "The hospital details have been updated");
+					}
+					else
+						request.setAttribute("message", "The hospital details couldn't be updated");
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
+		}
 		
-		RequestDispatcher rd = request.getRequestDispatcher("/jsp/success.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("/jsp/result.jsp");
 		rd.forward(request, response);
-		System.out.println(reply);
-		
-		
+				
 	}
 }

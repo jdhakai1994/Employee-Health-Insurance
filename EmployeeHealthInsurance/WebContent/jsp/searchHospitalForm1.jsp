@@ -51,37 +51,30 @@
 						<h3>Hospital Management</h3>						
 					</div>
 					
-					<div class="form-content">
 					<!-- FORM -->
-					<form id="addhospital" action="" method="post" role="form" class="form-horizontal" data-toggle="validator">
-						<div class="form-group">
-							<label for="hospitalId" class="col-sm-3 control-label">Hospital ID  <span style="color:red;">*</span></label>
-							<div class="col-sm-4">
-								<input type="text" name="hospitalId" id="hospitalId" tabindex="1" placeholder="eg:- 55" class="form-control" required>
-							</div>							
+					<div class="form-content">
+						<!-- ERROR MESSAGE -->
+						<div>
+							<p style="color:red;text-align:center;"><c:out value="${requestScope.message}"></c:out></p>
 						</div>
-						<div class="form-group">
-							<label for="submit" class="col-sm-3 control-label">&nbsp</span></label>
-							<div class="col-sm-3">
-								<input type="submit" name="submit" id="submit" tabindex="2" class="form-control btn btn-primary" value="Submit">
-							</div>							
-						</div>
-					</form>
+					<!-- END ERROR MESSAGE -->
+						<form id="searchHospitalForm1" action="<%=request.getContextPath()%>/HospitalController?action=search_hospital" method="post" role="form" class="form-horizontal" data-toggle="validator">
+							<div class="form-group">
+								<label for="hospitalId" class="col-sm-3 control-label">Hospital ID  <span style="color:red;">*</span></label>
+								<div class="col-sm-4">
+									<input type="text" name="hospitalId" id="hospitalId" tabindex="1" placeholder="eg:- 55" class="form-control" required>
+								</div>							
+							</div>
+							<div class="form-group">
+								<label for="submit" class="col-sm-3 control-label">&nbsp</span></label>
+								<div class="col-sm-3">
+									<input type="hidden" name="action1" value="searchHospitalById">
+									<input type="submit" name="submit" id="submit" tabindex="2" class="form-control btn btn-primary" value="Submit">
+								</div>							
+							</div>
+						</form>
 					</div>
 					<!-- END FORM -->
-					 
-					<!-- CONTENT FOOTER -->
-					<!--
-					<div class="content-footer">
-					<div class="container">
-						<div class="row">
-							<div class="col-sm-6 copyright"><strong>Copyright &copy 2016.</strong> All Rights Reserved</div>
-							<div class="col-sm-6 version"><strong>Version</strong> 1.0</div>
-						</div>
-					</div>
-				</div>
-				-->
-				<!-- END CONTENT FOOTER -->
 				
 				</div>
 				<!-- END CONTENT BODY -->

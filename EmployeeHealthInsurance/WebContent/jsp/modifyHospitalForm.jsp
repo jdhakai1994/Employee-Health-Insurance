@@ -53,31 +53,31 @@
 					
 					<!-- FORM -->
 					<div class="form-content">
-						<form id="addhospital" action="<%=request.getContextPath()%>/HospitalController?action=add_hospital" method="post" role="form" class="form-horizontal" data-toggle="validator">
+						<form id="modifyHospitalForm" action="<%=request.getContextPath()%>/HospitalController?action=modify_hospital" method="post" role="form" class="form-horizontal" data-toggle="validator">
 							<div class="form-group">
 								<label for="hospitalId" class="col-sm-3 control-label">Hospital ID  <span style="color:red;">*</span></label>
 								<div class="col-sm-4">
-									<input type="text" name="hospitalId" id="hospitalId" class="form-control" value='<c:out value='${requestScope.hospitalId + 1}'></c:out>' readonly>
+									<input type="text" name="hospitalId" id="hospitalId" class="form-control" value="<c:out value='${requestScope.hospitaldetails.hospitalId}'></c:out>" readonly>
 								</div>							
 							</div>
 							<div class="form-group has-feedback">
 								<label for="hospitalName" class="col-sm-3 control-label">Hospital Name  <span style="color:red;">*</span></label>
 								<div class="col-sm-6">
-									<input type="text" pattern="[A-z\s]{1,}" name="hospitalName" id="hospitalName" class="form-control" tabindex="1" placeholder="eg:- Some Hospital" required>
+									<input type="text" pattern="[A-z\s]{1,}" name="hospitalName" id="hospitalName" class="form-control" tabindex="1" value="<c:out value='${requestScope.hospitaldetails.hospitalName}'></c:out>" required>
 									<span class="glyphicon form-control-feedback"></span>
 								</div>							
 							</div>
 							<div class="form-group has-feedback">
 								<label for="address" class="col-sm-3 control-label">Address  <span style="color:red;">*</span></label>
 								<div class="col-sm-6">
-									<textarea rows="4" cols="50" name="address" id="address" class="form-control" tabindex="2" placeholder="Enter Address here.." required></textarea>
+									<textarea rows="4" cols="50" name="address" id="address" class="form-control" tabindex="2" required><c:out value='${requestScope.hospitaldetails.address}'></c:out></textarea>
 									<span class="glyphicon form-control-feedback"></span>
 								</div>							
 							</div>
 							<div class="form-group has-feedback">
 								<label for="cityName" class="col-sm-3 control-label">City Name  <span style="color:red;">*</span></label>
 								<div class="col-sm-4">
-									<input type="text" pattern="[A-z]{1,}" name="cityName" id="cityName" class="form-control" tabindex="3" placeholder="eg:- Kolkata" required>
+									<input type="text" pattern="[A-z]{1,}" name="cityName" id="cityName" class="form-control" tabindex="3" value="<c:out value='${requestScope.hospitaldetails.cityName}'></c:out>" required>
 									<span class="glyphicon form-control-feedback"></span>
 								</div>							
 							</div>
@@ -85,7 +85,7 @@
 								<label for="stateName" class="col-sm-3 control-label">State Name  <span style="color:red;">*</span></label>
 								<div class="col-sm-4">
 									<select class="form-control" name="stateName" id="stateName" tabindex="4" required>
-										<option value="">Select State</option>
+										<option value="${requestScope.hospitaldetails.stateName}"><c:out value='${requestScope.hospitaldetails.stateName}'></c:out></option>
 										<c:forEach items="${stateList}" var="stateValue">
 											<option value="${stateValue}">${stateValue}</option>
 										</c:forEach>
@@ -96,27 +96,31 @@
 							<div class="form-group has-feedback">
 								<label for="pincode" class="col-sm-3 control-label">Pin Code  <span style="color:red;">*</span></label>
 								<div class="col-sm-3">
-									<input type="text" pattern="[0-9]{6}" class="form-control" name="pincode" id="pincode" tabindex="5" placeholder="eg:- XXXXXX" required>
+									<input type="text" pattern="[0-9]{6}" class="form-control" name="pincode" id="pincode" tabindex="5" value="<c:out value='${requestScope.hospitaldetails.pincode}'></c:out>" required>
 								</div>							
 							</div>
 							<div class="form-group has-feedback">
 								<label for="stdcode" class="col-sm-3 control-label">STD Code  <span style="color:red;">*</span></label>
 								<div class="col-sm-3">
-									<input type="text" pattern="[0-9-]{3,6}" class="form-control" name="stdcode" id="stdcode" tabindex="6" placeholder="eg:- XXXXXX" required>
+									<input type="text" pattern="[0-9-]{3,6}" class="form-control" name="stdcode" id="stdcode" tabindex="6" value="<c:out value='${requestScope.hospitaldetails.stdcode}'></c:out>" required>
 								</div>							
 							</div>
 							<div class="form-group has-feedback">
 								<label for="phNo" class="col-sm-3 control-label">Phone Number  <span style="color:red;">*</span></label>
 								<div class="col-sm-4">
-									<input type="text" pattern="[0-9]{8}" name="phNo" id="phNo" class="form-control" tabindex="7" placeholder="eg:- XXXXXXXX" required>
+									<input type="text" pattern="[0-9]{8}" name="phNo" id="phNo" class="form-control" tabindex="7" value="<c:out value='${requestScope.hospitaldetails.phNo}'></c:out>" required>
 									<span class="glyphicon form-control-feedback"></span>
 								</div>							
 							</div>
 							<div class="form-group">
 								<label for="submit" class="col-sm-3 control-label">&nbsp</span></label>
 								<div class="col-sm-3">
-									<input type="hidden" name="action" value="add_hospital">
-									<input type="submit" name="submit" id="submit" tabindex="8" class="form-control btn btn-primary" value="Add">
+									<input type="hidden" name="action1" value="updateHospital">
+									<input type="submit" name="submit" id="submit" tabindex="8" class="form-control btn btn-warning" value="Update">
+								</div>
+								<div class="col-sm-3">
+									<input type="hidden" name="action1" value="deleteHospital">
+									<input type="submit" name="submit" id="submit" tabindex="8" class="form-control btn btn-danger" value="Delete">
 								</div>							
 							</div>
 						</form>
