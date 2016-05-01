@@ -35,6 +35,14 @@ public class HospitalController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Entering doGet() in HospitalController Class");
 		
+		String state[] = {"Andaman and Nicobar Islands","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chandigarh",
+				"Chhattisgarh","Dadra and Nagar Haveli","Daman and Diu","Delhi","Goa","Gujarat","Haryana","Himachal Pradesh",
+				"Jammu and Kashmir","Jharkhand","Karnataka","Kerala","Lakshadweep","Madhya Pradesh","Maharashtra","Manipur",
+				"Meghalaya","Mizoram","Nagaland","Orissa","Pondicherry","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana",
+				"Tripura","Uttaranchal","Uttar Pradesh","West Bengal"};
+		
+		ArrayList<String> stateList = new ArrayList<String>(Arrays.asList(state));
+		
 		RequestDispatcher rd = null;
 		
 		//Retrieving action from URL
@@ -45,13 +53,7 @@ public class HospitalController extends HttpServlet {
 		if("getAddHospitalForm".equals(action)){
 			
 			System.out.println("In add_hospital if/else action block");
-			String state[] = {"Andaman and Nicobar Islands","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chandigarh",
-					"Chhattisgarh","Dadra and Nagar Haveli","Daman and Diu","Delhi","Goa","Gujarat","Haryana","Himachal Pradesh",
-					"Jammu and Kashmir","Jharkhand","Karnataka","Kerala","Lakshadweep","Madhya Pradesh","Maharashtra","Manipur",
-					"Meghalaya","Mizoram","Nagaland","Orissa","Pondicherry","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana",
-					"Tripura","Uttaranchal","Uttar Pradesh","West Bengal"};
 			
-			ArrayList<String> stateList = new ArrayList<String>(Arrays.asList(state));
 			request.setAttribute("stateList", stateList);
 			
 			//To fetch the hospitalId
@@ -68,6 +70,12 @@ public class HospitalController extends HttpServlet {
 			System.out.println("In modify_hospital if/else action block");
 			rd = request.getRequestDispatcher("/jsp/forms/searchHospitalForm1.jsp");
 		}
+		else if("getSearchHospitalForm".equals(action)){
+			System.out.println("In search_hospital if/else action block");
+			request.setAttribute("stateList", stateList);
+			rd = request.getRequestDispatcher("/jsp/forms/searchHospitalForm.jsp");
+		}
+		
 		System.out.println("Exiting doGet() in HospitalController Class");				
 		rd.forward(request, response);
 		
@@ -149,6 +157,34 @@ public class HospitalController extends HttpServlet {
 						rd.forward(request, response);
 					}
 				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			else if("searchHospitalByPin".equals(action1)){
+				String pincode = request.getParameter("pincode");
+				System.out.println(pincode);
+				try {
+					Hospital hospital = hs.searchHospital(pincode);
+					if(hospital == null)
+						request.setAttribute("message", "The hospital details doesn't exist");
+					else
+						request.setAttribute("hospitaldetails", hospital);
+				}
+				catch (Exception e){
+					e.printStackTrace();
+				}
+			}
+			else if("searchHospitalByName".equals(action1)){
+				String hospitalName = request.getParameter("hospitalName");
+				System.out.println(hospitalName);
+				try {
+					Hospital hospital = hs.searchHospital(hospitalName);
+					if(hospital == null)
+						request.setAttribute("message", "The hospital details doesn't exist");
+					else
+						request.setAttribute("hospitaldetails", hospital);
+				}
+				catch (Exception e){
 					e.printStackTrace();
 				}
 			}

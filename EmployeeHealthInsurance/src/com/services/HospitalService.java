@@ -23,10 +23,18 @@ public class HospitalService {
 	}
 
 	public Hospital searchHospital(int hospitalId) throws Exception {
-		System.out.println("Entering searchHospital() in HospitalService Class");
+		System.out.println("Entering searchHospital(hospitalId) in HospitalService Class");
 		HospitalDAO hdao = new HospitalDAO();
 		Hospital hospital = hdao.searchHospital(hospitalId);
-		System.out.println("Exiting searchHospital() in HospitalService Class");
+		System.out.println("Exiting searchHospitalhospitalId) in HospitalService Class");
+		return hospital;
+	}
+	
+	public Hospital searchHospital(String input) throws Exception {
+		System.out.println("Entering searchHospital(input) in HospitalService Class");
+		HospitalDAO hdao = new HospitalDAO();
+		Hospital hospital = hdao.searchHospital(input);
+		System.out.println("Exiting searchHospital(input) in HospitalService Class");
 		return hospital;
 	}
 

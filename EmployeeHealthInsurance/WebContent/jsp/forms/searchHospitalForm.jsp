@@ -33,7 +33,7 @@
 	<div class="row">
 	
 		<!-- import navbar -->
-		<c:import url="member_navbar.jsp" />
+		<c:import url="../navbars/member_navbar.jsp" />
 	
 		<!-- CONTENT -->
 		<div class="col-sm-9 no-gutter">
@@ -53,13 +53,13 @@
 					
 					<div class="form-content">
 					<!-- FORM -->
-					<form id="searchhospital" action="" method="post" role="form" class="form-horizontal" data-toggle="validator">
+					<form id="searchHospitalFormByLocation" action="<%=request.getContextPath()%>/HospitalController?action=search_hospital" method="post" role="form" class="form-horizontal" data-toggle="validator">
 						<div class="form-group">
 							<label for="stateName" class="col-sm-3 control-label">Location  <span style="color:red;">*</span></label>
 							<div class="col-sm-9">
 							<div class="form-inline">
 								<div class="form-group has-feedback col-sm-6">
-									<select class="form-control" name="stateName" id="stateName" tabindex="1">
+									<select class="form-control" name="stateName" id="stateName" tabindex="1" required>
 										<option value="">Select State</option>
 										<c:forEach items="${stateList}" var="stateValue">
 											<option value="${stateValue}">${stateValue}</option>
@@ -68,7 +68,7 @@
 									<span class="glyphicon form-control-feedback"></span>
 								</div>
 								<div class="form-group has-feedback col-sm-6">
-									<select class="form-control" name="stateName" id="stateName" tabindex="2">
+									<select class="form-control" name="stateName" id="stateName" tabindex="2" required>
 										<option value="">Select City</option>
 											<c:forEach items="${stateList}" var="stateValue">
 												<option value="${stateValue}">${stateValue}</option>
@@ -80,33 +80,41 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-3 control-label">&nbsp</span></label>
+							<label for="submit" class="col-sm-3 control-label">&nbsp</span></label>
 							<div class="col-sm-3">
-								<p>OR</p>
+								<input type="hidden" name="action1" value="searchHospitalByLocation">
+								<input type="submit" name="submit" id="submit" tabindex="3" class="form-control btn btn-primary" value="Search">
 							</div>							
 						</div>
+					</form>
+					<form id="searchHospitalFormByPin" action="<%=request.getContextPath()%>/HospitalController?action=search_hospital" method="post" role="form" class="form-horizontal" data-toggle="validator">
 						<div class="form-group has-feedback">
 							<label for="pincode" class="col-sm-3 control-label">Pin Code  <span style="color:red;">*</span></label>
 							<div class="col-sm-3">
-								<input type="text" pattern="[0-9]{6}" class="form-control" name="pincode" id="pincode" tabindex="3" placeholder="eg:- XXXXXX">							</div>							
-						</div>
-						<div class="form-group">
-							<label class="col-sm-3 control-label">&nbsp</span></label>
-							<div class="col-sm-3">
-								<p>OR</p>
+								<input type="text" pattern="[0-9]{6}" class="form-control" name="pincode" id="pincode" tabindex="4" placeholder="eg:- XXXXXX" required>		
 							</div>							
 						</div>
+						<div class="form-group">
+							<label for="submit" class="col-sm-3 control-label">&nbsp</span></label>
+							<div class="col-sm-3">
+								<input type="hidden" name="action1" value="searchHospitalByPin">
+								<input type="submit" name="submit" id="submit" tabindex="5" class="form-control btn btn-primary" value="Search">
+							</div>							
+						</div>
+					</form>
+					<form id="searchHospitalFormByName" action="<%=request.getContextPath()%>/HospitalController?action=search_hospital" method="post" role="form" class="form-horizontal" data-toggle="validator">
 						<div class="form-group has-feedback">
 							<label for="hospitalName" class="col-sm-3 control-label">Hospital Name  <span style="color:red;">*</span></label>
 							<div class="col-sm-6">
-								<input type="text" pattern="[A-z\s]{1,}" name="hospitalName" id="hospitalName" class="form-control" tabindex="4" placeholder="eg:- Some Hospital">
+								<input type="text" pattern="[A-z\s]{1,}" name="hospitalName" id="hospitalName" class="form-control" tabindex="6" placeholder="eg:- Some Hospital" required>
 								<span class="glyphicon form-control-feedback"></span>
 							</div>							
 						</div>
 						<div class="form-group">
 							<label for="submit" class="col-sm-3 control-label">&nbsp</span></label>
 							<div class="col-sm-3">
-								<input type="submit" name="submit" id="submit" tabindex="2" class="form-control btn btn-primary" value="Submit">
+								<input type="hidden" name="action1" value="searchHospitalByName">
+								<input type="submit" name="submit" id="submit" tabindex="7" class="form-control btn btn-primary" value="Search">
 							</div>							
 						</div>
 					</form>

@@ -64,7 +64,7 @@
                			<a href="#"><span class="glyphicon glyphicon-home"></span>  Hospital Management</a>
                		</li>
                		<ul class="sub-menu collapse in" id="hospitals">
-                   		<li><a href="<%=request.getContextPath()%>/HospitalController?action=search_hospital">Search Hospital</a></li>
+                   		<li><a href="<%=request.getContextPath()%>/HospitalController?action=getSearchHospitalForm">Search Hospital</a></li>
                    		<li><a href="<%=request.getContextPath()%>/HospitalController?action=value_added_services">Value Added Services</a></li>
                    	</ul>
 				</ul>

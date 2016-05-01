@@ -58,7 +58,7 @@
 							<p style="color:red;text-align:center;"><c:out value="${requestScope.message}"></c:out></p>
 						</div>
 					<!-- END ERROR MESSAGE -->
-						<form id="searchHospitalForm1" action="<%=request.getContextPath()%>/HospitalController?action=search_hospital" method="post" role="form" class="form-horizontal" data-toggle="validator">
+						<form id="searchHospitalFormByHID" action="<%=request.getContextPath()%>/HospitalController?action=search_hospital" method="post" role="form" class="form-horizontal" data-toggle="validator">
 							<div class="form-group">
 								<label for="hospitalId" class="col-sm-3 control-label">Hospital ID  <span style="color:red;">*</span></label>
 								<div class="col-sm-4">

@@ -92,7 +92,7 @@ public class HospitalDAO {
 
 	public Hospital searchHospital(int hospitalId) throws Exception {
 		
-		System.out.println("In searchHospital() in HospitalDAO Class");
+		System.out.println("In searchHospital(hospitalId) in HospitalDAO Class");
 		
 		connect = DBConnection.getConnection();
 		
@@ -116,7 +116,7 @@ public class HospitalDAO {
 		}
 	
 		DBConnection.closeConnection(connect);
-		System.out.println("Exiting searchHospital() in HospitalDAO Class");
+		System.out.println("Exiting searchHospital(hospitalId) in HospitalDAO Class");
 		
 		return hospital;
 	}
@@ -171,6 +171,39 @@ public class HospitalDAO {
 		
 		return "success";
 
+	}
+
+	public Hospital searchHospital(String input) throws Exception {
+		
+		System.out.println("In searchHospital(input) in HospitalDAO Class");
+		
+		connect = DBConnection.getConnection();
+		
+		Hospital hospital = null;
+		ps1 = connect.prepareStatement("SELECT * FROM ehi.hospital WHERE pincode=? OR "
+				+ "hospital_name=? AND status=1");
+		ps1.setString(1, input);
+		ps1.setString(2, input);
+		resultSet = ps1.executeQuery();
+		if(resultSet.next()){
+			System.out.println("Yes");
+			hospital = new Hospital();
+			hospital.setHospitalId(resultSet.getInt("hid"));
+			hospital.setHospitalName(resultSet.getString("hospital_name"));
+			hospital.setAddress(resultSet.getString("address"));
+			hospital.setCityName(resultSet.getString("city"));
+			hospital.setStateName(resultSet.getString("state"));
+			hospital.setPincode(resultSet.getString("pincode"));
+			hospital.setStdcode(resultSet.getString("stdcode"));
+			hospital.setPhNo(resultSet.getString("phone_number"));
+
+			return hospital;
+		}
+	
+		DBConnection.closeConnection(connect);
+		System.out.println("Exiting searchHospital(input) in HospitalDAO Class");
+		
+		return hospital;
 	}
 
 }
