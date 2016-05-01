@@ -18,7 +18,7 @@ public class EmployeeDAO {
 	private String reply = null;
 
 	public String addEmployee(Employee employee) throws Exception {
-		System.out.println("In addEmployee() in EmployeeDAO Class");
+		System.out.println("Entering addEmployee() in EmployeeDAO Class");
 		
 		connect = DBConnection.getConnection();
 		

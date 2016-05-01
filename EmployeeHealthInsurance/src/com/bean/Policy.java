@@ -2,7 +2,7 @@ package com.bean;
 
 public class Policy {
 	
-	private int hiId;
+	private int healthInsuranceId;
 	private int employeeId;
 	private int dependentId;
 	private String startDate;
@@ -10,11 +10,11 @@ public class Policy {
 	private double totalSumInsured;
 	private int status;
 	
-	public int getHiId() {
-		return hiId;
+	public int getHealthInsuranceId() {
+		return healthInsuranceId;
 	}
-	public void setHiId(int hiId) {
-		this.hiId = hiId;
+	public void getHealthInsuranceId(int healthInsuranceId) {
+		this.healthInsuranceId = healthInsuranceId;
 	}
 	public int getEmployeeId() {
 		return employeeId;

@@ -59,7 +59,7 @@
 					
 					<div class="form-content">
 					<!-- FORM -->
-					<form id="dependentRegisterForm" action="" method="post" role="form" class="form-horizontal" data-toggle="validator">
+					<form id="dependentRegisterForm" action="<%=request.getContextPath()%>/RegisterController?action=register_dependent" method="post" role="form" class="form-horizontal" data-toggle="validator">
 						<div class="form-group has-feedback">
 							<label for="employeeId" class="col-sm-3 control-label">Employee ID  <span style="color:red;">*</span></label>
 							<div class="col-sm-4">

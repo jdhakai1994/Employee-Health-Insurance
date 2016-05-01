@@ -16,7 +16,7 @@ public class PolicyDAO {
 	private String reply = null;
 
 	public String addPolicy(Policy policy) throws Exception{
-		System.out.println("In addPolicy() in PolicyDAO Class");
+		System.out.println("Entering addPolicy() in PolicyDAO Class");
 		
 		connect = DBConnection.getConnection();
 		
@@ -44,20 +44,40 @@ public class PolicyDAO {
 	}
 
 	public int fetchPolicyId(int employeeId) throws Exception{
-		System.out.println("In fetchPolicyId() in PolicyDAO Class");
+		System.out.println("Entering fetchPolicyId() in PolicyDAO Class");
 		
 		connect = DBConnection.getConnection();
 		
-		ps1 = connect.prepareStatement("SELECT hi_id FROM ehi.policy WHERE employeeId=? and dependentId=0");
+		ps1 = connect.prepareStatement("SELECT healthInsuranceId FROM ehi.policy WHERE employeeId=? and dependentId=0");
 		ps1.setInt(1, employeeId);
 		resultSet = ps1.executeQuery();
 		int id = 0;
 		while(resultSet.next()){
-			id = resultSet.getInt("hi_id");
+			id = resultSet.getInt("healthInsuranceId");
 		}
 		
 		DBConnection.closeConnection(connect);
 		System.out.println("Exiting fetchPolicyId() in PolicyDAO Class");
+		
+		return id;
+	}
+	
+	public int fetchPolicyId(int employeeId, int dependentId) throws Exception{
+		System.out.println("Entering fetchPolicyId(int, int) in PolicyDAO Class");
+		
+		connect = DBConnection.getConnection();
+		
+		ps1 = connect.prepareStatement("SELECT healthInsuranceId FROM ehi.policy WHERE employeeId=? and dependentId=?");
+		ps1.setInt(1, employeeId);
+		ps1.setInt(2, dependentId);
+		resultSet = ps1.executeQuery();
+		int id = 0;
+		while(resultSet.next()){
+			id = resultSet.getInt("healthInsuranceId");
+		}
+		
+		DBConnection.closeConnection(connect);
+		System.out.println("Exiting fetchPolicyId(int, int) in PolicyDAO Class");
 		
 		return id;
 	}

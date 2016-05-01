@@ -15,11 +15,21 @@ public class PolicyService {
 	}
 
 	public int fetchPolicyId(int employeeId) throws Exception {
-		System.out.println("Entering fetchPolicyId() in PolicyService Class");
+		System.out.println("Entering fetchPolicyId(int) in PolicyService Class");
 		PolicyDAO pdao = new PolicyDAO();
-		int hiId = pdao.fetchPolicyId(employeeId);
-		System.out.println("Exiting fetchPolicyId() in PolicyService Class");
-		return hiId;
+		int healthInsuranceId = pdao.fetchPolicyId(employeeId);
+		System.out.println("Exiting fetchPolicyId(int) in PolicyService Class");
+		return healthInsuranceId;
 	}
+	
+	public int fetchPolicyId(int employeeId, int dependentId) throws Exception {
+		System.out.println("Entering fetchPolicyId(int, int) in PolicyService Class");
+		PolicyDAO pdao = new PolicyDAO();
+		int healthInsuranceId = pdao.fetchPolicyId(employeeId, dependentId);
+		System.out.println("Exiting fetchPolicyId(int, int) in PolicyService Class");
+		return healthInsuranceId;
+	}
+
+	
 
 }

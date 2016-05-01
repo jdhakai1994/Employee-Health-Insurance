@@ -18,7 +18,7 @@ public class HospitalDAO {
 
 	public String addHospital(Hospital hospital) throws Exception {
 		
-		System.out.println("In addHospital() in HospitalDAO Class");
+		System.out.println("Entering addHospital() in HospitalDAO Class");
 		
 		connect = DBConnection.getConnection();
 		
@@ -30,7 +30,7 @@ public class HospitalDAO {
 		String stdcode = hospital.getStdcode();
 		String phNo = hospital.getPhNo();
 		
-		ps1 = connect.prepareStatement("SELECT status FROM ehi.hospital WHERE pincode=? and hospital_name=?");
+		ps1 = connect.prepareStatement("SELECT status FROM ehi.hospital WHERE pincode=? and hospitalName=?");
 		ps1.setString(1, pincode);
 		ps1.setString(2, hospitalName);
 		resultSet = ps1.executeQuery();
@@ -39,7 +39,7 @@ public class HospitalDAO {
 		if(rownum == 1){
 			int status = resultSet.getInt("status");
 			if(status == 0){
-				ps2 = connect.prepareStatement("UPDATE ehi.hospital SET status=1 WHERE pincode=? and hospital_name=?");
+				ps2 = connect.prepareStatement("UPDATE ehi.hospital SET status=1 WHERE pincode=? and hospitalName=?");
 				ps2.setString(1, pincode);
 				ps2.setString(2, hospitalName);
 				ps2.executeUpdate();
@@ -51,7 +51,7 @@ public class HospitalDAO {
 		}
 		else if(rownum == 0){
 			ps2 = connect.prepareStatement("INSERT INTO ehi.hospital "
-			+ "(hospital_name,address,city,state,pincode,stdcode,phone_number) "
+			+ "(hospitalName,address,city,state,pincode,stdcode,phoneNumber) "
 			+ "VALUES (UPPER(?),UPPER(?),UPPER(?),UPPER(?),?,?,?)");
 			ps2.setString(1, hospitalName);
 			ps2.setString(2, address);
@@ -74,15 +74,15 @@ public class HospitalDAO {
 
 	public int fetchHospitalId() throws Exception {
 		
-		System.out.println("In fetchHospitalId() in HospitalDAO Class");
+		System.out.println("Entering fetchHospitalId() in HospitalDAO Class");
 		
 		connect = DBConnection.getConnection();
 		
 		int id = 0;
-		ps1 = connect.prepareStatement("SELECT hid FROM ehi.hospital ORDER BY hid DESC LIMIT 1");
+		ps1 = connect.prepareStatement("SELECT hospitalId FROM ehi.hospital ORDER BY hospitalId DESC LIMIT 1");
 		resultSet = ps1.executeQuery();
 		while(resultSet.next()){
-			id = resultSet.getInt("hid");
+			id = resultSet.getInt("hospitalId");
 		}
 		
 		DBConnection.closeConnection(connect);
@@ -92,25 +92,25 @@ public class HospitalDAO {
 
 	public Hospital searchHospital(int hospitalId) throws Exception {
 		
-		System.out.println("In searchHospital(hospitalId) in HospitalDAO Class");
+		System.out.println("Entering searchHospital(hospitalId) in HospitalDAO Class");
 		
 		connect = DBConnection.getConnection();
 		
 		Hospital hospital = null;
-		ps1 = connect.prepareStatement("SELECT * FROM ehi.hospital WHERE hid=? AND status=1");
+		ps1 = connect.prepareStatement("SELECT * FROM ehi.hospital WHERE hospitalId=? AND status=1");
 		ps1.setInt(1, hospitalId);
 		resultSet = ps1.executeQuery();
 		if(resultSet.next()){
 			System.out.println("Yes");
 			hospital = new Hospital();
-			hospital.setHospitalId(resultSet.getInt("hid"));
-			hospital.setHospitalName(resultSet.getString("hospital_name"));
+			hospital.setHospitalId(resultSet.getInt("hospitalId"));
+			hospital.setHospitalName(resultSet.getString("hospitalName"));
 			hospital.setAddress(resultSet.getString("address"));
 			hospital.setCityName(resultSet.getString("city"));
 			hospital.setStateName(resultSet.getString("state"));
 			hospital.setPincode(resultSet.getString("pincode"));
 			hospital.setStdcode(resultSet.getString("stdcode"));
-			hospital.setPhNo(resultSet.getString("phone_number"));
+			hospital.setPhNo(resultSet.getString("phoneNumber"));
 
 			return hospital;
 		}
@@ -123,16 +123,16 @@ public class HospitalDAO {
 
 	public String deleteHospital(int hospitalId) throws Exception {
 		
-		System.out.println("In deleteHospital() in HospitalDAO Class");
+		System.out.println("Entering deleteHospital() in HospitalDAO Class");
 		
 		connect = DBConnection.getConnection();
 		
-		ps1 = connect.prepareStatement("UPDATE ehi.hospital SET status=0 WHERE hid=?");
+		ps1 = connect.prepareStatement("UPDATE ehi.hospital SET status=0 WHERE hospitalId=?");
 		ps1.setInt(1, hospitalId);
 		ps1.executeUpdate();
 		
 		DBConnection.closeConnection(connect);
-		System.out.println("Exiting searchHospital() in HospitalDAO Class");
+		System.out.println("Exiting deleteHospital() in HospitalDAO Class");
 		
 		return "success";
 		
@@ -140,7 +140,7 @@ public class HospitalDAO {
 
 	public String updateHospital(Hospital hospital) throws Exception {
 		
-		System.out.println("In updateHospital() in HospitalDAO Class");
+		System.out.println("Entering updateHospital() in HospitalDAO Class");
 		
 		connect = DBConnection.getConnection();
 		
@@ -153,8 +153,8 @@ public class HospitalDAO {
 		String stdcode = hospital.getStdcode();
 		String phNo = hospital.getPhNo();
 		
-		ps1 = connect.prepareStatement("UPDATE ehi.hospital SET hospital_name=?, address=?,"
-				+ "city=?, state=?, pincode=?, stdcode=?, phone_number=? WHERE hid=?");
+		ps1 = connect.prepareStatement("UPDATE ehi.hospital SET hospitalName=?, address=?,"
+				+ "city=?, state=?, pincode=?, stdcode=?, phoneNumber=? WHERE hospitalId=?");
 		
 		ps1.setString(1, hospitalName);
 		ps1.setString(2, address);
@@ -175,27 +175,26 @@ public class HospitalDAO {
 
 	public Hospital searchHospital(String input) throws Exception {
 		
-		System.out.println("In searchHospital(input) in HospitalDAO Class");
+		System.out.println("Entering searchHospital(input) in HospitalDAO Class");
 		
 		connect = DBConnection.getConnection();
 		
 		Hospital hospital = null;
 		ps1 = connect.prepareStatement("SELECT * FROM ehi.hospital WHERE pincode=? OR "
-				+ "hospital_name=? AND status=1");
+				+ "hospitalName=? AND status=1");
 		ps1.setString(1, input);
 		ps1.setString(2, input);
 		resultSet = ps1.executeQuery();
 		if(resultSet.next()){
-			System.out.println("Yes");
 			hospital = new Hospital();
-			hospital.setHospitalId(resultSet.getInt("hid"));
-			hospital.setHospitalName(resultSet.getString("hospital_name"));
+			hospital.setHospitalId(resultSet.getInt("hospitalId"));
+			hospital.setHospitalName(resultSet.getString("hospitalName"));
 			hospital.setAddress(resultSet.getString("address"));
 			hospital.setCityName(resultSet.getString("city"));
 			hospital.setStateName(resultSet.getString("state"));
 			hospital.setPincode(resultSet.getString("pincode"));
 			hospital.setStdcode(resultSet.getString("stdcode"));
-			hospital.setPhNo(resultSet.getString("phone_number"));
+			hospital.setPhNo(resultSet.getString("phoneNumber"));
 
 			return hospital;
 		}

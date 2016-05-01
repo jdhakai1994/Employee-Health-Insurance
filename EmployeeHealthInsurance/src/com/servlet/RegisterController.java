@@ -12,8 +12,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.bean.Dependent;
 import com.bean.Employee;
 import com.bean.Policy;
+import com.services.DependentService;
 import com.services.EmployeeService;
 import com.services.HospitalService;
 import com.services.PolicyService;
@@ -64,7 +66,6 @@ public class RegisterController extends HttpServlet {
 		String action = request.getParameter("action");
 		System.out.println("The action retreived is " + action);
 		
-		EmployeeService es = new EmployeeService();
 		PolicyService ps = new PolicyService();
 		
 		if("register_employee".equals(action)){
@@ -122,28 +123,89 @@ public class RegisterController extends HttpServlet {
 			policy.setTotalSumInsured(totalSumInsured);
 			
 			try{
+				EmployeeService es = new EmployeeService();
 				String replyEmployee = es.addEmployee(employee);
-				int hiId = 0;
+				int healthInsuranceId = 0;
 				if("success".equals(replyEmployee)){
 					String replyPolicy = ps.addPolicy(policy);
 					if("success".equals(replyPolicy)){
-						hiId = ps.fetchPolicyId(employeeId);
+						healthInsuranceId = ps.fetchPolicyId(employeeId);
 						request.setAttribute("message", "Your details have been successfully noted."
 							+ " The registration is pending admin approval."
-							+ " The auto-generated health insurance id is "+hiId);
+							+ " The auto-generated health insurance id is "+healthInsuranceId);
 					}
 				}
 				else if("fail".equals(replyEmployee))
-					request.setAttribute("message", "The employee details couldn't be added");
+					request.setAttribute("message", "The details couldn't be added");
 				else if("already exists".equals(replyEmployee)){
-					hiId = ps.fetchPolicyId(employeeId);
+					healthInsuranceId = ps.fetchPolicyId(employeeId);
 					request.setAttribute("message", "Your details already exists "
 							+ "The registration is pending admin approval."
-							+ " The health insurance id is "+hiId);
+							+ " The health insurance id is "+healthInsuranceId);
 				}
 			} catch (Exception e) {
 			e.printStackTrace();
 			}			
+		}
+		else if("register_dependent".equals(action)){
+			System.out.println("In register_dependent if/else action block");
+			
+			int employeeId = Integer.parseInt(request.getParameter("employeeId"));
+			String beneficiaryName = request.getParameter("beneficiaryName");
+			String dateOfBirth = request.getParameter("dateOfBirth");
+			String gender = request.getParameter("gender");
+			String relation = request.getParameter("relation");
+			
+			String startDate = request.getParameter("policyStartDate");
+			int policyPeriod = Integer.parseInt(request.getParameter("policyPeriod"));
+			double totalSumInsured = Double.parseDouble(request.getParameter("totalSumInsured"));
+			double premiumAmount = Double.parseDouble(request.getParameter("premiumAmount"));
+			
+			Dependent dependent = new Dependent();
+			dependent.setEmployeeId(employeeId);
+			dependent.setBeneficiaryName(beneficiaryName);
+			dependent.setDateOfBirth(dateOfBirth);
+			dependent.setGender(gender);
+			dependent.setRelation(relation);
+			
+			Policy policy = new Policy();
+			policy.setEmployeeId(employeeId);
+			policy.setStartDate(startDate);
+			policy.setPolicyPeriod(policyPeriod);
+			policy.setTotalSumInsured(totalSumInsured);
+			
+			String submit = request.getParameter("submit");
+			System.out.println("The submit button pressed is " + submit);
+			
+			if("Add".equals(submit)){
+				try{
+					DependentService ds = new DependentService();
+					String replyDependent = ds.addDependent(dependent);
+					int healthInsuranceId = 0;
+					if("success".equals(replyDependent)){
+						int dependentId = ds.fetchDependentId(employeeId, relation);
+						policy.setDependentId(dependentId);
+						String replyPolicy = ps.addPolicy(policy);
+						if("success".equals(replyPolicy)){
+							healthInsuranceId = ps.fetchPolicyId(employeeId, dependentId);
+							request.setAttribute("message", "Your dependent details have been successfully noted."
+								+ " The registration is pending admin approval."
+								+ " The auto-generated health insurance id is "+healthInsuranceId);
+						}
+					}
+					else if("fail".equals(replyDependent))
+						request.setAttribute("message", "The details couldn't be added");
+					else if("already exists".equals(replyDependent)){
+						int dependentId = ds.fetchDependentId(employeeId, relation);
+						healthInsuranceId = ps.fetchPolicyId(employeeId, dependentId);
+						request.setAttribute("message", "Your details already exists "
+								+ "The registration is pending admin approval."
+								+ " The health insurance id is "+healthInsuranceId);
+					}
+				}catch (Exception e) {
+					e.printStackTrace();
+				}				
+			}
 		}
 
 		RequestDispatcher rd = request.getRequestDispatcher("/jsp/result.jsp");
