@@ -59,7 +59,7 @@
 					
 					<div class="form-content">
 					<!-- FORM -->
-					<form id="employeeRegisterForm" action="" method="post" role="form" class="form-horizontal" data-toggle="validator">
+					<form id="employeeRegisterForm" action="<%=request.getContextPath()%>/RegisterController?action=register_employee" method="post" role="form" class="form-horizontal" data-toggle="validator">
 						<div class="form-group has-feedback">
 							<label for="employeeId" class="col-sm-3 control-label">Employee ID  <span style="color:red;">*</span></label>
 							<div class="col-sm-4">
@@ -99,7 +99,7 @@
 						<div class="form-group">
 							<label for="email" class="col-sm-3 control-label">Email  <span style="color:red;">*</span></label>
 							<div class="col-sm-6"> 
-								<input type="email"  name="email" id="email" class="form-control" tabindex="6" placeholder="eg:- someone@example.com" required>
+								<input type="email"  name="emailId" id="emailId" class="form-control" tabindex="6" placeholder="eg:- someone@example.com" required>
 								<span class="glyphicon form-control-feedback"></span>				
 							</div>
 						</div>
@@ -156,24 +156,25 @@
 						<div class="form-group has-feedback">
 							<label for="accountNo" class="col-sm-3 control-label">Account Number  <span style="color:red;">*</span></label>
 							<div class="col-sm-4">
-								<input type="text" pattern="[0-9]" class="form-control" name="accountNo" id="accountNo" tabindex="13" placeholder="eg:- XXXXXXXXXXXXXXXXX" required>
+								<input type="text" pattern="[0-9]{1,}" class="form-control" name="accountNo" id="accountNo" tabindex="13" placeholder="eg:- XXXXXXXXXXXXXXXXX" required>
 							</div>							
 						</div>
 						<div class="form-group has-feedback">
 							<label for="bankName" class="col-sm-3 control-label">Bank Name  <span style="color:red;">*</span></label>
 							<div class="col-sm-6">
-								<input type="text" pattern="[A-z]" class="form-control" name="bankName" id="bankName" tabindex="14" placeholder="eg: Axis Bank Of India" required>
+								<input type="text" pattern="[A-z\s]{1,}" class="form-control" name="bankName" id="bankName" tabindex="14" placeholder="eg: Axis Bank Of India" required>
 							</div>							
 						</div>
 						<div class="form-group has-feedback">
 							<label for="ifscCode" class="col-sm-3 control-label">IFSC Code  <span style="color:red;">*</span></label>
 							<div class="col-sm-4">
-								<input type="text" pattern="[A-Z0-9]" class="form-control" name="ifscCode" id="ifscCode" tabindex="15" placeholder="Enter IFSC Code" required>
+								<input type="text" pattern="[A-Z0-9]{1,}" class="form-control" name="ifscCode" id="ifscCode" tabindex="15" placeholder="Enter IFSC Code" required>
 							</div>							
 						</div>
 						<div class="form-group">
 							<label for="submit" class="col-sm-3 control-label">&nbsp</span></label>
 							<div class="col-sm-3">
+								<input type="hidden" name="action" value="register_employee">
 								<input type="submit" name="submit" id="submit" tabindex="16" class="form-control btn btn-primary" value="Submit">
 							</div>							
 						</div>
