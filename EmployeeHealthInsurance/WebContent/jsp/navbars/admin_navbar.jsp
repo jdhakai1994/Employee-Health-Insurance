@@ -49,8 +49,8 @@
                			<a href="#"><span class="glyphicon glyphicon-user"></span>  Registration Management</a>
                		</li>
                		<ul class="sub-menu collapse in" id="registration">
-                   		<li><a href="<%=request.getContextPath()%>/RegisterController?action=approve&&value=employee">Approve Employee Registration</a></li>
-                   		<li><a href="<%=request.getContextPath()%>/RegisterController?action=approve&&value=dependent">Approve Dependent Registration</a></li>
+                   		<li><a href="<%=request.getContextPath()%>/RegisterController?action=getUnapprovedEmployeePolicyList">Approve Employee Registration</a></li>
+                   		<li><a href="<%=request.getContextPath()%>/RegisterController?action=getunapprovedDependentPolicyList">Approve Dependent Registration</a></li>
                    	</ul>
                    	<li data-toggle="collapse" data-target="#claims">
                			<a href="#"><span class="glyphicon glyphicon-usd"></span>  Claims Management</a>

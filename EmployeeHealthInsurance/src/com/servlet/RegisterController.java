@@ -3,6 +3,7 @@ package com.servlet;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.bean.Dependent;
 import com.bean.Employee;
+import com.bean.EmployeeApproval;
 import com.bean.Policy;
 import com.services.DependentService;
 import com.services.EmployeeService;
@@ -53,6 +55,16 @@ public class RegisterController extends HttpServlet {
 			rd = request.getRequestDispatcher("/jsp/forms/dependentRegisterForm.jsp");				
 		else if("getECardForm".equals(action))
 			rd = request.getRequestDispatcher("/jsp/forms/e_CardForm.jsp");
+		else if("getUnapprovedEmployeePolicyList".equals(action)){
+			PolicyService ps = new PolicyService();
+			try {
+				ArrayList<EmployeeApproval> unapprovedEmployeeList = ps.getUnapprovedEmployeePolicy();
+				request.setAttribute("unapprovedEmployeeList", unapprovedEmployeeList);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			rd = request.getRequestDispatcher("/jsp/unapprovedEmployeePolicyList.jsp");
+		}
 		rd.forward(request, response);
 	}
 
@@ -87,20 +99,7 @@ public class RegisterController extends HttpServlet {
 			String startDate = request.getParameter("policyStartDate");
 			int policyPeriod = Integer.parseInt(request.getParameter("policyPeriod"));
 			double totalSumInsured = Double.parseDouble(request.getParameter("totalSumInsured"));
-			
-//			System.out.println(employeeId);
-//			System.out.println(employeeName);
-//			System.out.println(dateOfBirth);
-//			System.out.println(gender);
-//			System.out.println(emailId);
-//			System.out.println(altEmailID);
-//			System.out.println(mobNo);
-//			System.out.println(altMobNo);
-//			System.out.println(premiumAmount);
-//			System.out.println(accountNo);
-//			System.out.println(bankName);
-//			System.out.println(ifscCode);
-			
+						
 			//Making a bean
 			Employee employee = new Employee();
 			employee.setEmployeeId(employeeId);
@@ -207,6 +206,20 @@ public class RegisterController extends HttpServlet {
 				}				
 			}
 		}
+		else if("approve_employee".equals(action)){
+			System.out.println("In approve_employee if/else action block");
+			
+			String approvedHealthInsuranceId [] = request.getParameterValues("approved");
+			System.out.println(approvedHealthInsuranceId.length);
+			try {
+				int count = ps.approvePolicy(approvedHealthInsuranceId);
+				request.setAttribute("message", count+" policies have been approved");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}		
+		
+		System.out.println("Exiting doPost() in RegisterController Class");
 
 		RequestDispatcher rd = request.getRequestDispatcher("/jsp/result.jsp");
 		rd.forward(request, response);

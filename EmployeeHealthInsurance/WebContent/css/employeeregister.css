@@ -6,6 +6,14 @@ body {
   overflow: hidden;
 }
 
+th {
+	text-align: center;
+}
+
+td {
+	text-align: center;
+}
+
 .no-gutter{
    padding: 0 !important;
    margin: 0 !important;

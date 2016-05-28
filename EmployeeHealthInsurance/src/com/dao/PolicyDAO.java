@@ -3,8 +3,11 @@ package com.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-import com.bean.Policy;
+import com.bean.*;
 import com.util.DBConnection;
 
 public class PolicyDAO {
@@ -80,6 +83,68 @@ public class PolicyDAO {
 		System.out.println("Exiting fetchPolicyId(int, int) in PolicyDAO Class");
 		
 		return id;
+	}
+
+	public ArrayList<EmployeeApproval> getUnapprovedEmployeePolicy() throws Exception{
+		System.out.println("Entering getUnapprovedEmployeePolicy() in PolicyDAO Class");
+		
+		connect = DBConnection.getConnection();
+		
+		ps1 = connect.prepareStatement("SELECT p.healthInsuranceId,e.employeeId,"
+				+ "e.employeeName,e.dateofBirth,p.startDate,p.totalSumInsured,"
+				+ "p.policyPeriod FROM ehi.policy as p,ehi.employee as e WHERE "
+				+ "p.employeeId=e.employeeId AND p.dependentId=0 AND p.status=0");
+		resultSet = ps1.executeQuery();
+		
+		ArrayList<EmployeeApproval> unapprovedEmployeeList = new ArrayList<EmployeeApproval>();
+
+		while(resultSet.next()){
+			int healthInsuranceId = resultSet.getInt("healthInsuranceId");
+			int employeeId =  resultSet.getInt("employeeId");
+			String employeeName = resultSet.getString("employeeName");
+			String dateOfBirth = resultSet.getString("dateOfBirth");
+			dateOfBirth = dateOfBirth.substring(8, 10) + "/" + dateOfBirth.substring(5, 7) + "/" + dateOfBirth.substring(0, 4);
+			String startDate = resultSet.getString("startDate");
+			startDate = startDate.substring(8, 10) + "/" + startDate.substring(5, 7) + "/" + startDate.substring(0, 4);
+			int sumInsured = resultSet.getInt("totalSumInsured");
+			int policyPeriod = resultSet.getInt("policyPeriod");
+			
+			EmployeeApproval ea = new EmployeeApproval();
+			
+			ea.setHealthInsuranceId(healthInsuranceId);
+			ea.setEmployeeId(employeeId);
+			ea.setEmployeeName(employeeName);
+			ea.setDateOfBirth(dateOfBirth);
+			ea.setStartDate(startDate);
+			ea.setPolicyPeriod(policyPeriod);
+			ea.setSumInsured(sumInsured);
+			
+			unapprovedEmployeeList.add(ea);
+		}
+		
+		DBConnection.closeConnection(connect);
+		System.out.println("Exiting getUnapprovedEmployeePolicy() in PolicyDAO Class");
+		
+		return unapprovedEmployeeList;
+	}
+
+	public int approvePolicy(String[] approvedHealthInsuranceId) throws Exception {
+		System.out.println("Entering approvePolicy(String []) in PolicyDAO Class");
+		
+		connect = DBConnection.getConnection();
+		
+		String approvedHealthInsuranceId1 = Arrays.toString(approvedHealthInsuranceId);
+		approvedHealthInsuranceId1 = approvedHealthInsuranceId1.substring(1, approvedHealthInsuranceId1.length() - 1);
+
+		ps1 = connect.prepareStatement("UPDATE ehi.policy SET status=1 WHERE "
+				+ "healthInsuranceId IN (?)");
+		ps1.setString(1, approvedHealthInsuranceId1);
+		int count = ps1.executeUpdate();
+				
+		DBConnection.closeConnection(connect);
+		System.out.println("Exiting approvePolicy(String []) in PolicyDAO Class");
+		
+		return count;
 	}
 
 }

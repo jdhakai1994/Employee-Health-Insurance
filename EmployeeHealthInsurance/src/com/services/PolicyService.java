@@ -1,5 +1,8 @@
 package com.services;
 
+import java.util.ArrayList;
+
+import com.bean.EmployeeApproval;
 import com.bean.Policy;
 import com.dao.EmployeeDAO;
 import com.dao.PolicyDAO;
@@ -28,6 +31,22 @@ public class PolicyService {
 		int healthInsuranceId = pdao.fetchPolicyId(employeeId, dependentId);
 		System.out.println("Exiting fetchPolicyId(int, int) in PolicyService Class");
 		return healthInsuranceId;
+	}
+
+	public ArrayList<EmployeeApproval> getUnapprovedEmployeePolicy() throws Exception{
+		System.out.println("Entering getUnapprovedEmployeePolicy() in PolicyService Class");
+		PolicyDAO pdao = new PolicyDAO();
+		ArrayList<EmployeeApproval> unapprovedEmployeeList = pdao.getUnapprovedEmployeePolicy();
+		System.out.println("Exiting getUnapprovedEmployeePolicy() in PolicyService Class");
+		return unapprovedEmployeeList;		
+	}
+
+	public int approvePolicy(String[] approvedHealthInsuranceId) throws Exception {
+		System.out.println("Entering approvePolicy(String []) in PolicyService Class");
+		PolicyDAO pdao = new PolicyDAO();
+		int count = pdao.approvePolicy(approvedHealthInsuranceId);
+		System.out.println("Exiting approvePolicy(String []) in PolicyService Class");
+		return count;
 	}
 
 	
