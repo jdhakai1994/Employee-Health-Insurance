@@ -45,18 +45,18 @@ public class HospitalController extends HttpServlet {
 		
 		RequestDispatcher rd = null;
 		
-		//Retrieving action from URL
+		//retrieving action from URL
 		String action = request.getParameter("action");
 		System.out.println("The action retreived is " + action);
 		
-		//If/else block for action
+		//if-else code block for action
 		if("getAddHospitalForm".equals(action)){
 			
-			System.out.println("In add_hospital if/else action block");
+			System.out.println("In add_hospital action if-else block");
 			
 			request.setAttribute("stateList", stateList);
 			
-			//To fetch the hospitalId
+			//to fetch the hospitalId
 			HospitalService hs = new HospitalService();
 			try {
 				int hospitalId = hs.fetchHospitalId();
@@ -67,11 +67,11 @@ public class HospitalController extends HttpServlet {
 			rd = request.getRequestDispatcher("/jsp/forms/addHospitalForm.jsp");
 		}
 		else if("getModifyHospitalForm".equals(action)){
-			System.out.println("In modify_hospital if/else action block");
+			System.out.println("In modify_hospital action if-else block");
 			rd = request.getRequestDispatcher("/jsp/forms/searchHospitalForm1.jsp");
 		}
 		else if("getSearchHospitalForm".equals(action)){
-			System.out.println("In search_hospital if/else action block");
+			System.out.println("In search_hospital action if-else block");
 			request.setAttribute("stateList", stateList);
 			rd = request.getRequestDispatcher("/jsp/forms/searchHospitalForm.jsp");
 		}
@@ -89,15 +89,17 @@ public class HospitalController extends HttpServlet {
 		
 		System.out.println("Entering doPost() in HospitalController Class");
 		
+		//this is retrieved from the hidden value passed while submitting the form
 		String action = request.getParameter("action");
 		System.out.println("The action retreived is " + action);
 		
 		HospitalService hs = new HospitalService();
 				
+		//if-else code block for action		
 		if("add_hospital".equals(action)){
-			System.out.println("In add_hospital if/else action block");
+			System.out.println("In add_hospital action if-else block");
 			
-			//Retrieving data
+			//retrieving data from addHospitalForm.jsp
 			String hospitalName = request.getParameter("hospitalName");
 			String address = request.getParameter("address");
 			String cityName = request.getParameter("cityName");
@@ -106,15 +108,7 @@ public class HospitalController extends HttpServlet {
 			String stdcode = request.getParameter("stdcode");
 			String phNo = request.getParameter("phNo");
 			
-//			System.out.println(hospitalName);
-//			System.out.println(address);
-//			System.out.println(cityName);
-//			System.out.println(stateName);
-//			System.out.println(pincode);
-//			System.out.println(stdcode);
-//			System.out.println(phNo);
-			
-			//Making a bean
+			//making a hospital bean
 			Hospital hospital = new Hospital();
 			hospital.setHospitalName(hospitalName);
 			hospital.setAddress(address);
@@ -137,10 +131,13 @@ public class HospitalController extends HttpServlet {
 			}
 		}
 		else if("search_hospital".equals(action)){
-			System.out.println("In search_hospital if/else action block");
+			System.out.println("In search_hospital action if-else block");
+			
+			//this is retrieved from the hidden value passed while submitting the form
 			String action1 = request.getParameter("action1");
 			System.out.println("The action1 retreived is " + action1);
 			
+			//if-else code block for action1
 			if("searchHospitalById".equals(action1)){
 				int hospitalId = Integer.parseInt(request.getParameter("hospitalId"));
 				System.out.println(hospitalId);
@@ -190,12 +187,14 @@ public class HospitalController extends HttpServlet {
 			}
 		}
 		else if("modify_hospital".equals(action)){
-			System.out.println("In modify_hospital if/else action block");
+			System.out.println("In modify_hospital action if-else block");
+			
+			//retrieving the value of submit button Update/Delete
 			String submit = request.getParameter("submit");
 			System.out.println("The submit button pressed is " + submit);
 			
 			if("Delete".equals(submit)){
-				System.out.println("In delete if/else action block");
+				System.out.println("In delete submit if-else block");
 				int hospitalId = Integer.parseInt(request.getParameter("hospitalId"));
 				System.out.println(hospitalId);
 				try {
@@ -210,7 +209,9 @@ public class HospitalController extends HttpServlet {
 				}
 			}
 			else if("Update".equals(submit)){
-				System.out.println("In update if/else action block");
+				System.out.println("In update submit if-else block");
+				
+				//retrieving data from the Form
 				int hospitalId = Integer.parseInt(request.getParameter("hospitalId"));
 				String hospitalName = request.getParameter("hospitalName");
 				String address = request.getParameter("address");
@@ -220,6 +221,7 @@ public class HospitalController extends HttpServlet {
 				String stdcode = request.getParameter("stdcode");
 				String phNo = request.getParameter("phNo");
 				
+				//making a hospital bean
 				Hospital hospital = new Hospital();
 				hospital.setHospitalId(hospitalId);
 				hospital.setHospitalName(hospitalName);
@@ -240,12 +242,11 @@ public class HospitalController extends HttpServlet {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-			}
-			
+			}			
 		}
 		
+		System.out.println("Exiting doPost() in HospitalController Class");
 		RequestDispatcher rd = request.getRequestDispatcher("/jsp/result.jsp");
-		rd.forward(request, response);
-				
+		rd.forward(request, response);	
 	}
 }

@@ -1,19 +1,23 @@
 package com.services;
 
-import java.sql.SQLException;
-
 import com.bean.Employee;
 import com.dao.EmployeeDAO;
-import com.dao.HospitalDAO;
 
 public class EmployeeService {
 
 	public String addEmployee(Employee employee) throws Exception {
-		System.out.println("Entering addEmployee() in EmployeeService Class");
+		System.out.println("Entering addEmployee(Employee) in EmployeeService Class");
 		EmployeeDAO edao = new EmployeeDAO();
 		String reply = edao.addEmployee(employee);
-		System.out.println("Exiting addEmployee() in EmployeeService Class");
+		System.out.println("Exiting addEmployee(Employee) in EmployeeService Class");
 		return reply;		
+	}
+
+	public void updatePremiumAmount(String[] approvedHealthInsuranceId) throws Exception {
+		System.out.println("Entering updatePremiumAmount(String []) in EmployeeService Class");
+		EmployeeDAO edao = new EmployeeDAO();
+		edao.updatePremiumAmount(approvedHealthInsuranceId);
+		System.out.println("Exiting updatePremiumAmount(String []) in EmployeeService Class");
 	}
 
 }

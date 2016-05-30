@@ -23,7 +23,7 @@ public class DBConnection {
 	}
 	
 	public static void closeConnection(Connection con){
-		System.out.println("Entering closeConnection() in DBConnection Class");
+		System.out.println("Entering closeConnection(Connection) in DBConnection Class");
 		if(con != null){
 			try{
 				con.close();
@@ -31,7 +31,7 @@ public class DBConnection {
 				e.printStackTrace();
 			}			
 		}
-		System.out.println("Exiting closeConnection() in DBConnection Class");
+		System.out.println("Exiting closeConnection(Connection) in DBConnection Class");
 	}
 
 }

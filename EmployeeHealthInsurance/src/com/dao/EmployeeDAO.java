@@ -3,9 +3,6 @@ package com.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Date;
-
 import com.bean.Employee;
 import com.util.DBConnection;
 
@@ -18,10 +15,11 @@ public class EmployeeDAO {
 	private String reply = null;
 
 	public String addEmployee(Employee employee) throws Exception {
-		System.out.println("Entering addEmployee() in EmployeeDAO Class");
+		System.out.println("Entering addEmployee(Employee) in EmployeeDAO Class");
 		
 		connect = DBConnection.getConnection();
 		
+		//retrieving data from employee bean
 		int employeeId = employee.getEmployeeId();
 		String employeeName = employee.getEmployeeName();
 		String gender = employee.getGender();
@@ -36,7 +34,8 @@ public class EmployeeDAO {
 		String bankName = employee.getBankName();
 		String ifscCode = employee.getIfscCode();
 		
-		ps1 = connect.prepareStatement("SELECT status FROM ehi.employee WHERE employeeId=?");
+		ps1 = connect.prepareStatement("SELECT status FROM ehi.employee WHERE "
+				+ "employeeId=?");
 		ps1.setInt(1, employeeId);
 		resultSet = ps1.executeQuery();
 		resultSet.last();
@@ -44,7 +43,8 @@ public class EmployeeDAO {
 		if(rownum == 1){
 			int status = resultSet.getInt("status");
 			if(status == 0){
-				ps2 = connect.prepareStatement("UPDATE ehi.employee SET status=1 WHERE employeeId=?");
+				ps2 = connect.prepareStatement("UPDATE ehi.employee SET status=1 WHERE"
+						+ " employeeId=?");
 				ps2.setInt(1, employeeId);
 				ps2.executeUpdate();
 				reply = "success";
@@ -77,9 +77,27 @@ public class EmployeeDAO {
 			reply ="fail";
 		
 		DBConnection.closeConnection(connect);
-		System.out.println("Exiting addEmployee() in EmployeeDAO Class");
+		System.out.println("Exiting addEmployee(Employee) in EmployeeDAO Class");
 		
 		return reply;
+	}
+
+	public void updatePremiumAmount(String[] approvedHealthInsuranceId) throws Exception {
+		System.out.println("Entering updatePremiumAmount(String []) in EmployeeDAO Class");
+		
+		connect = DBConnection.getConnection();
+		
+		for (int i = 0;i <= approvedHealthInsuranceId.length-1;i++){
+			ps1 = connect.prepareStatement("UPDATE ehi.employee JOIN policy as p ON "
+				+ "employee.employeeId=p.employeeId SET "
+				+ "premiumAmount=premiumAmount+0.02*totalSumInsured WHERE "
+				+ "healthInsuranceId=?");
+			ps1.setInt(1, Integer.parseInt(approvedHealthInsuranceId[i]));
+			ps1.executeUpdate();
+		}
+		
+		DBConnection.closeConnection(connect);
+		System.out.println("Exiting updatePremiumAmount(String []) in EmployeeDAO Class");
 	}
 
 }

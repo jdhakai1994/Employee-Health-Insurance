@@ -18,14 +18,16 @@ public class LoginDAO {
 	
 	public String loginUser(Login input) throws Exception{
 		
-		System.out.println("In loginUser() in LoginDAO Class");
+		System.out.println("Entering loginUser(Login) in LoginDAO Class");
 	
 		connect = DBConnection.getConnection();
 		
+		//retrieving data from login bean
 		String username = input.getUsername();
 		String password = input.getPassword();
 		
-		ps1 = connect.prepareStatement("SELECT * FROM ehi.user_credentials WHERE username=?");
+		ps1 = connect.prepareStatement("SELECT * FROM ehi.user_credentials "
+				+ "WHERE username=?");
 		ps1.setString(1, username);
 		resultSet = ps1.executeQuery();
 		
@@ -52,16 +54,17 @@ public class LoginDAO {
 		
 			System.out.println(reply);
 			DBConnection.closeConnection(connect);
-			System.out.println("Exiting loginUser() in LoginDAO Class");
+			System.out.println("Exiting loginUser(Login) in LoginDAO Class");
 			return reply;
 	}
 
 	public String registerUser(Login input) throws SQLException {
 		
-		System.out.println("Entering registerUser() in LoginDAO Class");
+		System.out.println("Entering registerUser(Login) in LoginDAO Class");
 		
 		connect = DBConnection.getConnection();
 		
+		//retrieving data from login bean
 		String username = input.getUsername();
 		String password = input.getPassword();
 		
@@ -83,7 +86,7 @@ public class LoginDAO {
 		}
 		
 		DBConnection.closeConnection(connect);
-		System.out.println("Exiting registerUser() in LoginDAO Class");
+		System.out.println("Exiting registerUser(Login) in LoginDAO Class");
 		return reply;
 	}
 }

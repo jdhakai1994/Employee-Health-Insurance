@@ -3,8 +3,6 @@ package com.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import com.bean.Hospital;
 import com.util.DBConnection;
 
@@ -18,10 +16,11 @@ public class HospitalDAO {
 
 	public String addHospital(Hospital hospital) throws Exception {
 		
-		System.out.println("Entering addHospital() in HospitalDAO Class");
+		System.out.println("Entering addHospital(Hospital) in HospitalDAO Class");
 		
 		connect = DBConnection.getConnection();
 		
+		//retrieving data from hospital bean
 		String hospitalName = hospital.getHospitalName();
 		String address = hospital.getAddress();
 		String cityName = hospital.getCityName();
@@ -30,7 +29,8 @@ public class HospitalDAO {
 		String stdcode = hospital.getStdcode();
 		String phNo = hospital.getPhNo();
 		
-		ps1 = connect.prepareStatement("SELECT status FROM ehi.hospital WHERE pincode=? and hospitalName=?");
+		ps1 = connect.prepareStatement("SELECT status FROM ehi.hospital WHERE pincode=? "
+				+ "and hospitalName=?");
 		ps1.setString(1, pincode);
 		ps1.setString(2, hospitalName);
 		resultSet = ps1.executeQuery();
@@ -39,7 +39,8 @@ public class HospitalDAO {
 		if(rownum == 1){
 			int status = resultSet.getInt("status");
 			if(status == 0){
-				ps2 = connect.prepareStatement("UPDATE ehi.hospital SET status=1 WHERE pincode=? and hospitalName=?");
+				ps2 = connect.prepareStatement("UPDATE ehi.hospital SET status=1 WHERE"
+						+ " pincode=? and hospitalName=?");
 				ps2.setString(1, pincode);
 				ps2.setString(2, hospitalName);
 				ps2.executeUpdate();
@@ -67,7 +68,7 @@ public class HospitalDAO {
 			reply ="fail";
 		
 		DBConnection.closeConnection(connect);
-		System.out.println("Exiting addHospital() in HospitalDAO Class");
+		System.out.println("Exiting addHospital(Hospital) in HospitalDAO Class");
 	
 		return reply;
 	}
@@ -92,7 +93,7 @@ public class HospitalDAO {
 
 	public Hospital searchHospital(int hospitalId) throws Exception {
 		
-		System.out.println("Entering searchHospital(hospitalId) in HospitalDAO Class");
+		System.out.println("Entering searchHospital(int) in HospitalDAO Class");
 		
 		connect = DBConnection.getConnection();
 		
@@ -101,7 +102,7 @@ public class HospitalDAO {
 		ps1.setInt(1, hospitalId);
 		resultSet = ps1.executeQuery();
 		if(resultSet.next()){
-			System.out.println("Yes");
+			//making a hospital bean 
 			hospital = new Hospital();
 			hospital.setHospitalId(resultSet.getInt("hospitalId"));
 			hospital.setHospitalName(resultSet.getString("hospitalName"));
@@ -116,14 +117,15 @@ public class HospitalDAO {
 		}
 	
 		DBConnection.closeConnection(connect);
-		System.out.println("Exiting searchHospital(hospitalId) in HospitalDAO Class");
+		System.out.println("Exiting searchHospital(int) in HospitalDAO Class");
 		
 		return hospital;
 	}
+	
 
 	public String deleteHospital(int hospitalId) throws Exception {
 		
-		System.out.println("Entering deleteHospital() in HospitalDAO Class");
+		System.out.println("Entering deleteHospital(int) in HospitalDAO Class");
 		
 		connect = DBConnection.getConnection();
 		
@@ -132,7 +134,7 @@ public class HospitalDAO {
 		ps1.executeUpdate();
 		
 		DBConnection.closeConnection(connect);
-		System.out.println("Exiting deleteHospital() in HospitalDAO Class");
+		System.out.println("Exiting deleteHospital(int) in HospitalDAO Class");
 		
 		return "success";
 		
@@ -140,10 +142,11 @@ public class HospitalDAO {
 
 	public String updateHospital(Hospital hospital) throws Exception {
 		
-		System.out.println("Entering updateHospital() in HospitalDAO Class");
+		System.out.println("Entering updateHospital(Hospital) in HospitalDAO Class");
 		
 		connect = DBConnection.getConnection();
 		
+		//retrieving data from hospital bean
 		int hospitalId = hospital.getHospitalId();
 		String hospitalName = hospital.getHospitalName();
 		String address = hospital.getAddress();
@@ -153,8 +156,9 @@ public class HospitalDAO {
 		String stdcode = hospital.getStdcode();
 		String phNo = hospital.getPhNo();
 		
-		ps1 = connect.prepareStatement("UPDATE ehi.hospital SET hospitalName=?, address=?,"
-				+ "city=?, state=?, pincode=?, stdcode=?, phoneNumber=? WHERE hospitalId=?");
+		ps1 = connect.prepareStatement("UPDATE ehi.hospital SET hospitalName=?, "
+				+ "address=?,city=?, state=?, pincode=?, stdcode=?, phoneNumber=? "
+				+ "WHERE hospitalId=?");
 		
 		ps1.setString(1, hospitalName);
 		ps1.setString(2, address);
@@ -167,7 +171,7 @@ public class HospitalDAO {
 		ps1.executeUpdate();
 		
 		DBConnection.closeConnection(connect);
-		System.out.println("Exiting updateHospital() in HospitalDAO Class");
+		System.out.println("Exiting updateHospital(Hospital) in HospitalDAO Class");
 		
 		return "success";
 
@@ -186,6 +190,7 @@ public class HospitalDAO {
 		ps1.setString(2, input);
 		resultSet = ps1.executeQuery();
 		if(resultSet.next()){
+			//making a hospital bean
 			hospital = new Hospital();
 			hospital.setHospitalId(resultSet.getInt("hospitalId"));
 			hospital.setHospitalName(resultSet.getString("hospitalName"));

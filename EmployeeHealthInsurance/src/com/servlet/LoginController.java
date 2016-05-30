@@ -68,14 +68,15 @@ public class LoginController extends HttpServlet {
 		
 		System.out.println("Entering doService() in LoginController Class");
 		
+		//this is retrieved from the hidden value passed while submitting the form
 		String action = request.getParameter("action");
 		System.out.println("The action retreived is " + action);
 		
-		//Retrieving username and password
+		//retrieving username and password from loginForm.jsp
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		
-		//Making a bean
+		//making a login bean
 		Login input = new Login();
 		input.setUsername(username);
 		input.setPassword(password);
@@ -85,9 +86,9 @@ public class LoginController extends HttpServlet {
 		String register_reply = null;
 		
 		RequestDispatcher rd = null;
-		//If/else block for action
+		//if-else code block for action
 		if("login".equals(action)){
-			System.out.println("In login if/else action block");
+			System.out.println("In login action if-else action block");
 			try {
 				login_reply = ls.loginUser(input);
 			} catch (Exception e) {
@@ -95,7 +96,7 @@ public class LoginController extends HttpServlet {
 			}
 		}
 		else if("register".equals(action)){
-			System.out.println("In register if/else action block");
+			System.out.println("In register action if-else block");
 			try {
 				register_reply = ls.registerUser(input);
 			} catch (Exception e) {
@@ -103,7 +104,7 @@ public class LoginController extends HttpServlet {
 			}
 		}
 		
-		//If/else block for the login_reply
+		//if-else code block for the login_reply
 		if("not_registered".equals(login_reply)){
 			System.out.println("In not_registered if/else login_reply block");
 			request.setAttribute("message", "You need to register yourself first");
@@ -123,7 +124,7 @@ public class LoginController extends HttpServlet {
 			rd = request.getRequestDispatcher("jsp/homepages/admin.jsp");
 		}
 		
-		//If/else block for the register_reply
+		//If-else code block for the register_reply
 		if("success".equals(register_reply)){
 			System.out.println("In success if/else register_reply block");
 			rd = request.getRequestDispatcher("jsp/homepages/member.jsp");
@@ -134,6 +135,7 @@ public class LoginController extends HttpServlet {
 			rd = request.getRequestDispatcher("jsp/forms/loginForm.jsp");
 		}
 		
+		System.out.println("Exiting doService() in LoginController Class");
 		rd.forward(request, response);
 	}
 	

@@ -2,18 +2,18 @@ package com.services;
 
 import java.util.ArrayList;
 
+import com.bean.DependentApproval;
 import com.bean.EmployeeApproval;
 import com.bean.Policy;
-import com.dao.EmployeeDAO;
 import com.dao.PolicyDAO;
 
 public class PolicyService {
 
 	public String addPolicy(Policy policy) throws Exception{
-		System.out.println("Entering addPolicy() in PolicyService Class");
+		System.out.println("Entering addPolicy(Policy) in PolicyService Class");
 		PolicyDAO pdao = new PolicyDAO();
 		String reply = pdao.addPolicy(policy);
-		System.out.println("Exiting addPolicy() in PolicyService Class");
+		System.out.println("Exiting addPolicy(Policy) in PolicyService Class");
 		return reply;
 	}
 
@@ -49,6 +49,12 @@ public class PolicyService {
 		return count;
 	}
 
-	
+	public ArrayList<DependentApproval> getUnapprovedDependentPolicy() throws Exception {
+		System.out.println("Entering getUnapprovedDependentPolicy() in PolicyService Class");
+		PolicyDAO pdao = new PolicyDAO();
+		ArrayList<DependentApproval> unapprovedDependentList = pdao.getUnapprovedDependentPolicy();
+		System.out.println("Exiting getUnapprovedDependentPolicy() in PolicyService Class");
+		return unapprovedDependentList;
+	}
 
 }
