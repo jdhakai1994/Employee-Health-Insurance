@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.bean.Hospital;
 import com.services.HospitalService;
@@ -45,35 +46,47 @@ public class HospitalController extends HttpServlet {
 		
 		RequestDispatcher rd = null;
 		
-		//retrieving action from URL
-		String action = request.getParameter("action");
-		System.out.println("The action retreived is " + action);
+		//get reference to existing session
+		HttpSession session = request.getSession(false);
+		String username = (String) session.getAttribute("username");
 		
-		//if-else code block for action
-		if("getAddHospitalForm".equals(action)){
+		//redirecting the user to login page if session has expired
+		if(username == null){
+			request.setAttribute("message", "Your session has expired, please login again to continue");
+			rd = request.getRequestDispatcher("jsp/forms/loginForm.jsp");
+		}
+		else{
+		
+			//retrieving action from URL
+			String action = request.getParameter("action");
+			System.out.println("The action retreived is " + action);
+		
+			//if-else code block for action
+			if("getAddHospitalForm".equals(action)){
 			
-			System.out.println("In add_hospital action if-else block");
+				System.out.println("In add_hospital action if-else block");
 			
-			request.setAttribute("stateList", stateList);
+				request.setAttribute("stateList", stateList);
 			
-			//to fetch the hospitalId
-			HospitalService hs = new HospitalService();
-			try {
-				int hospitalId = hs.fetchHospitalId();
-				request.setAttribute("hospitalId", hospitalId);
-			} catch (Exception e) {
-				e.printStackTrace();
+				//to fetch the hospitalId
+				HospitalService hs = new HospitalService();
+				try {
+					int hospitalId = hs.fetchHospitalId();
+					request.setAttribute("hospitalId", hospitalId);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				rd = request.getRequestDispatcher("/jsp/forms/addHospitalForm.jsp");
 			}
-			rd = request.getRequestDispatcher("/jsp/forms/addHospitalForm.jsp");
-		}
-		else if("getModifyHospitalForm".equals(action)){
-			System.out.println("In modify_hospital action if-else block");
-			rd = request.getRequestDispatcher("/jsp/forms/searchHospitalForm1.jsp");
-		}
-		else if("getSearchHospitalForm".equals(action)){
-			System.out.println("In search_hospital action if-else block");
-			request.setAttribute("stateList", stateList);
-			rd = request.getRequestDispatcher("/jsp/forms/searchHospitalForm.jsp");
+			else if("getModifyHospitalForm".equals(action)){
+				System.out.println("In modify_hospital action if-else block");
+				rd = request.getRequestDispatcher("/jsp/forms/searchHospitalForm1.jsp");
+			}
+			else if("getSearchHospitalForm".equals(action)){
+				System.out.println("In search_hospital action if-else block");
+				request.setAttribute("stateList", stateList);
+				rd = request.getRequestDispatcher("/jsp/forms/searchHospitalForm.jsp");
+			}
 		}
 		
 		System.out.println("Exiting doGet() in HospitalController Class");				

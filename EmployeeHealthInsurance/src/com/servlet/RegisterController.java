@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.bean.*;
 import com.services.*;
@@ -36,36 +37,48 @@ public class RegisterController extends HttpServlet {
 		
 		RequestDispatcher rd = null;
 		
-		//this is retrieved from the URL
-		String action = request.getParameter("action");
-		System.out.println("The action retreived is " + action);
-		
-		//if-else code block for action
-		if("getRegisterEmployeeForm".equals(action))
-			rd = request.getRequestDispatcher("/jsp/forms/employeeRegisterForm.jsp");
-		else if("getDependentEmployeeForm".equals(action))
-			rd = request.getRequestDispatcher("/jsp/forms/dependentRegisterForm.jsp");				
-		else if("getECardForm".equals(action))
-			rd = request.getRequestDispatcher("/jsp/forms/e_CardForm.jsp");
-		else if("getUnapprovedEmployeePolicyList".equals(action)){
-			PolicyService ps = new PolicyService();
-			try {
-				ArrayList<EmployeeApproval> unapprovedEmployeeList = ps.getUnapprovedEmployeePolicy();
-				request.setAttribute("unapprovedEmployeeList", unapprovedEmployeeList);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			rd = request.getRequestDispatcher("/jsp/unapprovedEmployeePolicyList.jsp");
+		//get reference to existing session
+		HttpSession session = request.getSession(false);
+		String username = (String) session.getAttribute("username");
+				
+		//redirecting the user to login page if session has expired
+		if(username == null){
+			request.setAttribute("message", "Your session has expired, please login again to continue");
+			rd = request.getRequestDispatcher("jsp/forms/loginForm.jsp");
 		}
-		else if("getUnapprovedDependentPolicyList".equals(action)){
-			PolicyService ps = new PolicyService();
-			try {
-				ArrayList<DependentApproval> unapprovedDependentList = ps.getUnapprovedDependentPolicy();
-				request.setAttribute("unapprovedDependentList", unapprovedDependentList);
-			} catch (Exception e) {
-				e.printStackTrace();
+		else{
+		
+			//this is retrieved from the URL
+			String action = request.getParameter("action");
+			System.out.println("The action retreived is " + action);
+		
+			//if-else code block for action
+			if("getRegisterEmployeeForm".equals(action))
+				rd = request.getRequestDispatcher("/jsp/forms/employeeRegisterForm.jsp");
+			else if("getDependentEmployeeForm".equals(action))
+				rd = request.getRequestDispatcher("/jsp/forms/dependentRegisterForm.jsp");				
+			else if("getECardForm".equals(action))
+				rd = request.getRequestDispatcher("/jsp/forms/e_CardForm.jsp");
+			else if("getUnapprovedEmployeePolicyList".equals(action)){
+				PolicyService ps = new PolicyService();
+				try {
+					ArrayList<EmployeeApproval> unapprovedEmployeeList = ps.getUnapprovedEmployeePolicy();
+					request.setAttribute("unapprovedEmployeeList", unapprovedEmployeeList);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				rd = request.getRequestDispatcher("/jsp/unapprovedEmployeePolicyList.jsp");
 			}
-			rd = request.getRequestDispatcher("/jsp/unapprovedDependentPolicyList.jsp");
+			else if("getUnapprovedDependentPolicyList".equals(action)){
+				PolicyService ps = new PolicyService();
+				try {
+					ArrayList<DependentApproval> unapprovedDependentList = ps.getUnapprovedDependentPolicy();
+					request.setAttribute("unapprovedDependentList", unapprovedDependentList);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				rd = request.getRequestDispatcher("/jsp/unapprovedDependentPolicyList.jsp");
+			}
 		}
 		
 		System.out.println("Exiting doGet() in RegisterController Class");

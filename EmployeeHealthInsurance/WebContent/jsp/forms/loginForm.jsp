@@ -8,7 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
 <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
 <!-- custom CSS -->
 <link href="<%=request.getContextPath()%>/css/login.css" rel="stylesheet" type="text/css" />
@@ -69,6 +69,8 @@
 										<div class="row">
 											<div class="col-sm-6 col-sm-offset-3">
 												<input type="hidden" name="action" value="login">
+												<c:set var="now" value="<%=System.currentTimeMillis()%>"/>
+												<input type="hidden" name="logon" value="${now}">
 												<input type="submit" name="login-submit" id="login-submit" tabindex="3" class="form-control btn btn-login" value="Log In">
 											</div>
 										</div>

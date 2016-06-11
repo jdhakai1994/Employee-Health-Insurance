@@ -38,9 +38,14 @@
 					Admin
 				</div>
 			</div>
-				
-			<div class="profile-userbuttons">
-				<button type="button" class="btn btn-success btn-sm">Log Out</button>
+			
+			<div class="profile-userbuttons">	
+				<form id="logoutForm" action="<%=request.getContextPath()%>/LoginController?action=logout" method="post" role="form">
+					<div class="form-group">
+						<input type="hidden" name="action" value="logout">
+						<input type="submit" name="submit" id="submit" class="btn btn-success btn-md" value="Log Out">
+					</div>
+				</form>
 			</div>
 			<hr>
 			<div class="menu-list">

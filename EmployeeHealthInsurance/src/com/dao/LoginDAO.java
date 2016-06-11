@@ -25,6 +25,7 @@ public class LoginDAO {
 		//retrieving data from login bean
 		String username = input.getUsername();
 		String password = input.getPassword();
+		long logon = input.getLogon();
 		
 		ps1 = connect.prepareStatement("SELECT * FROM ehi.user_credentials "
 				+ "WHERE username=?");
@@ -41,21 +42,35 @@ public class LoginDAO {
 		else{
 				String uname = resultSet.getString("username");
 				String pwd = resultSet.getString("password");
+				long lastLogon = resultSet.getLong("lastLogon");
 				
-				if(username.equals(uname) && password.equals(pwd)){
-					if("admin".equals(username))
-						reply = "admin";
+				if(logon > lastLogon){
+					System.out.println(logon);
+					System.out.println(lastLogon);
+					if(username.equals(uname) && password.equals(pwd)){
+						if("admin".equals(username))
+							reply = "admin";
+						else
+							reply = "member";
+						
+						//modify the last logon time
+						ps2 = connect.prepareStatement("UPDATE ehi.user_credentials SET "
+								+ "lastLogon=? WHERE username=?");
+						ps2.setLong(1, logon);
+						ps2.setString(2, username);
+						ps2.executeUpdate();
+					}
 					else
-						reply = "member";
+						reply = "wrong_credentials";
 				}
 				else
-					reply = "wrong_credentials";
-			}
+					reply = "session_expired";				
+		}
 		
-			System.out.println(reply);
-			DBConnection.closeConnection(connect);
-			System.out.println("Exiting loginUser(Login) in LoginDAO Class");
-			return reply;
+		System.out.println(reply);
+		DBConnection.closeConnection(connect);
+		System.out.println("Exiting loginUser(Login) in LoginDAO Class");
+		return reply;
 	}
 
 	public String registerUser(Login input) throws SQLException {
