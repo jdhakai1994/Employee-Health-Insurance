@@ -65,24 +65,22 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 					
 					<div class="form-content">
 					<!-- FORM -->
-					<form id="e_CardForm" action="" method="post" role="form" class="form-horizontal" data-toggle="validator">
+					<form id="e_CardForm" action="<%=request.getContextPath()%>/RegisterController?action=generate_eCard" method="post" role="form" class="form-horizontal" data-toggle="validator">
 						<div class="form-group">
   							<label for="e-card"  class="col-sm-3 control-label">Generate E-Card  <span style="color:red;">*</span></label>
   							<div class="col-sm-3">
   								<select class="form-control" name="e-card" id="e-card" tabindex="1" required>
   									<option value="">None</option>
-  									<option value="self">Self</option>
-  									<option value="father">Father</option>
-  									<option value="mother">Mother</option>
-  									<option value="spouse">Spouse</option>
-  									<option value="father-in-law">Father-in-Law</option>
-  									<option value="mother-in-law">Mother-in-Law</option>
+  									<c:forEach items="${list}" var="value">
+  										<option value="${value}">${value}</option>
+  									</c:forEach>
   								</select>
   							</div>
   						</div>
 						<div class="form-group">
 							<label for="submit" class="col-sm-3 control-label">&nbsp</span></label>
 							<div class="col-sm-2">
+								<input type="hidden" name="action" value="generate_eCard">
 								<input type="submit" name="submit" id="submit" tabindex="2" class="form-control btn btn-primary" value="Generate">
 							</div>				
 						</div>

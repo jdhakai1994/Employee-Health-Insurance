@@ -2,9 +2,7 @@ package com.services;
 
 import java.util.ArrayList;
 
-import com.bean.DependentApproval;
-import com.bean.EmployeeApproval;
-import com.bean.Policy;
+import com.bean.*;
 import com.dao.PolicyDAO;
 
 public class PolicyService {
@@ -17,19 +15,19 @@ public class PolicyService {
 		return reply;
 	}
 
-	public int fetchPolicyId(int employeeId) throws Exception {
-		System.out.println("Entering fetchPolicyId(int) in PolicyService Class");
+	public int fetchPolicyId(int employeeId,boolean isApproved) throws Exception {
+		System.out.println("Entering fetchPolicyId(int, boolean) in PolicyService Class");
 		PolicyDAO pdao = new PolicyDAO();
-		int healthInsuranceId = pdao.fetchPolicyId(employeeId);
-		System.out.println("Exiting fetchPolicyId(int) in PolicyService Class");
+		int healthInsuranceId = pdao.fetchPolicyId(employeeId, isApproved);
+		System.out.println("Exiting fetchPolicyId(int, boolean) in PolicyService Class");
 		return healthInsuranceId;
 	}
 	
-	public int fetchPolicyId(int employeeId, int dependentId) throws Exception {
-		System.out.println("Entering fetchPolicyId(int, int) in PolicyService Class");
+	public int fetchPolicyId(int employeeId, int dependentId,boolean isApproved) throws Exception {
+		System.out.println("Entering fetchPolicyId(int, int, boolean) in PolicyService Class");
 		PolicyDAO pdao = new PolicyDAO();
-		int healthInsuranceId = pdao.fetchPolicyId(employeeId, dependentId);
-		System.out.println("Exiting fetchPolicyId(int, int) in PolicyService Class");
+		int healthInsuranceId = pdao.fetchPolicyId(employeeId, dependentId, isApproved);
+		System.out.println("Exiting fetchPolicyId(int, int, boolean) in PolicyService Class");
 		return healthInsuranceId;
 	}
 
@@ -55,6 +53,14 @@ public class PolicyService {
 		ArrayList<DependentApproval> unapprovedDependentList = pdao.getUnapprovedDependentPolicy();
 		System.out.println("Exiting getUnapprovedDependentPolicy() in PolicyService Class");
 		return unapprovedDependentList;
+	}
+
+	public ECard getECardDetails(String username, String relation) throws Exception {
+		System.out.println("Entering getECardDetails(String, String) in PolicyService Class");
+		PolicyDAO pdao = new PolicyDAO();
+		ECard ecard = pdao.getECardDetails(username, relation);
+		System.out.println("Exiting getECardDetails(String, String) in PolicyService Class");
+		return ecard;		
 	}
 
 }

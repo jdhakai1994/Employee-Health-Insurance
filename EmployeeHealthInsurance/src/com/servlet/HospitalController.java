@@ -106,6 +106,9 @@ public class HospitalController extends HttpServlet {
 		String action = request.getParameter("action");
 		System.out.println("The action retreived is " + action);
 		
+		//the heading to be displayed on the result page
+		request.setAttribute("heading", "Hospital Management");
+		
 		HospitalService hs = new HospitalService();
 				
 		//if-else code block for action		

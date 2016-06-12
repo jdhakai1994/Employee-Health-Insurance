@@ -3,6 +3,8 @@ package com.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import com.bean.Employee;
 import com.util.DBConnection;
 
@@ -33,6 +35,7 @@ public class EmployeeDAO {
 		String accountNo = employee.getAccountNo();
 		String bankName = employee.getBankName();
 		String ifscCode = employee.getIfscCode();
+		String username = employee.getUsername();
 		
 		ps1 = connect.prepareStatement("SELECT status FROM ehi.employee WHERE "
 				+ "employeeId=?");
@@ -56,8 +59,8 @@ public class EmployeeDAO {
 		else if(rownum == 0){
 			ps2 = connect.prepareStatement("INSERT INTO ehi.employee "
 			+ "(employeeId,employeeName,dateOfBirth,gender,emailId,altEmailId,"
-			+ "mobNo,altMobNo,premiumAmount,accountNo,bankName,ifscCode) "
-			+ "VALUES (?,UPPER(?),?,?,?,?,?,?,?,?,UPPER(?),?)");
+			+ "mobNo,altMobNo,premiumAmount,accountNo,bankName,ifscCode,username) "
+			+ "VALUES (?,UPPER(?),?,?,?,?,?,?,?,?,UPPER(?),?,?)");
 			ps2.setInt(1, employeeId);
 			ps2.setString(2, employeeName);
 			ps2.setString(3, dateOfBirth);
@@ -70,6 +73,7 @@ public class EmployeeDAO {
 			ps2.setString(10, accountNo);
 			ps2.setString(11, bankName);
 			ps2.setString(12, ifscCode);
+			ps2.setString(13, username);
 			ps2.executeUpdate();
 			reply = "success";
 		}
@@ -98,6 +102,34 @@ public class EmployeeDAO {
 		
 		DBConnection.closeConnection(connect);
 		System.out.println("Exiting updatePremiumAmount(String []) in EmployeeDAO Class");
+	}
+
+	public Employee getEmployeeDetails(String username) throws Exception {
+		System.out.println("Entering getEmployeeDetails(String) in EmployeeDAO Class");
+		
+		connect = DBConnection.getConnection();
+		
+		Employee employee = new Employee();
+		
+		ps1 = connect.prepareStatement("SELECT employeeId,employeeName,mobNo,dateofBirth "
+				+ "FROM ehi.employee WHERE username=?");
+		ps1.setString(1, username);
+		resultSet = ps1.executeQuery();
+		while(resultSet.next()){
+			int employeeId = resultSet.getInt("employeeId");
+			String employeeName = resultSet.getString("employeeName");
+			String mobNo = resultSet.getString("mobNo");
+			String dateOfBirth = resultSet.getString("dateofBirth");
+			
+			employee.setEmployeeId(employeeId);
+			employee.setEmployeeName(employeeName);
+			employee.setMobNo(mobNo);
+			employee.setDateOfBirth(dateOfBirth);
+		}
+		
+		DBConnection.closeConnection(connect);
+		System.out.println("Exiting getEmployeeDetails(String) in EmployeeDAO Class");
+		return employee;
 	}
 
 }

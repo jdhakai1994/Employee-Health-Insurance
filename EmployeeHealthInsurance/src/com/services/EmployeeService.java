@@ -20,4 +20,12 @@ public class EmployeeService {
 		System.out.println("Exiting updatePremiumAmount(String []) in EmployeeService Class");
 	}
 
+	public Employee getEmployeeDetails(String username) throws Exception{
+		System.out.println("Entering getEmployeeDetails(String) in EmployeeService Class");
+		EmployeeDAO edao = new EmployeeDAO();
+		Employee employee = edao.getEmployeeDetails(username);
+		System.out.println("Exiting getEmployeeDetails(String) in EmployeeService Class");
+		return employee;
+	}
+
 }

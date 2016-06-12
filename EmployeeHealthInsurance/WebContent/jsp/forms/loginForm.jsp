@@ -17,10 +17,10 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 
 <!-- validation -->
-<script src="http://1000hz.github.io/bootstrap-validator/dist/validator.min.js"></script>
+<script src="https://1000hz.github.io/bootstrap-validator/dist/validator.min.js"></script>
 
 <!-- Latest compiled JavaScript -->
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
 <!-- custom JavaScript -->
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/login.js"></script>

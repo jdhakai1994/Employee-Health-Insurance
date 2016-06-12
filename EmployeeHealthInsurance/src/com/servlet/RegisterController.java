@@ -57,8 +57,54 @@ public class RegisterController extends HttpServlet {
 				rd = request.getRequestDispatcher("/jsp/forms/employeeRegisterForm.jsp");
 			else if("getDependentEmployeeForm".equals(action))
 				rd = request.getRequestDispatcher("/jsp/forms/dependentRegisterForm.jsp");				
-			else if("getECardForm".equals(action))
+			else if("getECardForm".equals(action)){
+				
+				//reference to service classes
+				EmployeeService es = new EmployeeService();
+				PolicyService ps = new PolicyService();
+				DependentService ds = new DependentService();
+				
+				//initializing 
+				ArrayList<String> list = new ArrayList<>();
+				int employeeId = 0;
+				try {
+					//get employee details corresponding to username
+					Employee employee = es.getEmployeeDetails(username);
+					
+					//retrieve employeeId
+					employeeId = employee.getEmployeeId();
+					
+					//fetch healthInsuranceId of the employee
+					int employeeHealthInsuranceId = ps.fetchPolicyId(employeeId,true);
+					
+					/*proceed further only if the health insurance policy is approved
+					 * one cannot generate e-card if approval is pending
+					 */
+					if(employeeHealthInsuranceId != -1){
+						list.add("self");
+						
+						//get the details of the dependents
+						ArrayList<Dependent> dependentList = new ArrayList<>();
+						dependentList = ds.fetchDependentDetails(employee.getEmployeeId());
+						for(Dependent dependent : dependentList){
+							//fetch health Insurance Id of dependents
+							int dependentHealthInsuranceId = ps.fetchPolicyId(employeeId, dependent.getDependentId(),true);
+							
+							/*add only if the health insurance policy of dependent is 
+							 * approved, one cannot generate e-card if approval is pending
+							 */
+							if(dependentHealthInsuranceId != -1)
+								list.add(dependent.getRelation());
+						}
+					}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				request.setAttribute("list", list);
+				
 				rd = request.getRequestDispatcher("/jsp/forms/e_CardForm.jsp");
+			}
 			else if("getUnapprovedEmployeePolicyList".equals(action)){
 				PolicyService ps = new PolicyService();
 				try {
@@ -101,6 +147,9 @@ public class RegisterController extends HttpServlet {
 		String action = request.getParameter("action");
 		System.out.println("The action retreived is " + action);
 		
+		//the heading to be displayed on the result page
+		request.setAttribute("heading", "Registration Management");
+		
 		//if-else code block for action
 		if("register_employee".equals(action)){
 			System.out.println("In register_employee action if-else block");
@@ -118,6 +167,10 @@ public class RegisterController extends HttpServlet {
 			String accountNo = request.getParameter("accountNo");
 			String bankName = request.getParameter("bankName");
 			String ifscCode = request.getParameter("ifscCode");
+			
+			//getting reference to existing session
+			HttpSession session = request.getSession(false);
+			String username = (String) session.getAttribute("username");
 			
 			String startDate = request.getParameter("policyStartDate");
 			int policyPeriod = Integer.parseInt(request.getParameter("policyPeriod"));
@@ -137,6 +190,7 @@ public class RegisterController extends HttpServlet {
 			employee.setAccountNo(accountNo);
 			employee.setBankName(bankName);
 			employee.setIfscCode(ifscCode);
+			employee.setUsername(username);
 			
 			//making a policy bean
 			Policy policy = new Policy();
@@ -155,7 +209,7 @@ public class RegisterController extends HttpServlet {
 				if("success".equals(replyEmployee)){
 					String replyPolicy = ps.addPolicy(policy);
 					if("success".equals(replyPolicy)){
-						healthInsuranceId = ps.fetchPolicyId(employeeId);
+						healthInsuranceId = ps.fetchPolicyId(employeeId, false);
 						request.setAttribute("message", "Your details have been successfully noted."
 							+ " The registration is pending admin approval."
 							+ " The auto-generated health insurance id is "+healthInsuranceId);
@@ -168,7 +222,7 @@ public class RegisterController extends HttpServlet {
 				 * fetching healthInsuranceId and displaying
 				 */
 				else if("already exists".equals(replyEmployee)){
-					healthInsuranceId = ps.fetchPolicyId(employeeId);
+					healthInsuranceId = ps.fetchPolicyId(employeeId, false);
 					request.setAttribute("message", "Your details already exists "
 							+ "The registration is pending admin approval."
 							+ " The health insurance id is "+healthInsuranceId);
@@ -224,7 +278,7 @@ public class RegisterController extends HttpServlet {
 						policy.setDependentId(dependentId);
 						String replyPolicy = ps.addPolicy(policy);
 						if("success".equals(replyPolicy)){
-							healthInsuranceId = ps.fetchPolicyId(employeeId, dependentId);
+							healthInsuranceId = ps.fetchPolicyId(employeeId, dependentId, false);
 							request.setAttribute("message", "Your dependent details have been successfully noted."
 								+ " The registration is pending admin approval."
 								+ " The auto-generated health insurance id is "+healthInsuranceId);
@@ -238,7 +292,7 @@ public class RegisterController extends HttpServlet {
 					 */
 					else if("already exists".equals(replyDependent)){
 						int dependentId = ds.fetchDependentId(employeeId, relation);
-						healthInsuranceId = ps.fetchPolicyId(employeeId, dependentId);
+						healthInsuranceId = ps.fetchPolicyId(employeeId, dependentId, false);
 						request.setAttribute("message", "Your details already exists "
 								+ "The registration is pending admin approval."
 								+ " The health insurance id is "+healthInsuranceId);
@@ -274,6 +328,26 @@ public class RegisterController extends HttpServlet {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+		else if("generate_eCard".equals(action)){
+			System.out.println("In generate_eCard action if-else block");
+			
+			String relation = request.getParameter("e-card");
+			
+			//get reference to existing session
+			HttpSession session = request.getSession(false);
+			String username = (String) session.getAttribute("username");
+			
+			ECard ecard = new ECard();
+			ecard = null;
+			try {
+				ecard = ps.getECardDetails(username, relation);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			request.setAttribute("type", "report");
+			request.setAttribute("ecard", ecard);			
 		}
 		
 		System.out.println("Exiting doPost() in RegisterController Class");

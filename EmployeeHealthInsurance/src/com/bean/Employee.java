@@ -15,6 +15,7 @@ public class Employee {
 	private String accountNo;
 	private String bankName;
 	private String ifscCode;
+	private String username;
 	private int status;
 	
 	public int getEmployeeId() {
@@ -88,6 +89,12 @@ public class Employee {
 	}
 	public void setIfscCode(String ifscCode) {
 		this.ifscCode = ifscCode;
+	}
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	public int getStatus() {
 		return status;
