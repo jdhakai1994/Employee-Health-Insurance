@@ -111,8 +111,8 @@ public class EmployeeDAO {
 		
 		Employee employee = new Employee();
 		
-		ps1 = connect.prepareStatement("SELECT employeeId,employeeName,mobNo,dateofBirth "
-				+ "FROM ehi.employee WHERE username=?");
+		ps1 = connect.prepareStatement("SELECT employeeId,employeeName,mobNo,dateofBirth,"
+				+ "altEmailId FROM ehi.employee WHERE username=?");
 		ps1.setString(1, username);
 		resultSet = ps1.executeQuery();
 		while(resultSet.next()){
@@ -120,11 +120,13 @@ public class EmployeeDAO {
 			String employeeName = resultSet.getString("employeeName");
 			String mobNo = resultSet.getString("mobNo");
 			String dateOfBirth = resultSet.getString("dateofBirth");
+			String altEmailId = resultSet.getString("altEmailId");
 			
 			employee.setEmployeeId(employeeId);
 			employee.setEmployeeName(employeeName);
 			employee.setMobNo(mobNo);
 			employee.setDateOfBirth(dateOfBirth);
+			employee.setAltEmailId(altEmailId);
 		}
 		
 		DBConnection.closeConnection(connect);

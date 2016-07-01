@@ -176,7 +176,7 @@ public class RegisterController extends HttpServlet {
 			int policyPeriod = Integer.parseInt(request.getParameter("policyPeriod"));
 			double totalSumInsured = Double.parseDouble(request.getParameter("totalSumInsured"));
 						
-			//making an employee bean
+			//making an Employee bean
 			Employee employee = new Employee();
 			employee.setEmployeeId(employeeId);
 			employee.setEmployeeName(employeeName);

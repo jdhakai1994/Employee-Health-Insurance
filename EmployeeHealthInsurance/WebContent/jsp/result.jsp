@@ -7,7 +7,7 @@ response.setHeader("Cache-Control","no-store"); //Directs caches not to store th
 response.setDateHeader("Expires", 0); //Causes the proxy cache to see the page as "stale"
 response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -70,7 +70,7 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 						
 						<c:set var="type" value="${requestScope.type }"/>
 						<c:choose>
-							<c:when test='true'>
+							<c:when test='${type == "report"}'>
 							<!-- REPORT CONTENT HEADER -->
 							<div class="report-header">
 								<div class="row">
@@ -119,8 +119,11 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 							</div>
 							<!-- END REPORT CONTENT BODY -->
 							</c:when>
-							<c:otherwise>
+							<c:when test='${type == "success_message"}'>
 								<p><span class="glyphicon glyphicon-ok"></span> <c:out value='${requestScope.message}'/></p>
+							</c:when>
+							<c:otherwise>
+								<p><span class="glyphicon glyphicon-remove"></span> <c:out value='${requestScope.message}'/></p>
 							</c:otherwise>
 						</c:choose>		
 						</div>
@@ -132,7 +135,7 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 					<div class="content-footer">
 						<div class="container">
 							<div class="row">
-								<div class="col-sm-6 copyright"><strong>Copyright &copy 2016.</strong> All Rights Reserved</div>
+								<div class="col-sm-6 copyright"><strong>Copyright &#169; 2016.</strong> All Rights Reserved</div>
 								<div class="col-sm-6" style="text-align:right"><strong>Version</strong> 1.0</div>
 							</div>
 						</div>

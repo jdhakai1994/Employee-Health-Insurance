@@ -3,6 +3,9 @@ package com.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 import com.bean.Dependent;
 import com.util.DBConnection;
 
@@ -89,5 +92,34 @@ public class DependentDAO {
 		System.out.println("Exiting fetchDependentId(int,String) in DependentDAO Class");
 		
 		return id;
+	}
+
+	public ArrayList<Dependent> fetchDependentDetails(int employeeId) throws Exception {
+		System.out.println("Entering fetchDependentDetails(int) in DependentDAO Class");
+		
+		connect = DBConnection.getConnection();
+		
+		ps1 = connect.prepareStatement("SELECT dependentId,beneficiaryName,relation FROM ehi.dependent "
+				+ "WHERE employeeId=? AND status=1");
+		ps1.setInt(1, employeeId);
+		resultSet = ps1.executeQuery();
+		ArrayList<Dependent> dependentList = new ArrayList<>();
+		while(resultSet.next()){
+			int dependentId = resultSet.getInt("dependentId");
+			String beneficiaryName = resultSet.getString("beneficiaryName");
+			String relation = resultSet.getString("relation");
+			
+			Dependent dependent = new Dependent();
+			dependent.setDependentId(dependentId);
+			dependent.setBeneficiaryName(beneficiaryName);
+			dependent.setRelation(relation);
+			
+			dependentList.add(dependent);
+		}
+		
+		DBConnection.closeConnection(connect);
+		System.out.println("Exiting fetchDependentDetails(int) in DependentDAO Class");
+		
+		return dependentList;		
 	}
 }

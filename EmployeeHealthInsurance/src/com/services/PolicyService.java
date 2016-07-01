@@ -63,4 +63,12 @@ public class PolicyService {
 		return ecard;		
 	}
 
+	public int fetchPolicyId(int employeeId, String beneficiaryName) throws Exception {
+		System.out.println("Entering fetchPolicyId(int, String) in PolicyService Class");
+		PolicyDAO pdao = new PolicyDAO();
+		int healthInsuranceId = pdao.fetchPolicyId(employeeId, beneficiaryName);
+		System.out.println("Exiting fetchPolicyId(int, String) in PolicyService Class");
+		return healthInsuranceId;
+	}
+
 }

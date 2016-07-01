@@ -45,8 +45,6 @@ public class LoginDAO {
 				long lastLogon = resultSet.getLong("lastLogon");
 				
 				if(logon > lastLogon){
-					System.out.println(logon);
-					System.out.println(lastLogon);
 					if(username.equals(uname) && password.equals(pwd)){
 						if("admin".equals(username))
 							reply = "admin";
