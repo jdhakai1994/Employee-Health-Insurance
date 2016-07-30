@@ -3,7 +3,6 @@ package com.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import com.bean.Employee;
 import com.util.DBConnection;
@@ -112,7 +111,7 @@ public class EmployeeDAO {
 		Employee employee = new Employee();
 		
 		ps1 = connect.prepareStatement("SELECT employeeId,employeeName,mobNo,dateofBirth,"
-				+ "altEmailId FROM ehi.employee WHERE username=?");
+				+ "altEmailId,emailId FROM ehi.employee WHERE username=?");
 		ps1.setString(1, username);
 		resultSet = ps1.executeQuery();
 		while(resultSet.next()){
@@ -121,11 +120,13 @@ public class EmployeeDAO {
 			String mobNo = resultSet.getString("mobNo");
 			String dateOfBirth = resultSet.getString("dateofBirth");
 			String altEmailId = resultSet.getString("altEmailId");
+			String emailId = resultSet.getString("emailId");
 			
 			employee.setEmployeeId(employeeId);
 			employee.setEmployeeName(employeeName);
 			employee.setMobNo(mobNo);
 			employee.setDateOfBirth(dateOfBirth);
+			employee.setEmailId(emailId);
 			employee.setAltEmailId(altEmailId);
 		}
 		

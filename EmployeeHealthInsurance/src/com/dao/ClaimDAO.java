@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import com.bean.DomiciliaryClaim;
+import com.bean.HospitalizationClaim;
 import com.util.DBConnection;
 
 public class ClaimDAO {
@@ -66,7 +67,6 @@ public class ClaimDAO {
 			while(resultSet1.next())
 				relation = resultSet1.getString("relation");
 		}
-//		System.out.println(relation);
 		ps1 = connect.prepareStatement("INSERT INTO ehi.claim (healthInsuranceId,type,"
 				+ "claimRaisedDate,patientName,relation,totalClaimAmount) "
 				+ "VALUES (?,?,?,?,?,?)");
@@ -105,6 +105,80 @@ public class ClaimDAO {
 		
 		DBConnection.closeConnection(connect);
 		System.out.println("Exiting submitDomiciliaryClaim(DomiciliaryClaim) in ClaimDAO Class");
+		
+		System.out.println(claimNo);
+		return claimNo;
+	}
+
+	public int submitHospitalizationClaim(HospitalizationClaim hospitalizationClaim) throws Exception {
+		System.out.println("Entering submitHospitalizationClaim(HospitalizationClaim) in ClaimDAO Class");
+
+		connect = DBConnection.getConnection();
+		
+		int claimNo = 0;
+		
+		// retrieving data from Hospitalization Claim bean
+		int employeeId = hospitalizationClaim.getEmployeeId();
+		int healthInsuranceId = hospitalizationClaim.getHealthInsuranceId();
+		String beneficiaryName = hospitalizationClaim.getBeneficiaryName();
+		String hospitalName = hospitalizationClaim.getHospitalName();
+		String mobNo = hospitalizationClaim.getMobNo();
+		String ad = hospitalizationClaim.getAdmissionDate();
+		String admissionDate = ad.substring(6, 10) + "-" + ad.substring(3, 5) + "-" + ad.substring(0, 2);
+		String dd = hospitalizationClaim.getDischargeDate();
+		String dischargeDate = dd.substring(6, 10) + "-" + dd.substring(3, 5) + "-" + dd.substring(0, 2);
+		double totalClaimAmount = hospitalizationClaim.getTotalClaimAmount();
+		String typeOfInjury = hospitalizationClaim.getTypeOfInjury();
+		String alcoholInvolved = hospitalizationClaim.getAlcoholInvolved();
+		String relation = hospitalizationClaim.getRelation();
+		
+		String typeOfClaim = "hospitalization";
+		
+		//to get the date when the claim was raised
+		Date curDate = new Date();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		String claimRaisedDate = format.format(curDate);
+		
+		ps1 = connect.prepareStatement("INSERT INTO ehi.claim (healthInsuranceId,type,"
+				+ "claimRaisedDate,patientName,relation,totalClaimAmount) "
+				+ "VALUES (?,?,?,?,?,?)");
+		ps1.setInt(1, healthInsuranceId);
+		ps1.setString(2, typeOfClaim);
+		ps1.setString(3, claimRaisedDate);
+		ps1.setString(4, beneficiaryName);
+		ps1.setString(5, relation);
+		ps1.setDouble(6, totalClaimAmount);
+		int result = ps1.executeUpdate();
+		if(result != 0){
+			ps2 = connect.prepareStatement("SELECT claimNo FROM ehi.claim ORDER BY "
+					+ "claimNo DESC LIMIT 1");
+			resultSet = ps2.executeQuery();
+			while(resultSet.next()){
+				claimNo = resultSet.getInt("claimNo");
+				
+				ps1 = connect.prepareStatement("INSERT INTO ehi.hospitalization_claim "
+						+ "(claimNo,employeeId,mobNo,beneficiaryName,hospitalName,dateOfAdmission,"
+						+ "dateOfDischarge,totalClaimAmount,alcoholInvolved,typeOfInjury) "
+						+ "VALUES (?,?,?,?,?,?,?,?,UPPER(?),UPPER(?))");
+				ps1.setInt(1, claimNo);
+				ps1.setInt(2, employeeId);
+				ps1.setString(3, mobNo);
+				ps1.setString(4, beneficiaryName);
+				ps1.setString(5, hospitalName);
+				ps1.setString(6, admissionDate);
+				ps1.setString(7, dischargeDate);
+				ps1.setDouble(8, totalClaimAmount);
+				ps1.setString(9, alcoholInvolved);
+				ps1.setString(10, typeOfInjury);
+				int result1 = ps1.executeUpdate();
+				
+				if(result1 == 0)
+					claimNo = 0;
+			}
+		}
+		
+		DBConnection.closeConnection(connect);
+		System.out.println("Exiting submitHospitalizationClaim(HospitalizationClaim) in ClaimDAO Class");
 		
 		System.out.println(claimNo);
 		return claimNo;

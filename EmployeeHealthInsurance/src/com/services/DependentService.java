@@ -33,4 +33,12 @@ public class DependentService {
 		
 	}
 
+	public String fetchRelation(int employeeId, String name) throws Exception {
+		System.out.println("Entering fetchRelation(int,String) in DependentService Class");
+		DependentDAO ddao = new DependentDAO();
+		String relation = ddao.fetchRelation(employeeId, name);
+		System.out.println("Exiting fetchRelation(int,String) in DependentService Class");
+		return relation;
+	}
+
 }

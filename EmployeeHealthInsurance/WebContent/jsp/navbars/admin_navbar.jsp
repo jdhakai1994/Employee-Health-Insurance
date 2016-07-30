@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -9,11 +9,11 @@
 
 <!-- keep these commented, importing twice doesn't work -->
 <!-- Latest compiled and minified CSS -->
-<!--  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"> -->
+<!--  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"> -->
 <!-- jQuery library -->
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script> -->
 <!-- Latest compiled JavaScript -->
-<!-- <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> -->
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> -->
 
 <!-- custom CSS -->
 <link href="<%=request.getContextPath()%>/css/navbar.css" rel="stylesheet" type="text/css" />
@@ -61,8 +61,8 @@
                			<a href="#"><span class="glyphicon glyphicon-usd"></span>  Claims Management</a>
                		</li>
                		<ul class="sub-menu collapse in" id="claims">
-                   		<li><a href="<%=request.getContextPath()%>/ClaimsController?action=approve&&value=domiciliary">Approve Domiciliary Claims</a></li>
-                   		<li><a href="<%=request.getContextPath()%>/ClaimsController?action=approve&&value=hospitalization">Approve Hospitalization Claims</a></li>
+                   		<li><a href="<%=request.getContextPath()%>/ClaimsController?action=getUnapprovedDomiciliaryClaimList">Approve Domiciliary Claims</a></li>
+                   		<li><a href="<%=request.getContextPath()%>/ClaimsController?action=getUnapprovedHospitalizationClaimList">Approve Hospitalization Claims</a></li>
                    	</ul>
                    	<li data-toggle="collapse" data-target="#hospitals">
                    		<a><span class="glyphicon glyphicon-home"></span>  Hospital Management</a>

@@ -5,12 +5,9 @@ public class DomiciliaryClaim {
 	private String beneficiaryName;
 	private int healthInsuranceId;
 	private String mobNo;
-	private String address;
-	private String altEmailId;
 	private String treatmentStartDate;
 	private String treatmentEndDate;
 	private String dateOfInjury;
-	private String doctorName;
 	private String typeOfInjury;
 	private double totalClaimAmount;
 	
@@ -38,18 +35,6 @@ public class DomiciliaryClaim {
 	public void setMobNo(String mobNo) {
 		this.mobNo = mobNo;
 	}
-	public String getAddress() {
-		return address;
-	}
-	public void setAddress(String address) {
-		this.address = address;
-	}
-	public String getAltEmailId() {
-		return altEmailId;
-	}
-	public void setAltEmailId(String altEmailId) {
-		this.altEmailId = altEmailId;
-	}
 	public String getTreatmentStartDate() {
 		return treatmentStartDate;
 	}
@@ -67,12 +52,6 @@ public class DomiciliaryClaim {
 	}
 	public void setDateOfInjury(String dateOfInjury) {
 		this.dateOfInjury = dateOfInjury;
-	}
-	public String getDoctorName() {
-		return doctorName;
-	}
-	public void setDoctorName(String doctorName) {
-		this.doctorName = doctorName;
 	}
 	public String getTypeOfInjury() {
 		return typeOfInjury;

@@ -3,9 +3,7 @@ package com.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-
 import com.bean.Dependent;
 import com.util.DBConnection;
 
@@ -121,5 +119,31 @@ public class DependentDAO {
 		System.out.println("Exiting fetchDependentDetails(int) in DependentDAO Class");
 		
 		return dependentList;		
+	}
+
+	public String fetchRelation(int employeeId, String name) throws Exception {
+		System.out.println("Entering fetchRelation(int,String) in DependentDAO Class");
+		
+		connect = DBConnection.getConnection();
+		
+		String relation = "";
+		
+		ps1 = connect.prepareStatement("SELECT relation FROM ehi.dependent WHERE employeeId=? "
+				+ "AND beneficiaryName=?");
+		ps1.setInt(1, employeeId);
+		ps1.setString(2, name);
+		resultSet = ps1.executeQuery();
+		resultSet.last();
+		int noOfRows = resultSet.getRow();
+		
+		if(noOfRows == 0)
+			relation = "self";
+		else
+			relation = resultSet.getString("relation");
+		
+		DBConnection.closeConnection(connect);
+		System.out.println("Exiting fetchRelation(int,String) in DependentDAO Class");
+		
+		return relation;
 	}
 }

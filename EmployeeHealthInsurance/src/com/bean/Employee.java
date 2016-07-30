@@ -1,7 +1,5 @@
 package com.bean;
 
-import java.util.Date;
-
 public class Employee {
 	private int employeeId;
 	private String employeeName;

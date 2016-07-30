@@ -2,6 +2,7 @@ package com.servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -26,7 +27,6 @@ public class ClaimsController extends HttpServlet {
      */
     public ClaimsController() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
@@ -106,7 +106,7 @@ public class ClaimsController extends HttpServlet {
 							}
 						}
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					}
 				
@@ -129,7 +129,7 @@ public class ClaimsController extends HttpServlet {
 					try {
 						healthInsuranceId = ps.fetchPolicyId(employeeId,name);
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					}					
 					response.setContentType("text/xml");
@@ -138,10 +138,119 @@ public class ClaimsController extends HttpServlet {
 				}
 			}
 			else if("getHospitalizationClaimForm".equals(action)){
-				rd = request.getRequestDispatcher("/jsp/forms/hospitalizationClaimForm.jsp");
-				rd.forward(request, response);
+				
+				//retrieving name from URL
+				String name = request.getParameter("name");
+				
+				//initial request to load the form
+				if(name == null){
+					
+					String state[] = {"Andaman and Nicobar Islands","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chandigarh",
+							"Chhattisgarh","Dadra and Nagar Haveli","Daman and Diu","Delhi","Goa","Gujarat","Haryana","Himachal Pradesh",
+							"Jammu and Kashmir","Jharkhand","Karnataka","Kerala","Lakshadweep","Madhya Pradesh","Maharashtra","Manipur",
+							"Meghalaya","Mizoram","Nagaland","Orissa","Pondicherry","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana",
+							"Tripura","Uttaranchal","Uttar Pradesh","West Bengal"};
+					
+					ArrayList<String> stateList = new ArrayList<String>(Arrays.asList(state));
+								
+					//reference to service classes
+					EmployeeService es = new EmployeeService();
+					PolicyService ps = new PolicyService();
+					DependentService ds = new DependentService();
+				
+					//initializing 
+					ArrayList<String> beneficiaryNameList = new ArrayList<>();
+					Employee employee = null;
+					int employeeId = 0;
+					try {
+						//get employee details corresponding to username
+						employee = es.getEmployeeDetails(username);
+					
+						/*retrieve mobile number, employee name, employeeId and email-ID 
+						 * which is supposed to be auto-populated in the form
+						 */
+						employeeId = employee.getEmployeeId();
+											
+						//fetch healthInsuranceId of the employee
+						int employeeHealthInsuranceId = ps.fetchPolicyId(employeeId,true);
+					
+						/*proceed further only if the health insurance policy is approved
+						 * one cannot place claims if approval is pending
+						 */
+						if(employeeHealthInsuranceId != -1){
+							beneficiaryNameList.add(employee.getEmployeeName());
+							
+							//get the details of the dependents
+							ArrayList<Dependent> dependentList = new ArrayList<>();
+							dependentList = ds.fetchDependentDetails(employeeId);
+							for(Dependent dependent : dependentList){
+								//fetch health Insurance Id of dependents
+								int dependentHealthInsuranceId = ps.fetchPolicyId(employeeId, dependent.getDependentId(),true);
+							
+								/*add only if the health insurance policy of dependent is 
+								 * approved, one cannot place claims if approval is pending
+								 */
+								if(dependentHealthInsuranceId != -1)
+									beneficiaryNameList.add(dependent.getBeneficiaryName());
+							}
+						}
+					} catch (Exception e) {
+						
+						e.printStackTrace();
+					}
+				
+					request.setAttribute("employee", employee);
+					request.setAttribute("beneficiaryNameList", beneficiaryNameList);
+					request.setAttribute("stateList", stateList);
+										
+					rd = request.getRequestDispatcher("/jsp/forms/hospitalizationClaimForm.jsp");
+					rd.forward(request, response);
+				}
+				//ajax get request
+				else{
+					//this is retrieved from URL
+					int employeeId = Integer.parseInt(request.getParameter("employeeId"));
+					
+					String value = request.getParameter("value");
+					
+					if("healthInsuranceId".equals(value)){
+						PolicyService ps = new PolicyService();
+					
+						int healthInsuranceId = 0;
+						try {
+							healthInsuranceId = ps.fetchPolicyId(employeeId,name);
+						} catch (Exception e) {
+						
+							e.printStackTrace();
+						}					
+						response.setContentType("text/xml");
+						response.setHeader("Cache-Control", "no-cache");
+						response.getWriter().write(Integer.toString(healthInsuranceId));
+					}
+					else if("relation".equals(value)){
+						
+						DependentService ds = new DependentService();
+						
+						String relation = null;
+						try {
+							relation = ds.fetchRelation(employeeId,name);
+						} catch (Exception e) {
+
+							e.printStackTrace();
+						}
+						response.setContentType("text/xml");
+						response.setHeader("Cache-Control", "no-cache");
+						response.getWriter().write(relation);
+					}
+				}
+				
 			}
 			else if("searchClaimForm".equals(action)){
+				rd = request.getRequestDispatcher("/jsp/forms/searchClaimForm.jsp");
+				rd.forward(request, response);
+			}
+			else if("getUnapprovedDomiciliaryClaimList".equals(action)){
+				
 				rd = request.getRequestDispatcher("/jsp/forms/searchClaimForm.jsp");
 				rd.forward(request, response);
 			}
@@ -173,7 +282,7 @@ public class ClaimsController extends HttpServlet {
 		if("domiciliaryClaim".equals(action)){
 			System.out.println("In domiciliaryClaim action if-else block");
 			
-			//retrieving input values from the employeeRegisterForm.jsp 
+			//retrieving input values from the domiciliaryClaimForm.jsp 
 			int employeeId = Integer.parseInt(request.getParameter("employeeId"));
 			String mobNo = request.getParameter("mobNo");
 			String beneficiaryName = request.getParameter("beneficiaryName");
@@ -214,6 +323,56 @@ public class ClaimsController extends HttpServlet {
 				e.printStackTrace();
 			}
 			
+		}
+		else if("hospitalizationClaim".equals(action)){
+			System.out.println("In hospitalizationClaim action if-else block");
+			
+			//retrieving input values from the hospitalizationClaim.jsp 
+			int employeeId = Integer.parseInt(request.getParameter("employeeId"));
+			String mobNo = request.getParameter("mobNo");
+			String beneficiaryName = request.getParameter("beneficiaryName");
+			int healthInsuranceId = Integer.parseInt(request.getParameter("healthInsuranceId"));
+			String hospitalName = request.getParameter("hospitalName");
+			String admissionDate = request.getParameter("admissionDate");
+			String dischargeDate = request.getParameter("dischargeDate");
+			double totalClaimAmount = Double.parseDouble(request.getParameter("totalClaimAmount"));
+			String typeOfInjury = request.getParameter("typeOfInjury");
+			String alcoholInvolved = request.getParameter("alcoholInvolved");
+			String relation = request.getParameter("relation");
+			
+			//making a HospitalizationClaim bean
+			HospitalizationClaim hospitalizationClaim = new HospitalizationClaim();
+			hospitalizationClaim.setEmployeeId(employeeId);
+			hospitalizationClaim.setHealthInsuranceId(healthInsuranceId);
+			hospitalizationClaim.setMobNo(mobNo);
+			hospitalizationClaim.setBeneficiaryName(beneficiaryName);
+			hospitalizationClaim.setAdmissionDate(admissionDate);
+			hospitalizationClaim.setDischargeDate(dischargeDate);
+			hospitalizationClaim.setTotalClaimAmount(totalClaimAmount);
+			hospitalizationClaim.setTypeOfInjury(typeOfInjury);
+			hospitalizationClaim.setAlcoholInvolved(alcoholInvolved);
+			hospitalizationClaim.setHospitalName(hospitalName);
+			hospitalizationClaim.setRelation(relation);
+			
+			try {
+				int claimNo = cs.submitHospitalizationClaim(hospitalizationClaim);
+				/*case 1 - successfully inserted in claim and hospitalization claim table
+				 *displaying the claim number generated 
+				 */
+				if(claimNo != 0){
+					request.setAttribute("type", "success_message");
+					request.setAttribute("message", "Your claim have been successfully "
+							+ "noted. The claim is pending admin approval."
+							+ " The auto-generated claim no is "+claimNo);
+				}
+				//case 2 - data couldn't be inserted into claims table
+				else{
+					request.setAttribute("type", "failure_message");
+					request.setAttribute("message", "The claim couldn't be noted successfully");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
 		System.out.println("Exiting doPost() in ClaimsController Class");
