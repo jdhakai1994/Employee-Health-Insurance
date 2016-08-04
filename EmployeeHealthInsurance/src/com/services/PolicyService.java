@@ -71,4 +71,12 @@ public class PolicyService {
 		return healthInsuranceId;
 	}
 
+	public ArrayList<Integer> fetchPolicyIdList(int employeeId) throws Exception {
+		System.out.println("Entering fetchPolicyIdList(int) in PolicyService Class");
+		PolicyDAO pdao = new PolicyDAO();
+		ArrayList<Integer> list = pdao.fetchPolicyIdList(employeeId);
+		System.out.println("Exiting fetchPolicyIdList(int) in PolicyService Class");
+		return list;
+	}
+
 }

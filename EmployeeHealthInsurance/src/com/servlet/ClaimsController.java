@@ -245,13 +245,12 @@ public class ClaimsController extends HttpServlet {
 				}
 				
 			}
-			else if("searchClaimForm".equals(action)){
+			else if("getSearchClaimForm".equals(action)){
 				rd = request.getRequestDispatcher("/jsp/forms/searchClaimForm.jsp");
 				rd.forward(request, response);
 			}
 			else if("getUnapprovedDomiciliaryClaimList".equals(action)){
 				
-				rd = request.getRequestDispatcher("/jsp/forms/searchClaimForm.jsp");
 				rd.forward(request, response);
 			}
 		
@@ -267,10 +266,13 @@ public class ClaimsController extends HttpServlet {
 		
 		System.out.println("Entering doPost() in ClaimsController Class");
 		
+		RequestDispatcher rd = null;
+				
 		//service class references
 		ClaimsService cs = new ClaimsService();
-		
-		
+		EmployeeService es = new EmployeeService();
+		PolicyService ps = new PolicyService();
+				
 		//this is retrieved from the hidden value passed while submitting the form
 		String action = request.getParameter("action");
 		System.out.println("The action retreived is " + action);
@@ -323,11 +325,12 @@ public class ClaimsController extends HttpServlet {
 				e.printStackTrace();
 			}
 			
+			rd = request.getRequestDispatcher("/jsp/result.jsp");
 		}
 		else if("hospitalizationClaim".equals(action)){
 			System.out.println("In hospitalizationClaim action if-else block");
 			
-			//retrieving input values from the hospitalizationClaim.jsp 
+			//retrieving input values from the hospitalizationClaim.jsp
 			int employeeId = Integer.parseInt(request.getParameter("employeeId"));
 			String mobNo = request.getParameter("mobNo");
 			String beneficiaryName = request.getParameter("beneficiaryName");
@@ -373,11 +376,94 @@ public class ClaimsController extends HttpServlet {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			
+			rd = request.getRequestDispatcher("/jsp/result.jsp");
+		}
+		else if("search_claim".equals(action)){
+			System.out.println("In search_claim action if-else block");
+			
+			//this is retrieved from the hidden value passed while submitting the form
+			String action1 = request.getParameter("action1");
+			System.out.println("The action1 retreived is " + action1);
+			
+			ArrayList<Claim> claimList = new ArrayList<Claim>();
+			ArrayList<Integer> healthInsuranceIdList = new ArrayList<Integer>();
+			Employee employee = null;
+			
+			//get reference to existing session
+			HttpSession session = request.getSession(false);
+			String username = (String) session.getAttribute("username");
+			
+			try {
+				employee = es.getEmployeeDetails(username);
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+			int employeeId = employee.getEmployeeId();
+			
+			try {
+				healthInsuranceIdList = ps.fetchPolicyIdList(employeeId);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+			
+			//if-else code block for action1
+			if("searchClaim".equals(action1)){
+				
+				//retrieving input values from the searchClaimForm.jsp
+				String claimType = request.getParameter("claimType");
+				String relation = request.getParameter("relation");
+				
+				int[] healthInsuranceIdArray = new int[healthInsuranceIdList.size()];
+			    for (int i=0; i < healthInsuranceIdArray.length; i++)
+			    {
+			    	healthInsuranceIdArray[i] = healthInsuranceIdList.get(i).intValue();
+			    }
+				
+				try {
+					claimList = cs.searchClaim(claimType,relation,healthInsuranceIdArray);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				if(claimList.isEmpty()){
+					request.setAttribute("type", "message");
+					request.setAttribute("message", "You have no such claim corresponding to that details");
+				}
+				else{
+					request.setAttribute("type", "report");
+					request.setAttribute("claimList", claimList);
+				}
+			}
+			else if("searchClaimByHealthInsuranceId".equals(action1)){
+				
+				//retrieving input values from the searchClaimForm.jsp
+				int healthInsuranceId = Integer.parseInt(request.getParameter("healthInsuranceId"));
+				
+				if(healthInsuranceIdList.contains(healthInsuranceId)){
+					try {
+						claimList = cs.searchClaimByHealthInsuranceId(healthInsuranceId);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					if(claimList.isEmpty()){
+						request.setAttribute("type", "message");
+						request.setAttribute("message", "You have no such claim corresponding to that health insurance Id");
+					}
+					else{
+						request.setAttribute("type", "report");
+						request.setAttribute("claimList", claimList);
+					}
+				}
+				else{
+					request.setAttribute("type", "message");
+					request.setAttribute("message", "The health insurance Id entered doesn't belong to you or any of your dependents");
+				}
+			}
+			rd = request.getRequestDispatcher("/jsp/report/claimReport.jsp");
 		}
 		
 		System.out.println("Exiting doPost() in ClaimsController Class");
 		
-		RequestDispatcher rd = request.getRequestDispatcher("/jsp/result.jsp");
 		rd.forward(request, response);
 		
 	}

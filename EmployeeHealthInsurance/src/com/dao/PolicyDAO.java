@@ -336,4 +336,25 @@ public class PolicyDAO {
 		
 		return healthInsuranceId;
 	}
+
+	public ArrayList<Integer> fetchPolicyIdList(int employeeId) throws Exception {
+		System.out.println("Entering fetchPolicyIdList(int) in PolicyDAO Class");
+		
+		connect = DBConnection.getConnection();
+		
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		
+		ps1 = connect.prepareStatement("SELECT healthInsuranceId FROM ehi.policy WHERE employeeId=?");
+		ps1.setInt(1, employeeId);
+		resultSet = ps1.executeQuery();
+		while(resultSet.next()){
+			int healthInsuranceId = resultSet.getInt("healthInsuranceId");
+			
+			list.add(healthInsuranceId);
+		}
+		DBConnection.closeConnection(connect);
+		System.out.println("Exiting fetchPolicyIdList(int) in PolicyDAO Class");
+		
+		return list;
+	}
 }

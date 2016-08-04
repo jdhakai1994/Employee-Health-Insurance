@@ -3,8 +3,13 @@ package com.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+
+import com.bean.Claim;
 import com.bean.DomiciliaryClaim;
 import com.bean.HospitalizationClaim;
 import com.util.DBConnection;
@@ -159,7 +164,7 @@ public class ClaimDAO {
 				ps1 = connect.prepareStatement("INSERT INTO ehi.hospitalization_claim "
 						+ "(claimNo,employeeId,mobNo,beneficiaryName,hospitalName,dateOfAdmission,"
 						+ "dateOfDischarge,totalClaimAmount,alcoholInvolved,typeOfInjury) "
-						+ "VALUES (?,?,?,?,?,?,?,?,UPPER(?),UPPER(?))");
+						+ "VALUES (?,?,?,?,UPPER(?),?,?,?,UPPER(?),UPPER(?))");
 				ps1.setInt(1, claimNo);
 				ps1.setInt(2, employeeId);
 				ps1.setString(3, mobNo);
@@ -180,8 +185,100 @@ public class ClaimDAO {
 		DBConnection.closeConnection(connect);
 		System.out.println("Exiting submitHospitalizationClaim(HospitalizationClaim) in ClaimDAO Class");
 		
-		System.out.println(claimNo);
 		return claimNo;
+	}
+
+	public ArrayList<Claim> searchClaim(String claimType, String relation, int[] healthInsuranceIdArray) throws Exception {
+
+		System.out.println("Entering searchClaim(String,String,int []) in ClaimDAO Class");
+		connect = DBConnection.getConnection();
+
+		ArrayList<Claim> claimList = new ArrayList<Claim>();
+		
+		//converting the array to a comma separated string to be use in IN statement
+		String healthInsuranceId = Arrays.toString(healthInsuranceIdArray);
+		healthInsuranceId = healthInsuranceId.substring(1, healthInsuranceId.length() - 1);
+		if("all".equals(claimType)){
+			ps1 = connect.prepareStatement("SELECT * FROM ehi.claim WHERE relation=? AND "
+					+ "healthInsuranceId IN ("+healthInsuranceId+")");
+			ps1.setString(1, relation);
+		}			
+		else{
+			ps1 = connect.prepareStatement("SELECT * FROM ehi.claim WHERE type=? AND relation=? "
+					+ "AND healthInsuranceId IN ("+healthInsuranceId+")");
+			ps1.setString(1, claimType);
+			ps1.setString(2, relation);
+		}			
+		resultSet = ps1.executeQuery();
+		while(resultSet.next()){
+			
+			int claimNo = resultSet.getInt("claimNo");
+			String type = resultSet.getString("type");
+			String claimRaisedDate = resultSet.getString("claimRaisedDate");
+			claimRaisedDate = claimRaisedDate.substring(8, 10) + "/" + claimRaisedDate.substring(5, 7) + "/" + claimRaisedDate.substring(0, 4);
+			String patientName = resultSet.getString("patientName");
+			double claimAmount = resultSet.getDouble("totalClaimAmount");
+			double approvedAmount = resultSet.getDouble("approvedAmount");
+			int status = resultSet.getInt("status");
+			
+			Claim claim = new Claim();
+			claim.setClaimNo(claimNo);
+			claim.setClaimType(type);
+			claim.setClaimRaisedDate(claimRaisedDate);
+			claim.setPatientName(patientName);
+			claim.setRelation(relation);
+			claim.setClaimAmount(claimAmount);
+			claim.setApprovedAmount(approvedAmount);
+			claim.setStatus(status);
+			
+			claimList.add(claim);			
+		}
+		
+		DBConnection.closeConnection(connect);
+		System.out.println("Exiting searchClaim(String,String,int []) in ClaimDAO Class");
+		
+		return claimList;
+	}
+
+	public ArrayList<Claim> searchClaimByHealthInsuranceId(int healthInsuranceId) throws Exception {
+		System.out.println("Entering searchClaim(int) in ClaimDAO Class");
+		connect = DBConnection.getConnection();
+
+		ArrayList<Claim> claimList = new ArrayList<Claim>();
+		
+		ps1 = connect.prepareStatement("SELECT * FROM ehi.claim WHERE healthInsuranceId=?");
+		ps1.setInt(1, healthInsuranceId);
+		resultSet = ps1.executeQuery();
+		while(resultSet.next()){
+			
+			int claimNo = resultSet.getInt("claimNo");
+			String type = resultSet.getString("type");
+			String claimRaisedDate = resultSet.getString("claimRaisedDate");
+			claimRaisedDate = claimRaisedDate.substring(8, 10) + "/" + claimRaisedDate.substring(5, 7) + "/" + claimRaisedDate.substring(0, 4);
+			String relation = resultSet.getString("relation");
+			String patientName = resultSet.getString("patientName");
+			double claimAmount = resultSet.getDouble("totalClaimAmount");
+			double approvedAmount = resultSet.getDouble("approvedAmount");
+			int status = resultSet.getInt("status");
+			
+			Claim claim = new Claim();
+			claim.setClaimNo(claimNo);
+			claim.setClaimType(type);
+			claim.setClaimRaisedDate(claimRaisedDate);
+			claim.setPatientName(patientName);
+			claim.setRelation(relation);
+			claim.setClaimAmount(claimAmount);
+			claim.setApprovedAmount(approvedAmount);
+			claim.setStatus(status);
+			
+			claimList.add(claim);			
+		}
+		
+		DBConnection.closeConnection(connect);
+		System.out.println("Exiting searchClaim(int) in ClaimDAO Class");
+		
+		return claimList;
+		
 	}
 
 }
