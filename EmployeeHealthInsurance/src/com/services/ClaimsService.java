@@ -56,4 +56,20 @@ public class ClaimsService {
 		return count;
 	}
 
+	public List<HospitalizationClaimApproval> getUnapprovedHospitalizationClaimList() throws SQLException {
+		System.out.println("Entering getUnapprovedHospitalizationClaimList() in ClaimsService Class");
+		ClaimDAO cdao = new ClaimDAO();
+		List<HospitalizationClaimApproval> unapprovedHospitalizationClaimList = cdao.getUnapprovedHospitalizationClaimList();
+		System.out.println("Exiting getUnapprovedHospitalizationClaimList() in ClaimsService Class");
+		return unapprovedHospitalizationClaimList;
+	}
+
+	public int approveHospitalizationClaim(Map<Integer, Double> combinations, String[] rejectedClaimNo) throws SQLException {
+		System.out.println("Entering approveHospitalizationClaim(Map<Integer, Double>, String[]) in ClaimsService Class");
+		ClaimDAO cdao = new ClaimDAO();
+		int count = cdao.approveHospitalizationClaim(combinations, rejectedClaimNo);
+		System.out.println("Exiting approveHospitalizationClaim(Map<Integer, Double>, String[]) in ClaimsService Class");
+		return count;
+	}
+
 }

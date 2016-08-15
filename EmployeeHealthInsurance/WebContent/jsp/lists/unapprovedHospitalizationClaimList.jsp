@@ -30,7 +30,7 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
 <!-- custom JavaScript -->
-<script type="text/javascript" src="<%=request.getContextPath()%>/js/unapprovedDomiciliaryClaim.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/js/unapprovedHospitalizationClaim.js"></script>
 
 </head>
 <body>
@@ -63,12 +63,24 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
           								<div class="row">
           									<form id="approvalForm" role="form" class="form-horizontal" data-toggle="validator">
 		            							<div class="form-group">
+													<label for="dateOfAdmission" class="col-sm-4 control-label">Date Of Admission  </label>
+													<div class="col-sm-6">
+														<input type="text" class="form-control" name="dateOfAdmission" id="dateOfAdmission" readonly>		
+													</div>							
+												</div>
+												<div class="form-group">
+													<label for="dateOfDischarge" class="col-sm-4 control-label">Date Of Discharge  </label>
+													<div class="col-sm-6">
+														<input type="text" class="form-control" name="dateOfDischarge" id="dateOfDischarge" readonly>		
+													</div>							
+												</div>
+												<div class="form-group">
 													<label for="totalSumInsured" class="col-sm-4 control-label">Total Sum Insured  </label>
 													<div class="col-sm-6">
 														<input type="text" class="form-control" name="totalSumInsured" id="totalSumInsured" readonly>		
 													</div>							
 												</div>
-											<div class="form-group">
+												<div class="form-group">
 													<label for="totalClaimAmount" class="col-sm-4 control-label">Total Claim Amount  </label>
 													<div class="col-sm-6">
 														<input type="text" class="form-control" name="totalClaimAmount" id="totalClaimAmount" readonly>		
@@ -98,7 +110,7 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 					<c:set var="type" value="${requestScope.type }"/>
 					<c:choose>
 						<c:when test='${type == "list"}'>
-						<form id="approveDomiciliaryClaimsForm" action="<%=request.getContextPath()%>/ClaimsController?action=approve_domiciliary_claim" method="post" role="form" class="form-horizontal">
+						<form id="approveHospitalizationClaimsForm" action="<%=request.getContextPath()%>/ClaimsController?action=approve_hospitalization_claim" method="post" role="form" class="form-horizontal">
 							<table class="table table-bordered table-striped">
 								<thead class="thead-inverse">
 									<tr>
@@ -107,8 +119,10 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 										<th>BENEFICIARY NAME</th>
 										<th>CONTACT</th>
 										<th>CLAIM RAISED DATE<br>(dd/mm/yyyy)</th>
-										<th style="display:none;">TREATMENT START DATE</th>
+										<th style="display:none;">DATE OF ADMISSION</th>
+										<th style="display:none;">DATE OF DISCHARGE</th>
 										<th>TYPE OF INJURY</th>
+										<th>ALCOHOL INVOLVED</th>
 										<th style="display:none;">SUM INSURED</th>
 										<th>CLAIMED AMOUNT</th>
 										<th>APPROVED AMOUNT</th>
@@ -117,15 +131,17 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 								</thead>
 								
 								<tbody>
-									<c:forEach items="${unapprovedDomiciliaryClaimList}" var="current" varStatus="loop">
+									<c:forEach items="${unapprovedHospitalizationClaimList}" var="current" varStatus="loop">
 										<tr data-id="rowId${loop.index +1}" id="rowId${loop.index +1}">
 											<td><c:out value="${current.claimNo}" /></td>
 											<td><c:out value="${current.healthInsuranceId}" /></td>
 											<td><c:out value="${current.beneficiaryName}" /></td>
 											<td><c:out value="${current.mobNo}" /></td>
 											<td><c:out value="${current.claimRaisedDate}" /></td>
-											<td style="display:none;"><c:out value="${current.treatmentStartDate}" /></td>
+											<td style="display:none;"><c:out value="${current.dateOfAdmission}" /></td>
+											<td style="display:none;"><c:out value="${current.dateOfDischarge}" /></td>
 											<td><c:out value="${current.typeOfInjury}" /></td>
+											<td><c:out value="${current.alcoholInvolved}" /></td>
 											<td id="sumInsured" style="display:none;"><c:out value="${current.totalSumInsured}" /></td>
 											<td id="claimedAmount"><c:out value="${current.totalClaimAmount}" /></td>
 											<td id="approvedAmount">
@@ -142,7 +158,7 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 							
 							<div class="form-group">
 								<div class="pull-right col-sm-2">
-									<input type="hidden" name="action" value="approve_domiciliary_claim">
+									<input type="hidden" name="action" value="approve_hospitalization_claim">
 									<input type="submit" name="submit" id="submit" class="form-control btn btn-primary" value="Submit">
 								</div>
 							</div>

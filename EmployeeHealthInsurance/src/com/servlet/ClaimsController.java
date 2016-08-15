@@ -268,6 +268,24 @@ public class ClaimsController extends HttpServlet {
 				rd = request.getRequestDispatcher("/jsp/lists/unapprovedDomiciliaryClaimList.jsp");
 				rd.forward(request, response);
 			}
+			else if("getUnapprovedHospitalizationClaimList".equals(action)){
+				ClaimsService cs = new ClaimsService();
+				List<HospitalizationClaimApproval> unapprovedHospitalizationClaimList = new ArrayList<HospitalizationClaimApproval>();
+				try {
+					unapprovedHospitalizationClaimList = cs.getUnapprovedHospitalizationClaimList();
+					request.setAttribute("unapprovedHospitalizationClaimList", unapprovedHospitalizationClaimList);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				if(unapprovedHospitalizationClaimList.size() != 0)
+					request.setAttribute("type", "list");
+				else{
+					request.setAttribute("type", "message");
+					request.setAttribute("message", " No hospitalization claims are pending for approval");
+				}
+				rd = request.getRequestDispatcher("/jsp/lists/unapprovedHospitalizationClaimList.jsp");
+				rd.forward(request, response);
+			}
 		
 		System.out.println("Exiting doGet() in ClaimsController Class");
 		}
@@ -487,7 +505,7 @@ public class ClaimsController extends HttpServlet {
 			//combine the claim no and approved amount to one model
 			Map<Integer, Double> combinations = new HashMap<Integer, Double>();
 			
-			//to avoid null pointer excpetion if all claims are rejected
+			//to avoid null pointer exception if all claims are rejected
 			if(approvedClaimNo != null){
 				for(int i=0; i<approvedClaimNo.length; i++)
 					combinations.put(Integer.parseInt(approvedClaimNo[i]), Double.parseDouble(approvedClaimAmount[i]));
@@ -495,6 +513,31 @@ public class ClaimsController extends HttpServlet {
 			
 			try {
 				int count = cs.approveDomiciliaryClaim(combinations, rejectedClaimNo);
+				request.setAttribute("message", count+" policies have been modified");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			rd = request.getRequestDispatcher("/jsp/report/approvalReport.jsp");
+		}
+		else if("approve_hospitalization_claim".equals(action)){
+			System.out.println("In approve_hospitalization_claim action if-else block");
+			
+			//retrieving list of check marked Claim No
+			String approvedClaimNo [] = request.getParameterValues("approval");
+			String rejectedClaimNo [] = request.getParameterValues("rejection");
+			String approvedClaimAmount [] = request.getParameterValues("approvedAmount");
+			
+			//combine the claim no and approved amount to one model
+			Map<Integer, Double> combinations = new HashMap<Integer, Double>();
+			
+			//to avoid null pointer exception if all claims are rejected
+			if(approvedClaimNo != null){
+				for(int i=0; i<approvedClaimNo.length; i++)
+					combinations.put(Integer.parseInt(approvedClaimNo[i]), Double.parseDouble(approvedClaimAmount[i]));
+			}
+			
+			try {
+				int count = cs.approveHospitalizationClaim(combinations, rejectedClaimNo);
 				request.setAttribute("message", count+" policies have been modified");
 			} catch (Exception e) {
 				e.printStackTrace();
