@@ -1,10 +1,9 @@
 package com.services;
 
-import java.util.ArrayList;
+import java.sql.SQLException;
+import java.util.*;
 
-import com.bean.Claim;
-import com.bean.DomiciliaryClaim;
-import com.bean.HospitalizationClaim;
+import com.bean.*;
 import com.dao.ClaimDAO;
 
 public class ClaimsService {
@@ -39,6 +38,22 @@ public class ClaimsService {
 		ArrayList<Claim> claimList = cdao.searchClaimByHealthInsuranceId(healthInsuranceId);
 		System.out.println("Exiting searchClaim(int) in ClaimsService Class");
 		return claimList;
+	}
+	
+	public List<DomiciliaryClaimApproval> getUnapprovedDomiciliaryClaimList() throws Exception {
+		System.out.println("Entering getUnapprovedDomiciliaryClaimList() in ClaimsService Class");
+		ClaimDAO cdao = new ClaimDAO();
+		List<DomiciliaryClaimApproval> unapprovedDomiciliaryClaimList = cdao.getUnapprovedDomiciliaryClaimList();
+		System.out.println("Exiting getUnapprovedDomiciliaryClaimList() in ClaimsService Class");
+		return unapprovedDomiciliaryClaimList;
+	}
+
+	public int approveDomiciliaryClaim(Map<Integer, Double> combinations, String[] rejectedClaimNo) throws SQLException {
+		System.out.println("Entering approveDomiciliaryClaim(Map<Integer, Double>, String[]) in ClaimsService Class");
+		ClaimDAO cdao = new ClaimDAO();
+		int count = cdao.approveDomiciliaryClaim(combinations, rejectedClaimNo);
+		System.out.println("Exiting approveDomiciliaryClaim(Map<Integer, Double>, String[]) in ClaimsService Class");
+		return count;
 	}
 
 }

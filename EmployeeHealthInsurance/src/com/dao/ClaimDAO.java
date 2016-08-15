@@ -5,13 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-
-import com.bean.Claim;
-import com.bean.DomiciliaryClaim;
-import com.bean.HospitalizationClaim;
+import java.util.*;
+import com.bean.*;
 import com.util.DBConnection;
 
 public class ClaimDAO {
@@ -279,6 +274,92 @@ public class ClaimDAO {
 		
 		return claimList;
 		
+	}
+	
+	public List<DomiciliaryClaimApproval> getUnapprovedDomiciliaryClaimList() throws SQLException {
+		System.out.println("Entering getUnapprovedDomiciliaryClaimList() in ClaimDAO Class");
+		
+		connect = DBConnection.getConnection();
+		
+		List<DomiciliaryClaimApproval> unapprovedDomiciliaryClaimList = new ArrayList<DomiciliaryClaimApproval>();
+		
+		ps1 = connect.prepareStatement("SELECT d.claimNo, c.healthInsuranceId, d.beneficiaryName, "
+				+ "d.mobNo, c.claimRaisedDate, d.typeOfInjury, d.treatmentStartDate, "
+				+ "d.totalClaimAmount, p.totalSumInsured FROM ehi.domiciliary_claim as d "
+				+ "JOIN ehi.claim as c ON d.claimNo=c.claimNo JOIN ehi.policy as p ON "
+				+ "c.healthInsuranceId=p.healthInsuranceId WHERE d.status=0");
+		resultSet = ps1.executeQuery();
+		while(resultSet.next()){
+			int claimNo = resultSet.getInt("claimNo");
+			int healthInsuranceId = resultSet.getInt("healthInsuranceId");
+			String beneficiaryName = resultSet.getString("beneficiaryName");
+			String mobNo = resultSet.getString("mobNo");
+			String claimRaisedDate = resultSet.getString("claimRaisedDate");
+			claimRaisedDate = claimRaisedDate.substring(8, 10) + "/" + claimRaisedDate.substring(5, 7) + "/" + claimRaisedDate.substring(0, 4);
+			String treatmentStartDate = resultSet.getString("treatmentStartDate");
+			treatmentStartDate = treatmentStartDate.substring(8, 10) + "/" + treatmentStartDate.substring(5, 7) + "/" + treatmentStartDate.substring(0, 4);
+			String typeOfInjury = resultSet.getString("typeOfInjury");
+			double totalClaimAmount = resultSet.getDouble("totalClaimAmount");
+			double totalSumInsured = resultSet.getDouble("totalSumInsured");
+			
+			DomiciliaryClaimApproval domiciliaryClaimApproval = new DomiciliaryClaimApproval();
+			domiciliaryClaimApproval.setClaimNo(claimNo);
+			domiciliaryClaimApproval.setBeneficiaryName(beneficiaryName);
+			domiciliaryClaimApproval.setHealthInsuranceId(healthInsuranceId);
+			domiciliaryClaimApproval.setMobNo(mobNo);
+			domiciliaryClaimApproval.setTreatmentStartDate(treatmentStartDate);
+			domiciliaryClaimApproval.setClaimRaisedDate(claimRaisedDate);
+			domiciliaryClaimApproval.setTypeOfInjury(typeOfInjury);
+			domiciliaryClaimApproval.setTotalClaimAmount(totalClaimAmount);
+			domiciliaryClaimApproval.setTotalSumInsured(totalSumInsured);
+						
+			unapprovedDomiciliaryClaimList.add(domiciliaryClaimApproval);
+		}
+		DBConnection.closeConnection(connect);
+		System.out.println("Exiting getUnapprovedDomiciliaryClaimList() in ClaimDAO Class");
+		
+		return unapprovedDomiciliaryClaimList;
+	}
+
+	public int approveDomiciliaryClaim(Map<Integer, Double> combinations, String[] rejectedClaimNo) throws SQLException {
+		System.out.println("Entering approveDomiciliaryClaim(Map<Integer, Double>, String[]) in ClaimDAO Class");
+		
+		connect = DBConnection.getConnection();
+		
+		int count1 = 0;
+		int count2 = 0;
+		
+		//converting the array to a comma separated string to be use in IN statement
+		if(rejectedClaimNo != null){
+			String rejectedClaimNo1 = Arrays.toString(rejectedClaimNo);
+			rejectedClaimNo1 = rejectedClaimNo1.substring(1, rejectedClaimNo1.length() - 1);
+		
+			//updating two tables with rejected claims
+			ps1 = connect.prepareStatement("UPDATE ehi.domiciliary_claim SET status=2 WHERE "
+				+ "claimNo IN ("+rejectedClaimNo1+")");
+			ps2 = connect.prepareStatement("UPDATE ehi.claim SET status=2 WHERE "
+				+ "claimNo IN ("+rejectedClaimNo1+")");
+			count1 = ps1.executeUpdate();
+			ps2.executeUpdate();
+		}
+		
+		//iterating over every entry in the hash map and updating both tables
+		for(Map.Entry<Integer, Double> entry: combinations.entrySet()){
+			int claimNo = entry.getKey();
+			double approvedAmount = entry.getValue();
+			ps1 = connect.prepareStatement("UPDATE ehi.domiciliary_claim SET status=1 WHERE claimNo=?");
+			ps1.setInt(1, claimNo);
+			ps1.executeUpdate();
+			ps2 = connect.prepareStatement("UPDATE ehi.claim SET status=1, approvedAmount=? WHERE claimNo=?");
+			ps2.setDouble(1, approvedAmount);
+			ps2.setInt(2, claimNo);
+			int count = ps2.executeUpdate();
+			count2 += count;
+		}
+		DBConnection.closeConnection(connect);
+		System.out.println("Exiting approveDomiciliaryClaim(Map<Integer, Double>, String[]) in ClaimDAO Class");
+		
+		return count1+count2;
 	}
 
 }

@@ -1,8 +1,7 @@
 package com.servlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -48,6 +47,8 @@ public class ClaimsController extends HttpServlet {
 			rd = request.getRequestDispatcher("jsp/forms/loginForm.jsp");
 		}
 		else{
+			//the heading to be displayed on the result page
+			request.setAttribute("heading", "Claims Management");
 			
 			//this is retrieved from URL
 			String action = request.getParameter("action");
@@ -250,7 +251,21 @@ public class ClaimsController extends HttpServlet {
 				rd.forward(request, response);
 			}
 			else if("getUnapprovedDomiciliaryClaimList".equals(action)){
-				
+				ClaimsService cs = new ClaimsService();
+				List<DomiciliaryClaimApproval> unapprovedDomiciliaryClaimList = new ArrayList<DomiciliaryClaimApproval>();
+				try {
+					unapprovedDomiciliaryClaimList = cs.getUnapprovedDomiciliaryClaimList();
+					request.setAttribute("unapprovedDomiciliaryClaimList", unapprovedDomiciliaryClaimList);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				if(unapprovedDomiciliaryClaimList.size() != 0)
+					request.setAttribute("type", "list");
+				else{
+					request.setAttribute("type", "message");
+					request.setAttribute("message", " No domiciliary claims are pending for approval");
+				}
+				rd = request.getRequestDispatcher("/jsp/lists/unapprovedDomiciliaryClaimList.jsp");
 				rd.forward(request, response);
 			}
 		
@@ -267,7 +282,10 @@ public class ClaimsController extends HttpServlet {
 		System.out.println("Entering doPost() in ClaimsController Class");
 		
 		RequestDispatcher rd = null;
-				
+		
+		//the heading to be displayed on the result page
+		request.setAttribute("heading", "Claims Management");
+						
 		//service class references
 		ClaimsService cs = new ClaimsService();
 		EmployeeService es = new EmployeeService();
@@ -276,10 +294,7 @@ public class ClaimsController extends HttpServlet {
 		//this is retrieved from the hidden value passed while submitting the form
 		String action = request.getParameter("action");
 		System.out.println("The action retreived is " + action);
-			
-		//the heading to be displayed on the result page
-		request.setAttribute("heading", "Claims Management");
-				
+						
 		//if-else code block for action
 		if("domiciliaryClaim".equals(action)){
 			System.out.println("In domiciliaryClaim action if-else block");
@@ -460,6 +475,31 @@ public class ClaimsController extends HttpServlet {
 				}
 			}
 			rd = request.getRequestDispatcher("/jsp/report/claimReport.jsp");
+		}
+		else if("approve_domiciliary_claim".equals(action)){
+			System.out.println("In approve_domiciliary_claim action if-else block");
+			
+			//retrieving list of check marked Claim No
+			String approvedClaimNo [] = request.getParameterValues("approval");
+			String rejectedClaimNo [] = request.getParameterValues("rejection");
+			String approvedClaimAmount [] = request.getParameterValues("approvedAmount");
+			
+			//combine the claim no and approved amount to one model
+			Map<Integer, Double> combinations = new HashMap<Integer, Double>();
+			
+			//to avoid null pointer excpetion if all claims are rejected
+			if(approvedClaimNo != null){
+				for(int i=0; i<approvedClaimNo.length; i++)
+					combinations.put(Integer.parseInt(approvedClaimNo[i]), Double.parseDouble(approvedClaimAmount[i]));
+			}
+			
+			try {
+				int count = cs.approveDomiciliaryClaim(combinations, rejectedClaimNo);
+				request.setAttribute("message", count+" policies have been modified");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			rd = request.getRequestDispatcher("/jsp/report/approvalReport.jsp");
 		}
 		
 		System.out.println("Exiting doPost() in ClaimsController Class");

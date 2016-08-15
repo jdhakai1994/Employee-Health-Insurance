@@ -78,5 +78,4 @@ public class PolicyService {
 		System.out.println("Exiting fetchPolicyIdList(int) in PolicyService Class");
 		return list;
 	}
-
 }
