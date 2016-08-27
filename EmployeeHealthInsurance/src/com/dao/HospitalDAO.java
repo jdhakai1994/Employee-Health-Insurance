@@ -3,6 +3,10 @@ package com.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.bean.Hospital;
 import com.util.DBConnection;
 
@@ -208,6 +212,25 @@ public class HospitalDAO {
 		System.out.println("Exiting searchHospital(input) in HospitalDAO Class");
 		
 		return hospital;
+	}
+
+	public List<Integer> fetchHospitalIdList() throws SQLException {
+		System.out.println("Entering fetchHospitalIdList() in HospitalDAO Class");
+		
+		connect = DBConnection.getConnection();
+		
+		List<Integer> hospitalIdList = new ArrayList<Integer>();
+		int id = 0;
+		ps1 = connect.prepareStatement("SELECT hospitalId FROM ehi.hospital WHERE status=1");
+		resultSet = ps1.executeQuery();
+		while(resultSet.next()){
+			id = resultSet.getInt("hospitalId");
+			hospitalIdList.add(id);
+		}
+		
+		DBConnection.closeConnection(connect);
+		System.out.println("Exiting fetchHospitalId() in HospitalDAO Class");
+		return hospitalIdList;
 	}
 
 }

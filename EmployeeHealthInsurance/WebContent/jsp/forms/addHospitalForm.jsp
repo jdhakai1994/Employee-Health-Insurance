@@ -7,7 +7,7 @@ response.setHeader("Cache-Control","no-store"); //Directs caches not to store th
 response.setDateHeader("Expires", 0); //Causes the proxy cache to see the page as "stale"
 response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -15,22 +15,22 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 <title>Health Insurance Management</title>
 
 <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
 <!-- custom CSS -->
-<link href="<%=request.getContextPath()%>/css/employeeregister.css" rel="stylesheet" type="text/css" />
+<link href="<%=request.getContextPath()%>/css/common.css" rel="stylesheet" type="text/css" />
 
 <!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 
 <!-- validation -->
-<script src="http://1000hz.github.io/bootstrap-validator/dist/validator.min.js"></script>
+<script src="https://1000hz.github.io/bootstrap-validator/dist/validator.min.js"></script>
 
 <!-- Latest compiled JavaScript -->
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
 <!-- custom JavaScript -->
-<script type="text/javascript" src="<%=request.getContextPath()%>/js/employeeregister.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/js/common.js"></script>
 
 </head>
 
@@ -69,7 +69,7 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 							<div class="form-group has-feedback">
 								<label for="hospitalName" class="col-sm-3 control-label">Hospital Name  <span style="color:red;">*</span></label>
 								<div class="col-sm-6">
-									<input type="text" pattern="[A-z\s]{1,}" name="hospitalName" id="hospitalName" class="form-control" tabindex="1" placeholder="eg:- Some Hospital" required>
+									<input type="text" pattern="[A-z'&\s]{1,}" name="hospitalName" id="hospitalName" class="form-control" tabindex="1" placeholder="eg:- Some Hospital" required>
 									<span class="glyphicon form-control-feedback"></span>
 								</div>							
 							</div>
@@ -83,7 +83,7 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 							<div class="form-group has-feedback">
 								<label for="cityName" class="col-sm-3 control-label">City Name  <span style="color:red;">*</span></label>
 								<div class="col-sm-4">
-									<input type="text" pattern="[A-z]{1,}" name="cityName" id="cityName" class="form-control" tabindex="3" placeholder="eg:- Kolkata" required>
+									<input type="text" pattern="[A-z\s]{1,}" name="cityName" id="cityName" class="form-control" tabindex="3" placeholder="eg:- Kolkata" required>
 									<span class="glyphicon form-control-feedback"></span>
 								</div>							
 							</div>
@@ -108,18 +108,18 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 							<div class="form-group has-feedback">
 								<label for="stdcode" class="col-sm-3 control-label">STD Code  <span style="color:red;">*</span></label>
 								<div class="col-sm-3">
-									<input type="text" pattern="[0-9-]{3,6}" class="form-control" name="stdcode" id="stdcode" tabindex="6" placeholder="eg:- XXXXXX" required>
+									<input type="text" pattern="[0-9-+]{3,6}" class="form-control" name="stdcode" id="stdcode" tabindex="6" placeholder="eg:- XXXXXX" required>
 								</div>							
 							</div>
 							<div class="form-group has-feedback">
 								<label for="phNo" class="col-sm-3 control-label">Phone Number  <span style="color:red;">*</span></label>
 								<div class="col-sm-4">
-									<input type="text" pattern="[0-9]{8}" name="phNo" id="phNo" class="form-control" tabindex="7" placeholder="eg:- XXXXXXXX" required>
+									<input type="text" pattern="[0-9]{7,10}" name="phNo" id="phNo" class="form-control" tabindex="7" placeholder="eg:- XXXXXXXX" required>
 									<span class="glyphicon form-control-feedback"></span>
 								</div>							
 							</div>
 							<div class="form-group">
-								<label for="submit" class="col-sm-3 control-label">&nbsp</span></label>
+								<label for="submit" class="col-sm-3 control-label"><span>&#160;</span></label>
 								<div class="col-sm-3">
 									<input type="hidden" name="action" value="add_hospital">
 									<input type="submit" name="submit" id="submit" tabindex="8" class="form-control btn btn-primary" value="Add">
@@ -133,8 +133,8 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 					<div class="content-footer">
 						<div class="container">
 							<div class="row">
-								<div class="col-sm-6 copyright"><strong>Copyright &copy 2016.</strong> All Rights Reserved</div>
-								<div class="col-sm-6 version"><strong>Version</strong> 1.0</div>
+								<div class="col-sm-6 copyright"><strong>Copyright &#169; 2016.</strong> All Rights Reserved</div>
+								<div class="col-sm-6" style="text-align:right"><strong>Version</strong> 1.0</div>
 							</div>
 						</div>
 					</div>

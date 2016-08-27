@@ -1,8 +1,11 @@
 package com.services;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.bean.Hospital;
 import com.dao.HospitalDAO;
-import com.dao.LoginDAO;
 
 public class HospitalService {
 	
@@ -52,6 +55,15 @@ public class HospitalService {
 		String reply = hdao.updateHospital(hospital);
 		System.out.println("Exiting updateHospital(Hospital) in HospitalService Class");
 		return reply;
+	}
+
+	public List<Integer> fetchHospitalIdList() throws SQLException{
+		System.out.println("Entering fetchHospitalIdList() in HospitalService Class");
+		HospitalDAO hdao = new HospitalDAO();
+		List<Integer> hospitalIdList = new ArrayList<Integer>();
+		hospitalIdList = hdao.fetchHospitalIdList();
+		System.out.println("Exiting fetchHospitalIdList() in HospitalService Class");
+		return hospitalIdList;
 	}
 
 }

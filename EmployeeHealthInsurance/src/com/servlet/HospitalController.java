@@ -1,8 +1,10 @@
 package com.servlet;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -27,7 +29,6 @@ public class HospitalController extends HttpServlet {
      */
     public HospitalController() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
@@ -42,7 +43,7 @@ public class HospitalController extends HttpServlet {
 				"Meghalaya","Mizoram","Nagaland","Orissa","Pondicherry","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana",
 				"Tripura","Uttaranchal","Uttar Pradesh","West Bengal"};
 		
-		ArrayList<String> stateList = new ArrayList<String>(Arrays.asList(state));
+		List<String> stateList = new ArrayList<String>(Arrays.asList(state));
 		
 		RequestDispatcher rd = null;
 		
@@ -61,6 +62,9 @@ public class HospitalController extends HttpServlet {
 			String action = request.getParameter("action");
 			System.out.println("The action retreived is " + action);
 		
+			//service class references
+			HospitalService hs = new HospitalService();
+			
 			//if-else code block for action
 			if("getAddHospitalForm".equals(action)){
 			
@@ -69,7 +73,6 @@ public class HospitalController extends HttpServlet {
 				request.setAttribute("stateList", stateList);
 			
 				//to fetch the hospitalId
-				HospitalService hs = new HospitalService();
 				try {
 					int hospitalId = hs.fetchHospitalId();
 					request.setAttribute("hospitalId", hospitalId);
@@ -80,6 +83,14 @@ public class HospitalController extends HttpServlet {
 			}
 			else if("getModifyHospitalForm".equals(action)){
 				System.out.println("In modify_hospital action if-else block");
+				
+				List<Integer> hospitalIdList = new ArrayList<Integer>();
+				try {
+					hospitalIdList = hs.fetchHospitalIdList();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				request.setAttribute("hospitalIdList", hospitalIdList);
 				rd = request.getRequestDispatcher("/jsp/forms/searchHospitalForm1.jsp");
 			}
 			else if("getSearchHospitalForm".equals(action)){
@@ -108,7 +119,7 @@ public class HospitalController extends HttpServlet {
 		
 		//the heading to be displayed on the result page
 		request.setAttribute("heading", "Hospital Management");
-		
+		RequestDispatcher rd = null;
 		HospitalService hs = new HospitalService();
 				
 		//if-else code block for action		
@@ -136,12 +147,19 @@ public class HospitalController extends HttpServlet {
 			
 			try {
 				String reply = hs.addHospital(hospital);
-				if("success".equals(reply))
-					request.setAttribute("message", "The hospital details have been successfully added");
-				else if("fail".equals(reply))
-					request.setAttribute("message", "The hospital details couldn't be added");
-				else if("already exists".equals(reply))
-					request.setAttribute("message", "The hospital details already exists");
+				if("success".equals(reply)){
+					request.setAttribute("type", "success_message");
+					request.setAttribute("message", "The hospital details have been successfully added.");
+					rd = request.getRequestDispatcher("/jsp/report/hospitalReport.jsp");
+				}else if("fail".equals(reply)){
+					request.setAttribute("type", "failure_message");
+					request.setAttribute("message", "The hospital details couldn't be added.");
+					rd = request.getRequestDispatcher("/jsp/report/hospitalReport.jsp");
+				}else if("already exists".equals(reply)){
+					request.setAttribute("type", "failure_message");
+					request.setAttribute("message", "The hospital details already exists.");
+					rd = request.getRequestDispatcher("/jsp/report/hospitalReport.jsp");
+				}
 			} catch (Exception e) {
 			e.printStackTrace();
 			}
@@ -156,18 +174,15 @@ public class HospitalController extends HttpServlet {
 			//if-else code block for action1
 			if("searchHospitalById".equals(action1)){
 				int hospitalId = Integer.parseInt(request.getParameter("hospitalId"));
-				System.out.println(hospitalId);
 				try {
 					Hospital hospital = hs.searchHospital(hospitalId);
 					if(hospital == null){
-						request.setAttribute("message", "The hospital details doesn't exist");
-						RequestDispatcher rd = request.getRequestDispatcher("/jsp/forms/searchHospitalForm1.jsp");
-						rd.forward(request, response);
-					}
-					else{
+						request.setAttribute("type", "failure_message");
+						request.setAttribute("message", "The hospital details doesn't exist.");
+						rd = request.getRequestDispatcher("/jsp/report/hospitalReport.jsp");
+					}else{
 						request.setAttribute("hospitaldetails", hospital);
-						RequestDispatcher rd = request.getRequestDispatcher("/jsp/forms/modifyHospitalForm.jsp");
-						rd.forward(request, response);
+						rd = request.getRequestDispatcher("/jsp/forms/modifyHospitalForm.jsp");
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -175,13 +190,16 @@ public class HospitalController extends HttpServlet {
 			}
 			else if("searchHospitalByPin".equals(action1)){
 				String pincode = request.getParameter("pincode");
-				System.out.println(pincode);
 				try {
 					Hospital hospital = hs.searchHospital(pincode);
-					if(hospital == null)
-						request.setAttribute("message", "The hospital details doesn't exist");
-					else
+					if(hospital == null){
+						request.setAttribute("type", "failure_message");
+						request.setAttribute("message", "No such hospital registered under that pincode.");
+						rd = request.getRequestDispatcher("/jsp/report/hospitalReport.jsp");
+					}else
+						request.setAttribute("type", "report");
 						request.setAttribute("hospitaldetails", hospital);
+						rd = request.getRequestDispatcher("/jsp/report/hospitalReport.jsp");
 				}
 				catch (Exception e){
 					e.printStackTrace();
@@ -189,13 +207,17 @@ public class HospitalController extends HttpServlet {
 			}
 			else if("searchHospitalByName".equals(action1)){
 				String hospitalName = request.getParameter("hospitalName");
-				System.out.println(hospitalName);
 				try {
 					Hospital hospital = hs.searchHospital(hospitalName);
-					if(hospital == null)
-						request.setAttribute("message", "The hospital details doesn't exist");
-					else
+					if(hospital == null){
+						request.setAttribute("type", "failure_message");
+						request.setAttribute("message", "No such hospital registered by that name.");
+						rd = request.getRequestDispatcher("/jsp/report/hospitalReport.jsp");
+					}else{
+						request.setAttribute("type", "report");
 						request.setAttribute("hospitaldetails", hospital);
+						rd = request.getRequestDispatcher("/jsp/report/hospitalReport.jsp");
+					}
 				}
 				catch (Exception e){
 					e.printStackTrace();
@@ -212,14 +234,18 @@ public class HospitalController extends HttpServlet {
 			if("Delete".equals(submit)){
 				System.out.println("In delete submit if-else block");
 				int hospitalId = Integer.parseInt(request.getParameter("hospitalId"));
-				System.out.println(hospitalId);
 				try {
 					String reply = hs.deleteHospital(hospitalId);
 					if("success".equals(reply)){
-						request.setAttribute("message", "The hospital details have been deleted");
+						request.setAttribute("type", "success_message");
+						request.setAttribute("message", "The hospital details have been deleted successfully.");
+						rd = request.getRequestDispatcher("/jsp/report/hospitalReport.jsp");
 					}
-					else
-						request.setAttribute("message", "The hospital details couldn't be deleted");
+					else{
+						request.setAttribute("type", "failure_message");
+						request.setAttribute("message", "The hospital details couldn't be deleted.");
+						rd = request.getRequestDispatcher("/jsp/report/hospitalReport.jsp");
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -251,10 +277,15 @@ public class HospitalController extends HttpServlet {
 				try {
 					String reply = hs.updateHospital(hospital);
 					if("success".equals(reply)){
-						request.setAttribute("message", "The hospital details have been updated");
+						request.setAttribute("type", "success_message");
+						request.setAttribute("message", "The hospital details have been updated successfully.");
+						rd = request.getRequestDispatcher("/jsp/report/hospitalReport.jsp");
 					}
-					else
-						request.setAttribute("message", "The hospital details couldn't be updated");
+					else{
+						request.setAttribute("type", "failure_message");
+						request.setAttribute("message", "The hospital details couldn't be updated.");
+						rd = request.getRequestDispatcher("/jsp/report/hospitalReport.jsp");
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -262,7 +293,6 @@ public class HospitalController extends HttpServlet {
 		}
 		
 		System.out.println("Exiting doPost() in HospitalController Class");
-		RequestDispatcher rd = request.getRequestDispatcher("/jsp/result.jsp");
-		rd.forward(request, response);	
+		rd.forward(request, response);
 	}
 }
