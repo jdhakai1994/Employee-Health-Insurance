@@ -18,7 +18,7 @@ public class HospitalDAO {
 	private ResultSet resultSet = null;
 	private String reply = null;
 
-	public String addHospital(Hospital hospital) throws Exception {
+	public String addHospital(Hospital hospital) throws SQLException {
 		
 		System.out.println("Entering addHospital(Hospital) in HospitalDAO Class");
 		
@@ -77,7 +77,7 @@ public class HospitalDAO {
 		return reply;
 	}
 
-	public int fetchHospitalId() throws Exception {
+	public int fetchHospitalId() throws SQLException {
 		
 		System.out.println("Entering fetchHospitalId() in HospitalDAO Class");
 		
@@ -95,7 +95,7 @@ public class HospitalDAO {
 		return id;
 	}
 
-	public Hospital searchHospital(int hospitalId) throws Exception {
+	public Hospital searchHospital(int hospitalId) throws SQLException {
 		
 		System.out.println("Entering searchHospital(int) in HospitalDAO Class");
 		
@@ -127,7 +127,7 @@ public class HospitalDAO {
 	}
 	
 
-	public String deleteHospital(int hospitalId) throws Exception {
+	public String deleteHospital(int hospitalId) throws SQLException {
 		
 		System.out.println("Entering deleteHospital(int) in HospitalDAO Class");
 		
@@ -144,7 +144,7 @@ public class HospitalDAO {
 		
 	}
 
-	public String updateHospital(Hospital hospital) throws Exception {
+	public String updateHospital(Hospital hospital) throws SQLException {
 		
 		System.out.println("Entering updateHospital(Hospital) in HospitalDAO Class");
 		
@@ -181,7 +181,7 @@ public class HospitalDAO {
 
 	}
 
-	public Hospital searchHospital(String input) throws Exception {
+	public Hospital searchHospital(String input) throws SQLException {
 		
 		System.out.println("Entering searchHospital(input) in HospitalDAO Class");
 		
@@ -205,13 +205,45 @@ public class HospitalDAO {
 			hospital.setStdcode(resultSet.getString("stdcode"));
 			hospital.setPhNo(resultSet.getString("phoneNumber"));
 
-			return hospital;
 		}
 	
 		DBConnection.closeConnection(connect);
 		System.out.println("Exiting searchHospital(input) in HospitalDAO Class");
 		
 		return hospital;
+	}
+	
+	public List<Hospital> searchHospital(String stateName, String cityName) throws SQLException {
+		System.out.println("Entering searchHospital(String, String) in HospitalDAO Class");
+		
+		connect = DBConnection.getConnection();
+		
+		Hospital hospital = null;
+		List<Hospital> hospitalList = new ArrayList<Hospital>();
+		ps1 = connect.prepareStatement("SELECT * FROM ehi.hospital WHERE state=? OR "
+				+ "city=? AND status=1");
+		ps1.setString(1, stateName);
+		ps1.setString(2, cityName);
+		resultSet = ps1.executeQuery();
+		while(resultSet.next()){
+			//making a hospital bean
+			hospital = new Hospital();
+			hospital.setHospitalId(resultSet.getInt("hospitalId"));
+			hospital.setHospitalName(resultSet.getString("hospitalName"));
+			hospital.setAddress(resultSet.getString("address"));
+			hospital.setCityName(resultSet.getString("city"));
+			hospital.setStateName(resultSet.getString("state"));
+			hospital.setPincode(resultSet.getString("pincode"));
+			hospital.setStdcode(resultSet.getString("stdcode"));
+			hospital.setPhNo(resultSet.getString("phoneNumber"));
+
+			hospitalList.add(hospital);
+		}
+	
+		DBConnection.closeConnection(connect);
+		System.out.println("Exiting searchHospital(String, String) in HospitalDAO Class");
+		
+		return hospitalList;
 	}
 
 	public List<Integer> fetchHospitalIdList() throws SQLException {
@@ -233,4 +265,23 @@ public class HospitalDAO {
 		return hospitalIdList;
 	}
 
+	public List<String> getCityList(String state) throws SQLException {
+		System.out.println("Entering getCityList() in HospitalDAO Class");
+		
+		connect = DBConnection.getConnection();
+		
+		List<String> cityList = new ArrayList<String>();
+		String city;
+		ps1 = connect.prepareStatement("SELECT DISTINCT city FROM ehi.hospital WHERE state=? AND status=1");
+		ps1.setString(1, state);
+		resultSet = ps1.executeQuery();
+		while(resultSet.next()){
+			city = resultSet.getString("city");
+			cityList.add(city);
+		}
+		
+		DBConnection.closeConnection(connect);
+		System.out.println("Exiting getCityList() in HospitalDAO Class");
+		return cityList;
+	}
 }

@@ -59,7 +59,6 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 					
 					<!-- FORM -->
 					<div class="form-content">
-						<!-- END ERROR MESSAGE -->
 						<form id="searchHospitalFormByHID" action="<%=request.getContextPath()%>/HospitalController?action=search_hospital" method="post" role="form" class="form-horizontal" data-toggle="validator">
 							<div class="form-group">
 								<label for="hospitalId" class="col-sm-3 control-label">Hospital ID  <span style="color:red;">*</span></label>

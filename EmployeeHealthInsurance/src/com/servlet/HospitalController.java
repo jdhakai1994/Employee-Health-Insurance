@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.bean.Hospital;
+import com.google.gson.Gson;
 import com.services.HospitalService;
 
 /**
@@ -55,6 +56,7 @@ public class HospitalController extends HttpServlet {
 		if(username == null){
 			request.setAttribute("message", "Your session has expired, please login again to continue");
 			rd = request.getRequestDispatcher("jsp/forms/loginForm.jsp");
+			rd.forward(request, response);
 		}
 		else{
 		
@@ -80,6 +82,7 @@ public class HospitalController extends HttpServlet {
 					e.printStackTrace();
 				}
 				rd = request.getRequestDispatcher("/jsp/forms/addHospitalForm.jsp");
+				rd.forward(request, response);
 			}
 			else if("getModifyHospitalForm".equals(action)){
 				System.out.println("In modify_hospital action if-else block");
@@ -92,17 +95,32 @@ public class HospitalController extends HttpServlet {
 				}
 				request.setAttribute("hospitalIdList", hospitalIdList);
 				rd = request.getRequestDispatcher("/jsp/forms/searchHospitalForm1.jsp");
+				rd.forward(request, response);
 			}
 			else if("getSearchHospitalForm".equals(action)){
 				System.out.println("In search_hospital action if-else block");
-				request.setAttribute("stateList", stateList);
-				rd = request.getRequestDispatcher("/jsp/forms/searchHospitalForm.jsp");
+				String stateName = request.getParameter("state");
+				if(stateName != null){
+					List<String> cityList = new ArrayList<>();
+				    try {
+						cityList = hs.getCityList(stateName);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				    String json = new Gson().toJson(cityList);
+
+				    response.setContentType("application/json");
+				    response.setCharacterEncoding("UTF-8");
+				    response.getWriter().write(json); 
+				}
+				else{
+					request.setAttribute("stateList", stateList);
+					rd = request.getRequestDispatcher("/jsp/forms/searchHospitalForm.jsp");
+					rd.forward(request, response);
+				}
 			}
 		}
-		
 		System.out.println("Exiting doGet() in HospitalController Class");				
-		rd.forward(request, response);
-		
 	}
 
 	/**
@@ -188,13 +206,33 @@ public class HospitalController extends HttpServlet {
 					e.printStackTrace();
 				}
 			}
+			else if("searchHospitalByLocation".equals(action1)){
+				String stateName = request.getParameter("stateName");
+				String cityName = request.getParameter("cityName");
+				List<Hospital> hospitalList = new ArrayList<Hospital>();
+				try {
+					hospitalList = hs.searchHospital(stateName, cityName);
+					if(hospitalList == null){
+						request.setAttribute("type", "failure_message");
+						request.setAttribute("message", "There is no registered hospital in that city.");
+						rd = request.getRequestDispatcher("/jsp/report/hospitalReport.jsp");
+					}else
+						request.setAttribute("type", "list");
+						request.setAttribute("hospitalList", hospitalList);
+						rd = request.getRequestDispatcher("/jsp/report/hospitalReport.jsp");
+				}
+				catch (Exception e){
+					e.printStackTrace();
+				}
+			}
 			else if("searchHospitalByPin".equals(action1)){
 				String pincode = request.getParameter("pincode");
 				try {
 					Hospital hospital = hs.searchHospital(pincode);
+					System.out.println(hospital);
 					if(hospital == null){
 						request.setAttribute("type", "failure_message");
-						request.setAttribute("message", "No such hospital registered under that pincode.");
+						request.setAttribute("message", "There is no registered hospital under that pincode.");
 						rd = request.getRequestDispatcher("/jsp/report/hospitalReport.jsp");
 					}else
 						request.setAttribute("type", "report");
@@ -211,7 +249,7 @@ public class HospitalController extends HttpServlet {
 					Hospital hospital = hs.searchHospital(hospitalName);
 					if(hospital == null){
 						request.setAttribute("type", "failure_message");
-						request.setAttribute("message", "No such hospital registered by that name.");
+						request.setAttribute("message", "There is no registered hospital by that name.");
 						rd = request.getRequestDispatcher("/jsp/report/hospitalReport.jsp");
 					}else{
 						request.setAttribute("type", "report");

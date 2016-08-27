@@ -59,27 +59,98 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 					<div class="report-content">
 						<c:set var="type" value="${requestScope.type }"/>
 						<c:choose>
+							<c:when test='${type == "list"}'>
+								<div class="report-body">
+									<table class="table table-hover table-sm">
+										<caption style="font-weight:bold;font-size:15px">Hospital List Details</caption>
+										<thead>
+											<tr>
+												<th>#</th>
+												<th>Name</th>
+											</tr>
+										</thead>
+										<tbody>
+											<c:forEach items="${hospitalList}" var="current" varStatus="loop">
+												<tr class="clickable" data-toggle="collapse" data-target=".demo${loop.index +1}">
+													<td><c:out value="${loop.index +1}" /></td>
+													<td colspan=2><c:out value="${current.hospitalName}" /></td>
+												</tr>
+												<tr class="collapse out demo${loop.index +1}">
+													<td>Address :</td>
+													<td><c:out value="${current.address}" /></td>											
+												</tr>
+												<tr class="collapse out demo${loop.index +1}">
+													<td>City Name :</td>
+													<td><c:out value="${current.cityName}" /></td>											
+												</tr>
+												<tr class="collapse out demo${loop.index +1}">
+													<td>State Name :</td>
+													<td><c:out value="${current.stateName}" /></td>											
+												</tr>
+												<tr class="collapse out demo${loop.index +1}">														
+													<td>Pin Code :</td>
+													<td><c:out value="${current.pincode}" /></td>											
+												</tr>
+												<tr class="collapse out demo${loop.index +1}">
+													<td>STD Code :</td>
+													<td><c:out value="${current.stdcode}" /></td>											
+												</tr>
+												<tr class="collapse out demo${loop.index +1}">
+													<td>Phone Number :</td>
+													<td><c:out value="${current.phNo}" /></td>											
+												</tr>
+											</c:forEach>
+										</tbody>
+									</table>
+								</div>									
+							</c:when>
 							<c:when test='${type == "report"}'>
-							<!-- REPORT CONTENT HEADER -->
-							<div class="report-header">
-								
-							</div>
-							<!-- END REPORT CONTENT HEADER -->
-							
 							<!-- REPORT CONTENT BODY -->
 							<div class="report-body">
-								
+								<table class="table table-hover table-sm">
+									<caption style="font-weight:bold;font-size:15px">Hospital Details</caption>
+									<tbody>
+										<tr>
+											<td>Hospital Name :</td>
+											<td><c:out value="${requestScope.hospitaldetails.hospitalName}" /></td>											
+										</tr>
+										<tr>
+											<td>Address :</td>
+											<td><c:out value="${requestScope.hospitaldetails.address}" /></td>											
+										</tr>
+										<tr>
+											<td>City Name :</td>
+											<td><c:out value="${requestScope.hospitaldetails.cityName}" /></td>											
+										</tr>
+										<tr>
+											<td>State Name :</td>
+											<td><c:out value="${requestScope.hospitaldetails.stateName}" /></td>											
+										</tr>
+										<tr>
+											<td>Pin Code :</td>
+											<td><c:out value="${requestScope.hospitaldetails.pincode}" /></td>											
+										</tr>
+										<tr>
+											<td>STD Code :</td>
+											<td><c:out value="${requestScope.hospitaldetails.stdcode}" /></td>											
+										</tr>
+										<tr>
+											<td>Phone Number :</td>
+											<td><c:out value="${requestScope.hospitaldetails.phNo}" /></td>											
+										</tr>
+									</tbody>
+								</table>
 							</div>
 							<!-- END REPORT CONTENT BODY -->
 							</c:when>
 							<c:when test='${type == "success_message"}'>
-								<p><span class="glyphicon glyphicon-ok-circle" style="color:green"></span> <c:out value='${requestScope.message}'/></p>
+								<p style="font-size:20px"><span class="glyphicon glyphicon-ok-circle" style="color:green"></span> <c:out value='${requestScope.message}'/></p>
 							</c:when>
 							<c:when test='${type == "failure_message"}'>
-								<p><span class="glyphicon glyphicon-remove-circle" style="color:red"></span> <c:out value='${requestScope.message}'/></p>
+								<p style="font-size:20px"><span class="glyphicon glyphicon-remove-circle" style="color:red"></span> <c:out value='${requestScope.message}'/></p>
 							</c:when>
 							<c:otherwise>
-								<p><span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span> Something went wrong, please try again.</p>
+								<p style="font-size:20px"><span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span> Something went wrong, please try again.</p>
 							</c:otherwise>
 						</c:choose>
 					</div>

@@ -30,7 +30,7 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
 <!-- custom JavaScript -->
-<script type="text/javascript" src="<%=request.getContextPath()%>/js/common.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/js/searchHospital.js"></script>
 
 </head>
 
@@ -74,11 +74,8 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 									<span class="glyphicon form-control-feedback"></span>
 								</div>
 								<div class="form-group has-feedback col-sm-6">
-									<select class="form-control" name="stateName" id="stateName" tabindex="2" required>
+									<select class="form-control" name="cityName" id="cityName" tabindex="2" required>
 										<option value="">Select City</option>
-											<c:forEach items="${stateList}" var="stateValue">
-												<option value="${stateValue}">${stateValue}</option>
-											</c:forEach>
 									</select>
 									<span class="glyphicon form-control-feedback"></span>
 								</div>
