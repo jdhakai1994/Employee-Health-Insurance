@@ -70,7 +70,7 @@
                		</li>
                		<ul class="sub-menu collapse in" id="hospitals">
                    		<li><a href="<%=request.getContextPath()%>/HospitalController?action=getSearchHospitalForm">Search Hospital</a></li>
-                   		<li><a href="<%=request.getContextPath()%>/HospitalController?action=value_added_services">Value Added Services</a></li>
+                   		<li><a href="<%=request.getContextPath()%>/HospitalController?action=getValueAddedServicesForm">Value Added Services</a></li>
                    	</ul>
 				</ul>
                     

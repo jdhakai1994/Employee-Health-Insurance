@@ -54,7 +54,7 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 				<!-- CONTENT BODY -->
 				<div class="content-body">
 					<div>
-						<h3>Hospital Management</h3>						
+						<h3><c:out value='${requestScope.heading}'/></h3>						
 					</div>
 					
 					<!-- FORM -->

@@ -86,7 +86,7 @@ public class ClaimsController extends HttpServlet {
 						//fetch healthInsuranceId of the employee
 						int employeeHealthInsuranceId = ps.fetchPolicyId(employeeId,true);
 					
-						/*proceed further only if the health insurance policy is approved
+						/*proceed further only if the health insurance policy is approved,
 						 * one cannot place claims if approval is pending
 						 */
 						if(employeeHealthInsuranceId != -1){

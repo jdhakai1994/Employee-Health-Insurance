@@ -14,9 +14,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.bean.Dependent;
+import com.bean.Employee;
 import com.bean.Hospital;
 import com.google.gson.Gson;
+import com.services.DependentService;
+import com.services.EmployeeService;
 import com.services.HospitalService;
+import com.services.PolicyService;
 
 /**
  * Servlet implementation class HospitalController
@@ -59,13 +64,19 @@ public class HospitalController extends HttpServlet {
 			rd.forward(request, response);
 		}
 		else{
+			
+			//the heading to be displayed on the page
+			request.setAttribute("heading", "Hospital Management");
 		
 			//retrieving action from URL
 			String action = request.getParameter("action");
 			System.out.println("The action retreived is " + action);
 		
-			//service class references
+			//reference to service classes			
 			HospitalService hs = new HospitalService();
+			EmployeeService es = new EmployeeService();
+			PolicyService ps = new PolicyService();
+			DependentService ds = new DependentService();
 			
 			//if-else code block for action
 			if("getAddHospitalForm".equals(action)){
@@ -116,6 +127,94 @@ public class HospitalController extends HttpServlet {
 				else{
 					request.setAttribute("stateList", stateList);
 					rd = request.getRequestDispatcher("/jsp/forms/searchHospitalForm.jsp");
+					rd.forward(request, response);
+				}
+			}
+			else if("getValueAddedServicesForm".equals(action)){
+				System.out.println("In value_added_services action if-else block");
+				
+				String beneficiaryName = request.getParameter("beneficiaryName");
+				String stateName = request.getParameter("state");
+				if(stateName != null && beneficiaryName == null){
+					List<String> cityList = new ArrayList<String>();
+				    try {
+						cityList = hs.getCityList(stateName);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				    String json = new Gson().toJson(cityList);
+
+				    response.setContentType("application/json");
+				    response.setCharacterEncoding("UTF-8");
+				    response.getWriter().write(json); 
+				}
+				if(beneficiaryName != null && stateName == null){
+					int employeeId = Integer.parseInt(request.getParameter("employeeId"));
+					int healthInsuranceId = 0;
+					try {
+						healthInsuranceId = ps.fetchPolicyId(employeeId, beneficiaryName);
+					} catch (Exception e) {
+					
+						e.printStackTrace();
+					}					
+					response.setContentType("text/plain");
+					response.setCharacterEncoding("UTF-8");
+					response.getWriter().write(Integer.toString(healthInsuranceId));					
+				}
+				else if(beneficiaryName == null && stateName == null){
+					//initializing 
+					List<String> beneficiaryNameList = new ArrayList<String>();
+					String mobNo = "";
+					String emailId = "";
+					String employeeName = "";
+					int employeeId = 0;
+					try {
+						//get employee details corresponding to username
+						Employee employee = es.getEmployeeDetails(username);
+				
+						/*retrieve mobile number, employeeName, employeeId and email-ID 
+						 * which is supposed to be auto-populated in the form
+						 */
+						mobNo = employee.getMobNo();
+						employeeName = employee.getEmployeeName();
+						employeeId = employee.getEmployeeId();
+						emailId = employee.getEmailId();
+				
+						//fetch healthInsuranceId of the employee
+						int employeeHealthInsuranceId = ps.fetchPolicyId(employeeId,true);
+				
+						/*proceed further only if the health insurance policy is approved,
+						 * one cannot place check-up request if approval is pending
+						 */
+						if(employeeHealthInsuranceId != -1){
+							beneficiaryNameList.add(employee.getEmployeeName());
+						
+							//get the details of the dependents
+							List<Dependent> dependentList = new ArrayList<Dependent>();
+							dependentList = ds.fetchDependentDetails(employeeId);
+							for(Dependent dependent : dependentList){
+								//fetch health Insurance Id of dependents
+								int dependentHealthInsuranceId = ps.fetchPolicyId(employeeId, dependent.getDependentId(),true);
+						
+								/*add only if the health insurance policy of dependent is 
+								 * approved, one cannot place check-up request if approval is pending
+								 */
+								if(dependentHealthInsuranceId != -1)
+									beneficiaryNameList.add(dependent.getBeneficiaryName());
+							}
+						}
+					} catch (Exception e) {					
+						e.printStackTrace();
+					}
+			
+					request.setAttribute("employeeId", employeeId);
+					request.setAttribute("employeeName", employeeName);
+					request.setAttribute("beneficiaryNameList", beneficiaryNameList);
+					request.setAttribute("mobNo", mobNo);
+					request.setAttribute("emailId", emailId);
+					request.setAttribute("stateList", stateList);
+				
+					rd = request.getRequestDispatcher("/jsp/forms/valueAddedServicesForm.jsp");
 					rd.forward(request, response);
 				}
 			}
