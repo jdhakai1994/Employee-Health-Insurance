@@ -76,12 +76,21 @@ public class HospitalService {
 	}
 
 	public List<String> getCityList(String state) throws SQLException {
-		System.out.println("Entering getCityList() in HospitalService Class");
+		System.out.println("Entering getCityList(String) in HospitalService Class");
 		HospitalDAO hdao = new HospitalDAO();
 		List<String> cityList = new ArrayList<String>();
 		cityList = hdao.getCityList(state);
-		System.out.println("Exiting getCityList() in HospitalService Class");
+		System.out.println("Exiting getCityList(String) in HospitalService Class");
 		return cityList;
+	}
+
+	public List<String> getHospitalList(String state, String city) throws SQLException {
+		System.out.println("Entering getHospitalList(String, String) in HospitalService Class");
+		HospitalDAO hdao = new HospitalDAO();
+		List<String> hospitalList = new ArrayList<String>();
+		hospitalList = hdao.getHospitalList(state, city);
+		System.out.println("Exiting getCityList(String, String) in HospitalService Class");
+		return hospitalList;
 	}
 
 	

@@ -284,4 +284,25 @@ public class HospitalDAO {
 		System.out.println("Exiting getCityList() in HospitalDAO Class");
 		return cityList;
 	}
+
+	public List<String> getHospitalList(String state, String city) throws SQLException {
+		System.out.println("Entering getHospitalList(String, String) in HospitalDAO Class");
+		
+		connect = DBConnection.getConnection();
+		
+		List<String> hospitalList = new ArrayList<String>();
+		String hospital;
+		ps1 = connect.prepareStatement("SELECT hospitalName FROM ehi.hospital WHERE state=? AND city=? AND status=1");
+		ps1.setString(1, state);
+		ps1.setString(2, city);
+		resultSet = ps1.executeQuery();
+		while(resultSet.next()){
+			hospital = resultSet.getString("hospitalName");
+			hospitalList.add(hospital);
+		}
+		
+		DBConnection.closeConnection(connect);
+		System.out.println("Exiting getHospitalList(String, String) in HospitalDAO Class");
+		return hospitalList;
+	}
 }

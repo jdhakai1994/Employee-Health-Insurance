@@ -135,33 +135,8 @@ public class HospitalController extends HttpServlet {
 				
 				String beneficiaryName = request.getParameter("beneficiaryName");
 				String stateName = request.getParameter("state");
-				if(stateName != null && beneficiaryName == null){
-					List<String> cityList = new ArrayList<String>();
-				    try {
-						cityList = hs.getCityList(stateName);
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-				    String json = new Gson().toJson(cityList);
-
-				    response.setContentType("application/json");
-				    response.setCharacterEncoding("UTF-8");
-				    response.getWriter().write(json); 
-				}
-				if(beneficiaryName != null && stateName == null){
-					int employeeId = Integer.parseInt(request.getParameter("employeeId"));
-					int healthInsuranceId = 0;
-					try {
-						healthInsuranceId = ps.fetchPolicyId(employeeId, beneficiaryName);
-					} catch (Exception e) {
-					
-						e.printStackTrace();
-					}					
-					response.setContentType("text/plain");
-					response.setCharacterEncoding("UTF-8");
-					response.getWriter().write(Integer.toString(healthInsuranceId));					
-				}
-				else if(beneficiaryName == null && stateName == null){
+				String cityName = request.getParameter("city");
+				if(beneficiaryName == null && stateName == null && cityName == null){
 					//initializing 
 					List<String> beneficiaryNameList = new ArrayList<String>();
 					String mobNo = "";
@@ -216,6 +191,47 @@ public class HospitalController extends HttpServlet {
 				
 					rd = request.getRequestDispatcher("/jsp/forms/valueAddedServicesForm.jsp");
 					rd.forward(request, response);
+				}
+				else if(beneficiaryName != null){
+					int employeeId = Integer.parseInt(request.getParameter("employeeId"));
+					int healthInsuranceId = 0;
+					try {
+						healthInsuranceId = ps.fetchPolicyId(employeeId, beneficiaryName);
+					} catch (Exception e) {
+					
+						e.printStackTrace();
+					}					
+					response.setContentType("text/plain");
+					response.setCharacterEncoding("UTF-8");
+					response.getWriter().write(Integer.toString(healthInsuranceId));					
+				}
+				else if(stateName != null){
+					if(cityName == null){
+						List<String> cityList = new ArrayList<String>();
+						try {
+							cityList = hs.getCityList(stateName);
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+						String json = new Gson().toJson(cityList);
+
+						response.setContentType("application/json");
+						response.setCharacterEncoding("UTF-8");
+						response.getWriter().write(json);
+					}
+					else{
+						List<String> hospitalList = new ArrayList<String>();
+						try {
+							hospitalList = hs.getHospitalList(stateName, cityName);
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+						String json = new Gson().toJson(hospitalList);
+
+						response.setContentType("application/json");
+						response.setCharacterEncoding("UTF-8");
+						response.getWriter().write(json);
+					}
 				}
 			}
 		}
