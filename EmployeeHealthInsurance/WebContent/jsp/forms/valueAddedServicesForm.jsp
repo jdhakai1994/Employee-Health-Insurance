@@ -65,7 +65,7 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 					
 					<!-- FORM -->
 					<div class="form-content">
-						<form id="valueAddedServicesForm" action="<%=request.getContextPath()%>/HospitalController?action=valueAddedServices" method="post" role="form" class="form-horizontal" data-toggle="validator">
+						<form id="valueAddedServicesForm" action="<%=request.getContextPath()%>/HospitalController?action=value_added_services" method="post" role="form" class="form-horizontal" data-toggle="validator">
 							<div class="form-group">
 							<label for="employeeId" class="col-sm-3 control-label">Employee ID  <span style="color:red;">*</span></label>
 							<div class="col-sm-4">
@@ -123,7 +123,7 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 							<div class="form-group has-feedback">
 								<label for="age" class="col-sm-3 control-label">Age  <span style="color:red;">*</span></label>
 								<div class="col-sm-2">
-									<input type="text" name="age" id="age" class="form-control" tabindex="4" placeholder="eg 1-99" required>
+									<input type="text" pattern="[0-9]{1,2}" name="age" id="age" class="form-control" tabindex="4" placeholder="eg 1-99" required>
 									<span class="glyphicon form-control-feedback"></span>
 								</div>							
 							</div>
@@ -171,7 +171,6 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 							<div class="form-group">
 								<label for="submit" class="col-sm-3 control-label"><span>&#160;</span></label>
 								<div class="col-sm-3">
-									<input type="hidden" name="action" value="valueAddedServices">
 									<input type="submit" name="submit" id="submit" tabindex="9" class="form-control btn btn-primary" value="Submit">
 								</div>							
 							</div>

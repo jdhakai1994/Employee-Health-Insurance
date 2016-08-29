@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.bean.Hospital;
+import com.bean.ValueAddedServices;
 import com.dao.HospitalDAO;
 
 public class HospitalService {
@@ -91,6 +92,14 @@ public class HospitalService {
 		hospitalList = hdao.getHospitalList(state, city);
 		System.out.println("Exiting getCityList(String, String) in HospitalService Class");
 		return hospitalList;
+	}
+
+	public int addCheckUpRequest(ValueAddedServices vas) throws SQLException {
+		System.out.println("Entering addCheckUpRequest(ValueAddedServices) in HospitalService Class");
+		HospitalDAO hdao = new HospitalDAO();
+		int checkUpId = hdao.addCheckUpRequest(vas);
+		System.out.println("Exiting addCheckUpRequest(ValueAddedServices) in HospitalService Class");
+		return checkUpId;
 	}
 
 	

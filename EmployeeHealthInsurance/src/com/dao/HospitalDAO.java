@@ -4,10 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.bean.Hospital;
+import com.bean.ValueAddedServices;
 import com.util.DBConnection;
 
 public class HospitalDAO {
@@ -304,5 +308,102 @@ public class HospitalDAO {
 		DBConnection.closeConnection(connect);
 		System.out.println("Exiting getHospitalList(String, String) in HospitalDAO Class");
 		return hospitalList;
+	}
+
+	public int addCheckUpRequest(ValueAddedServices vas) throws SQLException {
+		System.out.println("Entering getHospitalList(String, String) in HospitalDAO Class");
+		
+		connect = DBConnection.getConnection();
+
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		int checkUpId = 0;
+		
+		int employeeId = vas.getEmployeeId();
+		String employeeName = vas.getEmployeeName();
+		String mobNo = vas.getMobNo();
+		String emailId = vas.getEmailId();
+		String beneficiaryName = vas.getBeneficiaryName();
+		int healthInsuranceId = vas.getHealthInsuranceId();
+		String gender = vas.getGender();
+		int age = vas.getAge();
+		String hospitalName = vas.getHospitalName();
+		String date = vas.getAppointmentDate();
+		String appointmentDate = date.substring(6, 10) + "-" + date.substring(3, 5) + "-" + date.substring(0, 2);
+		ps1 = connect.prepareStatement("SELECT appointmentDate FROM ehi.value_added_services WHERE healthInsuranceId=? AND status=1"
+				+ " ORDER BY appointmentDate DESC LIMIT 1");
+		ps1.setInt(1, healthInsuranceId);
+		resultSet = ps1.executeQuery();
+		if(resultSet.next()){
+			String lastAppointmentDate = resultSet.getString("appointmentDate");
+			Date date1 = null;
+			try {
+				date1 = format.parse(lastAppointmentDate);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			Date date2 = null;
+			try {
+				date2 = format.parse(appointmentDate);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			int diffInDays = (int) ((date2.getTime() - date1.getTime()) / (1000 * 60 * 60 * 24));
+			if(diffInDays > 90){
+				ps1 = connect.prepareStatement("INSERT INTO ehi.value_added_services (employeeId,employeeName,mobNo,emailId,"
+						+ "beneficiaryName,healthInsuranceId,gender,age,hospitalName,appointmentDate) VALUES "
+						+ "(?,?,?,?,?,?,?,?,?,?)");
+				ps1.setInt(1, employeeId);
+				ps1.setString(2, employeeName);
+				ps1.setString(3, mobNo);
+				ps1.setString(4, emailId);
+				ps1.setString(5, beneficiaryName);
+				ps1.setInt(6, healthInsuranceId);
+				ps1.setString(7, gender);
+				ps1.setInt(8, age);
+				ps1.setString(9, hospitalName);
+				ps1.setString(10, appointmentDate);
+				int result = ps1.executeUpdate();
+				if(result != 0){
+					ps2 = connect.prepareStatement("SELECT checkUpId FROM ehi.value_added_services ORDER BY "
+							+ "checkUpId DESC LIMIT 1");
+					resultSet = ps2.executeQuery();
+					while(resultSet.next()){
+						checkUpId = resultSet.getInt("checkUpId");
+					}
+				}
+			}
+			else
+				checkUpId = -1;
+		}
+		else{
+			ps1 = connect.prepareStatement("INSERT INTO ehi.value_added_services (employeeId,employeeName,mobNo,emailId,"
+					+ "beneficiaryName,healthInsuranceId,gender,age,hospitalName,appointmentDate) VALUES "
+					+ "(?,?,?,?,?,?,?,?,?,?)");
+			ps1.setInt(1, employeeId);
+			ps1.setString(2, employeeName);
+			ps1.setString(3, mobNo);
+			ps1.setString(4, emailId);
+			ps1.setString(5, beneficiaryName);
+			ps1.setInt(6, healthInsuranceId);
+			ps1.setString(7, gender);
+			ps1.setInt(8, age);
+			ps1.setString(9, hospitalName);
+			ps1.setString(10, appointmentDate);
+			int result = ps1.executeUpdate();
+			if(result != 0){
+				ps2 = connect.prepareStatement("SELECT checkUpId FROM ehi.value_added_services ORDER BY "
+						+ "checkUpId DESC LIMIT 1");
+				resultSet = ps2.executeQuery();
+				while(resultSet.next()){
+					checkUpId = resultSet.getInt("checkUpId");
+				}
+			}
+		}
+		
+		DBConnection.closeConnection(connect);
+		System.out.println("Exiting getHospitalList(String, String) in HospitalDAO Class");
+		return checkUpId;
 	}
 }

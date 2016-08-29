@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import com.bean.Dependent;
 import com.bean.Employee;
 import com.bean.Hospital;
+import com.bean.ValueAddedServices;
 import com.google.gson.Gson;
 import com.services.DependentService;
 import com.services.EmployeeService;
@@ -246,7 +247,7 @@ public class HospitalController extends HttpServlet {
 		
 		System.out.println("Entering doPost() in HospitalController Class");
 		
-		//this is retrieved from the hidden value passed while submitting the form
+		//this is retrieved from the url mentioned in action attribute in form tag
 		String action = request.getParameter("action");
 		System.out.println("The action retreived is " + action);
 		
@@ -442,6 +443,55 @@ public class HospitalController extends HttpServlet {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+			}			
+		}
+		if("value_added_services".equals(action)){
+			System.out.println("In value_added_services action if-else block");
+			
+			//retrieving data from valueAddedServicesForm.jsp
+			int employeeId = Integer.parseInt(request.getParameter("employeeId"));
+			String employeeName = request.getParameter("employeeName");
+			String mobNo = request.getParameter("mobNo");
+			String emailId = request.getParameter("email");
+			String beneficiaryName = request.getParameter("beneficiaryName");
+			int healthInsuranceId = Integer.parseInt(request.getParameter("healthInsuranceId"));
+			String gender = request.getParameter("gender");
+			int age = Integer.parseInt(request.getParameter("age"));
+			String hospitalName = request.getParameter("hospitalName");
+			String appointmentDate = request.getParameter("appointmentDate");			
+			
+			//making a Value Added Services bean
+			ValueAddedServices vas = new ValueAddedServices();
+			vas.setEmployeeId(employeeId);
+			vas.setEmployeeName(employeeName);
+			vas.setMobNo(mobNo);
+			vas.setEmailId(emailId);
+			vas.setBeneficiaryName(beneficiaryName);
+			vas.setHealthInsuranceId(healthInsuranceId);
+			vas.setGender(gender);
+			vas.setAge(age);
+			vas.setHospitalName(hospitalName);
+			vas.setAppointmentDate(appointmentDate);
+			
+			try {
+				int checkUpId = hs.addCheckUpRequest(vas);
+				if(checkUpId == -1){
+					request.setAttribute("type", "failure_message");
+					request.setAttribute("message", "The check up request couldn't be placed. Once registered successfully you "
+							+ "cannot place another request for same personnel upto next 3 months.");
+					rd = request.getRequestDispatcher("/jsp/report/hospitalReport.jsp");
+				}else if(checkUpId == 0){
+					request.setAttribute("type", "failure_message");
+					request.setAttribute("message", "The check up request couldn't be placed.");
+					rd = request.getRequestDispatcher("/jsp/report/hospitalReport.jsp");
+				}else{
+					request.setAttribute("type", "success_message");
+					request.setAttribute("message", "The check up request has been sucessfully placed. The auto generated check up id "
+							+ "is "+checkUpId+" and is pending admin approval.");
+					rd = request.getRequestDispatcher("/jsp/report/hospitalReport.jsp");
+				}
+			} catch (Exception e) {
+			e.printStackTrace();
 			}			
 		}
 		
