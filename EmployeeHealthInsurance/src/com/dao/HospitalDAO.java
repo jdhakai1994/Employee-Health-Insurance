@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -37,6 +38,10 @@ public class HospitalDAO {
 		String stdcode = hospital.getStdcode();
 		String phNo = hospital.getPhNo();
 		
+		/* check if an entry with same hospital name and pincode already exist (may be previously deleted)
+		 * case 1 - if it exists updating the status to 1
+		 * case 2 - if it doesn't exist inserting a new row
+		 */
 		ps1 = connect.prepareStatement("SELECT status FROM ehi.hospital WHERE pincode=? "
 				+ "and hospitalName=?");
 		ps1.setString(1, pincode);
@@ -88,6 +93,7 @@ public class HospitalDAO {
 		connect = DBConnection.getConnection();
 		
 		int id = 0;
+		// find the last entered hospitalId
 		ps1 = connect.prepareStatement("SELECT hospitalId FROM ehi.hospital ORDER BY hospitalId DESC LIMIT 1");
 		resultSet = ps1.executeQuery();
 		while(resultSet.next()){
@@ -106,6 +112,7 @@ public class HospitalDAO {
 		connect = DBConnection.getConnection();
 		
 		Hospital hospital = null;
+		// get details of an active hospital with a particular hospital id
 		ps1 = connect.prepareStatement("SELECT * FROM ehi.hospital WHERE hospitalId=? AND status=1");
 		ps1.setInt(1, hospitalId);
 		resultSet = ps1.executeQuery();
@@ -136,7 +143,7 @@ public class HospitalDAO {
 		System.out.println("Entering deleteHospital(int) in HospitalDAO Class");
 		
 		connect = DBConnection.getConnection();
-		
+		// deleting (updating the status to 0) the hospital details with a particular hospitalId
 		ps1 = connect.prepareStatement("UPDATE ehi.hospital SET status=0 WHERE hospitalId=?");
 		ps1.setInt(1, hospitalId);
 		ps1.executeUpdate();
@@ -163,7 +170,8 @@ public class HospitalDAO {
 		String pincode = hospital.getPincode();
 		String stdcode = hospital.getStdcode();
 		String phNo = hospital.getPhNo();
-		
+
+		// updating the hospital details of a particular hospitalId		
 		ps1 = connect.prepareStatement("UPDATE ehi.hospital SET hospitalName=?, "
 				+ "address=?,city=?, state=?, pincode=?, stdcode=?, phoneNumber=? "
 				+ "WHERE hospitalId=?");
@@ -192,6 +200,8 @@ public class HospitalDAO {
 		connect = DBConnection.getConnection();
 		
 		Hospital hospital = null;
+
+		// get hospital details corresponding to a particular pincode or hospital name
 		ps1 = connect.prepareStatement("SELECT * FROM ehi.hospital WHERE pincode=? OR "
 				+ "hospitalName=? AND status=1");
 		ps1.setString(1, input);
@@ -224,6 +234,7 @@ public class HospitalDAO {
 		
 		Hospital hospital = null;
 		List<Hospital> hospitalList = new ArrayList<Hospital>();
+		// get hospital details list corresponding to a particular state and city
 		ps1 = connect.prepareStatement("SELECT * FROM ehi.hospital WHERE state=? OR "
 				+ "city=? AND status=1");
 		ps1.setString(1, stateName);
@@ -257,6 +268,7 @@ public class HospitalDAO {
 		
 		List<Integer> hospitalIdList = new ArrayList<Integer>();
 		int id = 0;
+		// get list of hospitalIDs 
 		ps1 = connect.prepareStatement("SELECT hospitalId FROM ehi.hospital WHERE status=1");
 		resultSet = ps1.executeQuery();
 		while(resultSet.next()){
@@ -276,6 +288,7 @@ public class HospitalDAO {
 		
 		List<String> cityList = new ArrayList<String>();
 		String city;
+		// get list of cities corresponding to a state
 		ps1 = connect.prepareStatement("SELECT DISTINCT city FROM ehi.hospital WHERE state=? AND status=1");
 		ps1.setString(1, state);
 		resultSet = ps1.executeQuery();
@@ -296,6 +309,7 @@ public class HospitalDAO {
 		
 		List<String> hospitalList = new ArrayList<String>();
 		String hospital;
+		// get list of hospital names corresponding to a state and city
 		ps1 = connect.prepareStatement("SELECT hospitalName FROM ehi.hospital WHERE state=? AND city=? AND status=1");
 		ps1.setString(1, state);
 		ps1.setString(2, city);
@@ -318,6 +332,7 @@ public class HospitalDAO {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		int checkUpId = 0;
 		
+		//retrieving data from ValueAddedServices bean
 		int employeeId = vas.getEmployeeId();
 		String employeeName = vas.getEmployeeName();
 		String mobNo = vas.getMobNo();
@@ -329,6 +344,10 @@ public class HospitalDAO {
 		String hospitalName = vas.getHospitalName();
 		String date = vas.getAppointmentDate();
 		String appointmentDate = date.substring(6, 10) + "-" + date.substring(3, 5) + "-" + date.substring(0, 2);
+		/* get last approved appointment date for a personnel
+		 * case 1 - if it exists compare if it is more than 3 months and then enter a new row else ignore
+		 * case 2 - if it doesn't exist enter a new row
+		 */
 		ps1 = connect.prepareStatement("SELECT appointmentDate FROM ehi.value_added_services WHERE healthInsuranceId=? AND status=1"
 				+ " ORDER BY appointmentDate DESC LIMIT 1");
 		ps1.setInt(1, healthInsuranceId);
@@ -339,14 +358,12 @@ public class HospitalDAO {
 			try {
 				date1 = format.parse(lastAppointmentDate);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			Date date2 = null;
 			try {
 				date2 = format.parse(appointmentDate);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			int diffInDays = (int) ((date2.getTime() - date1.getTime()) / (1000 * 60 * 60 * 24));
@@ -405,5 +422,82 @@ public class HospitalDAO {
 		DBConnection.closeConnection(connect);
 		System.out.println("Exiting getHospitalList(String, String) in HospitalDAO Class");
 		return checkUpId;
+	}
+
+	public List<ValueAddedServices> getUnapprovedAppointmentList() throws SQLException {
+		System.out.println("Entering getUnapprovedAppointmentList() in HospitalDAO Class");
+		
+		connect = DBConnection.getConnection();
+		
+		List<ValueAddedServices> unapprovedAppointmentList = new ArrayList<ValueAddedServices>();
+
+		// get the details of unapproved appointment requests
+		ps1 = connect.prepareStatement("SELECT * FROM ehi.value_added_services WHERE status=0");
+		resultSet = ps1.executeQuery();
+		while(resultSet.next()){
+			int checkUpId = resultSet.getInt("checkUpId");
+			int healthInsuranceId = resultSet.getInt("healthInsuranceId");
+			String mobNo = resultSet.getString("mobNo");
+			String beneficiaryName = resultSet.getString("beneficiaryName");
+			String gender = resultSet.getString("gender");
+			int age = resultSet.getInt("age");
+			String hospitalName = resultSet.getString("hospitalName");
+			String date = resultSet.getString("appointmentDate");
+			String appointmentDate = date.substring(8, 10) + "/" + date.substring(5, 7) + "/" + date.substring(0, 4);
+			
+			//making a Value Added Services bean
+			ValueAddedServices vas = new ValueAddedServices();
+			vas.setCheckUpId(checkUpId);
+			vas.setMobNo(mobNo);
+			vas.setBeneficiaryName(beneficiaryName);
+			vas.setHealthInsuranceId(healthInsuranceId);
+			vas.setGender(gender);
+			vas.setAge(age);
+			vas.setHospitalName(hospitalName);
+			vas.setAppointmentDate(appointmentDate);
+			
+			unapprovedAppointmentList.add(vas);
+		}
+		
+		DBConnection.closeConnection(connect);
+		System.out.println("Exiting getUnapprovedAppointmentList() in HospitalDAO Class");
+		return unapprovedAppointmentList;
+	}
+
+	public int approveAppointment(String[] approvedClaimNo, String[] rejectedClaimNo) throws SQLException {
+		System.out.println("Entering approveAppointment(String[], String[]) in ClaimDAO Class");
+		
+		connect = DBConnection.getConnection();
+		
+		int count1 = 0;
+		int count2 = 0;
+		
+		//converting the array to a comma separated string to be use in IN statement
+		if(approvedClaimNo != null){
+			String approvedClaimNo1 = Arrays.toString(approvedClaimNo);
+			approvedClaimNo1 = approvedClaimNo1.substring(1, approvedClaimNo1.length() - 1);
+		
+			//updating table with approved claims
+			ps1 = connect.prepareStatement("UPDATE ehi.value_added_services SET status=1 WHERE "
+				+ "checkUpId IN ("+approvedClaimNo1+")");
+			count1 = ps1.executeUpdate();
+		}
+		
+		//converting the array to a comma separated string to be use in IN statement
+		if(rejectedClaimNo != null){
+			String rejectedClaimNo1 = Arrays.toString(rejectedClaimNo);
+			rejectedClaimNo1 = rejectedClaimNo1.substring(1, rejectedClaimNo1.length() - 1);
+		
+			//updating table with rejected claims
+			ps1 = connect.prepareStatement("UPDATE ehi.value_added_services SET status=2 WHERE "
+				+ "checkUpId IN ("+rejectedClaimNo1+")");
+			count2 = ps1.executeUpdate();
+		}
+		
+		
+		DBConnection.closeConnection(connect);
+		System.out.println("Exiting approveAppointment(String[], String[]) in ClaimDAO Class");
+		
+		return count1+count2;
 	}
 }

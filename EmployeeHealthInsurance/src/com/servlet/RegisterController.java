@@ -307,7 +307,7 @@ public class RegisterController extends HttpServlet {
 			
 			//retrieving list of check marked healthInsuranceId
 			String approvedHealthInsuranceId [] = request.getParameterValues("approved");
-			System.out.println(approvedHealthInsuranceId.length);
+
 			try {
 				int count = ps.approvePolicy(approvedHealthInsuranceId);
 				request.setAttribute("message", count+" policies have been approved");
@@ -320,7 +320,6 @@ public class RegisterController extends HttpServlet {
 			
 			//retrieving list of check marked healthInsuranceId
 			String approvedHealthInsuranceId [] = request.getParameterValues("approved");
-			System.out.println(approvedHealthInsuranceId.length);
 			try {
 				int count = ps.approvePolicy(approvedHealthInsuranceId);
 				request.setAttribute("message", count+" policies have been approved");

@@ -54,7 +54,7 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 				<!-- CONTENT BODY -->
 				<div class="content-body">
 					<div>
-						<h3>Hospital Management</h3>						
+						<h3><c:out value='${requestScope.heading}'/></h3>						
 					</div>
 					
 					<!-- FORM -->
@@ -121,7 +121,6 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 							<div class="form-group">
 								<label for="submit" class="col-sm-3 control-label"><span>&#160;</span></label>
 								<div class="col-sm-3">
-									<input type="hidden" name="action" value="add_hospital">
 									<input type="submit" name="submit" id="submit" tabindex="8" class="form-control btn btn-primary" value="Add">
 								</div>							
 							</div>
@@ -138,15 +137,12 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 							</div>
 						</div>
 					</div>
-					<!-- END CONTENT FOOTER -->
-				
+					<!-- END CONTENT FOOTER -->				
 				</div>
-				<!-- END CONTENT BODY -->
-						
+				<!-- END CONTENT BODY -->						
 			</div>
 		</div>
-		<!-- END CONTENT -->
-		
+		<!-- END CONTENT -->		
 	</div>
 </div>
 </body>

@@ -102,6 +102,23 @@ public class HospitalService {
 		return checkUpId;
 	}
 
+	public List<ValueAddedServices> getUnapprovedAppointmentList() throws SQLException {
+		System.out.println("Entering getUnapprovedAppointmentList() in HospitalService Class");
+		HospitalDAO hdao = new HospitalDAO();
+		List<ValueAddedServices> unapprovedAppointmentList = new ArrayList<ValueAddedServices>();
+		unapprovedAppointmentList = hdao.getUnapprovedAppointmentList();
+		System.out.println("Exiting getUnapprovedAppointmentList() in HospitalService Class");
+		return unapprovedAppointmentList;
+	}
+
+	public int approveAppointment(String[] approvedClaimNo, String[] rejectedClaimNo) throws SQLException {
+		System.out.println("Entering approveAppointment(String[], String[]) in ClaimsService Class");
+		HospitalDAO hdao = new HospitalDAO();
+		int count = hdao.approveAppointment(approvedClaimNo, rejectedClaimNo);
+		System.out.println("Exiting approveAppointment(String[], String[]) in ClaimsService Class");
+		return count;
+	}
+
 	
 
 }

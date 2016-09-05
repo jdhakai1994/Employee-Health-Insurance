@@ -44,13 +44,11 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 		<!-- CONTENT -->
 		<div class="col-sm-9 no-gutter">
 			<div class="content">
-				
 				<!-- CONTENT HEADER -->
 				<div class="content-header">
 					<span class="glyphicon glyphicon-align-justify"></span>
 				</div>
-				<!-- CONTENT HEADER -->
-				
+				<!-- END CONTENT HEADER -->
 				<!-- CONTENT BODY -->
 				<div class="content-body">
 					<div>
@@ -69,7 +67,7 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 							<div class="form-group has-feedback">
 								<label for="hospitalName" class="col-sm-3 control-label">Hospital Name  <span style="color:red;">*</span></label>
 								<div class="col-sm-6">
-									<input type="text" pattern="[A-z\s]{1,}" name="hospitalName" id="hospitalName" class="form-control" tabindex="1" value="<c:out value='${requestScope.hospitaldetails.hospitalName}'></c:out>" required>
+									<input type="text" pattern="[A-z'&\s]{1,}" name="hospitalName" id="hospitalName" class="form-control" tabindex="1" value="<c:out value='${requestScope.hospitaldetails.hospitalName}'></c:out>" required>
 									<span class="glyphicon form-control-feedback"></span>
 								</div>							
 							</div>
@@ -108,13 +106,13 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 							<div class="form-group has-feedback">
 								<label for="stdcode" class="col-sm-3 control-label">STD Code  <span style="color:red;">*</span></label>
 								<div class="col-sm-3">
-									<input type="text" pattern="[0-9-]{3,6}" class="form-control" name="stdcode" id="stdcode" tabindex="6" value="<c:out value='${requestScope.hospitaldetails.stdcode}'></c:out>" required>
+									<input type="text" pattern="[0-9-+]{3,6}" class="form-control" name="stdcode" id="stdcode" tabindex="6" value="<c:out value='${requestScope.hospitaldetails.stdcode}'></c:out>" required>
 								</div>							
 							</div>
 							<div class="form-group has-feedback">
 								<label for="phNo" class="col-sm-3 control-label">Phone Number  <span style="color:red;">*</span></label>
 								<div class="col-sm-4">
-									<input type="text" pattern="[0-9]{8}" name="phNo" id="phNo" class="form-control" tabindex="7" value="<c:out value='${requestScope.hospitaldetails.phNo}'></c:out>" required>
+									<input type="text" pattern="[0-9]{7,10}" name="phNo" id="phNo" class="form-control" tabindex="7" value="<c:out value='${requestScope.hospitaldetails.phNo}'></c:out>" required>
 									<span class="glyphicon form-control-feedback"></span>
 								</div>							
 							</div>
@@ -142,15 +140,12 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 							</div>
 						</div>
 					</div>
-					<!-- END CONTENT FOOTER -->
-				
+					<!-- END CONTENT FOOTER -->				
 				</div>
-				<!-- END CONTENT BODY -->
-						
+				<!-- END CONTENT BODY -->						
 			</div>
 		</div>
-		<!-- END CONTENT -->
-		
+		<!-- END CONTENT -->		
 	</div>
 </div>
 </body>

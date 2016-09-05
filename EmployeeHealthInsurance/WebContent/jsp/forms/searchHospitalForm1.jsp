@@ -74,7 +74,6 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 							<div class="form-group">
 								<label for="submit" class="col-sm-3 control-label"><span>&#160;</span></label>
 								<div class="col-sm-3">
-									<input type="hidden" name="action1" value="searchHospitalById">
 									<input type="submit" name="submit" id="submit" tabindex="2" class="form-control btn btn-primary" value="Submit">
 								</div>							
 							</div>

@@ -49,7 +49,7 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 					</div>
 					
 					<div class="report-content">
-						<p><span class="glyphicon glyphicon-ok"></span> <c:out value='${requestScope.message}'/></p>
+						<p style="font-size:20px"><span class="glyphicon glyphicon-ok-circle"  style="color:green"></span> <c:out value='${requestScope.message}'/></p>
 					</div>
 					
 				</div>

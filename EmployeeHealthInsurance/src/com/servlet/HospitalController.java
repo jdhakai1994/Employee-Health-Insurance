@@ -19,10 +19,7 @@ import com.bean.Employee;
 import com.bean.Hospital;
 import com.bean.ValueAddedServices;
 import com.google.gson.Gson;
-import com.services.DependentService;
-import com.services.EmployeeService;
-import com.services.HospitalService;
-import com.services.PolicyService;
+import com.services.*;
 
 /**
  * Servlet implementation class HospitalController
@@ -112,8 +109,10 @@ public class HospitalController extends HttpServlet {
 			else if("getSearchHospitalForm".equals(action)){
 				System.out.println("In search_hospital action if-else block");
 				String stateName = request.getParameter("state");
+				
+				// ajax get request to load city list corresponding to a state
 				if(stateName != null){
-					List<String> cityList = new ArrayList<>();
+					List<String> cityList = new ArrayList<String>();
 				    try {
 						cityList = hs.getCityList(stateName);
 					} catch (SQLException e) {
@@ -125,6 +124,7 @@ public class HospitalController extends HttpServlet {
 				    response.setCharacterEncoding("UTF-8");
 				    response.getWriter().write(json); 
 				}
+				// initial request to load the form
 				else{
 					request.setAttribute("stateList", stateList);
 					rd = request.getRequestDispatcher("/jsp/forms/searchHospitalForm.jsp");
@@ -137,6 +137,8 @@ public class HospitalController extends HttpServlet {
 				String beneficiaryName = request.getParameter("beneficiaryName");
 				String stateName = request.getParameter("state");
 				String cityName = request.getParameter("city");
+				
+				// initial request to load the form
 				if(beneficiaryName == null && stateName == null && cityName == null){
 					//initializing 
 					List<String> beneficiaryNameList = new ArrayList<String>();
@@ -193,6 +195,7 @@ public class HospitalController extends HttpServlet {
 					rd = request.getRequestDispatcher("/jsp/forms/valueAddedServicesForm.jsp");
 					rd.forward(request, response);
 				}
+				// ajax get request to fetch health insurance ID
 				else if(beneficiaryName != null){
 					int employeeId = Integer.parseInt(request.getParameter("employeeId"));
 					int healthInsuranceId = 0;
@@ -206,7 +209,9 @@ public class HospitalController extends HttpServlet {
 					response.setCharacterEncoding("UTF-8");
 					response.getWriter().write(Integer.toString(healthInsuranceId));					
 				}
+				// ajax get request
 				else if(stateName != null){
+					// ajax get request to load city list corresponding to a state
 					if(cityName == null){
 						List<String> cityList = new ArrayList<String>();
 						try {
@@ -220,6 +225,7 @@ public class HospitalController extends HttpServlet {
 						response.setCharacterEncoding("UTF-8");
 						response.getWriter().write(json);
 					}
+					// ajax get request to load hospital list corresponding to a particular state and city
 					else{
 						List<String> hospitalList = new ArrayList<String>();
 						try {
@@ -234,6 +240,23 @@ public class HospitalController extends HttpServlet {
 						response.getWriter().write(json);
 					}
 				}
+			}
+			else if("getUnapprovedAppointmentList".equals(action)){
+				List<ValueAddedServices> unapprovedAppointmentList = new ArrayList<ValueAddedServices>();
+				try {
+					unapprovedAppointmentList = hs.getUnapprovedAppointmentList();
+					request.setAttribute("unapprovedAppointmentList", unapprovedAppointmentList);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				if(unapprovedAppointmentList.size() != 0)
+					request.setAttribute("type", "list");
+				else{
+					request.setAttribute("type", "message");
+					request.setAttribute("message", " No appointments are pending for approval.");
+				}
+				rd = request.getRequestDispatcher("/jsp/lists/unapprovedAppointmentList.jsp");
+				rd.forward(request, response);
 			}
 		}
 		System.out.println("Exiting doGet() in HospitalController Class");				
@@ -445,7 +468,7 @@ public class HospitalController extends HttpServlet {
 				}
 			}			
 		}
-		if("value_added_services".equals(action)){
+		else if("value_added_services".equals(action)){
 			System.out.println("In value_added_services action if-else block");
 			
 			//retrieving data from valueAddedServicesForm.jsp
@@ -493,6 +516,22 @@ public class HospitalController extends HttpServlet {
 			} catch (Exception e) {
 			e.printStackTrace();
 			}			
+		}
+		else if("approve_appointment".equals(action)){
+			System.out.println("In approve_appointment action if-else block");
+			
+			//retrieving list of check marked Check Up Id
+			String approvedClaimNo [] = request.getParameterValues("approval");
+			String rejectedClaimNo [] = request.getParameterValues("rejection");
+						
+			try {
+				int count = hs.approveAppointment(approvedClaimNo, rejectedClaimNo);
+				request.setAttribute("type", "success_message");
+				request.setAttribute("message", count+" appointment have been modified.");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			rd = request.getRequestDispatcher("/jsp/report/hospitalReport.jsp");
 		}
 		
 		System.out.println("Exiting doPost() in HospitalController Class");
