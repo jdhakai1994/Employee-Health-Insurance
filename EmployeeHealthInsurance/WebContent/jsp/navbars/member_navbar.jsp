@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html">
 <html>
 <head>
@@ -31,7 +32,7 @@
 				
 			<div class="profile-usertitle">
 				<div class="profile-usertitle-name">
-					Marcus Doe
+					<c:out value="${sessionScope.username}" />
 				</div>
 				<div class="profile-usertitle-role">
 					Member
@@ -41,7 +42,6 @@
 			<div class="profile-userbuttons">	
 				<form id="logoutForm" action="<%=request.getContextPath()%>/LoginController?action=logout" method="post" role="form">
 					<div class="form-group">
-						<input type="hidden" name="action" value="logout">
 						<input type="submit" name="submit" id="submit" class="btn btn-success btn-md" value="Log Out">
 					</div>
 				</form>

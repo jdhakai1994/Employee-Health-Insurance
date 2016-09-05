@@ -80,6 +80,7 @@ public class LoginDAO {
 		//retrieving data from login bean
 		String username = input.getUsername();
 		String password = input.getPassword();
+		long logon = input.getLogon();
 		
 		ps1 = connect.prepareStatement("SELECT * FROM ehi.user_credentials WHERE username=?");
 		ps1.setString(1, username);
@@ -91,9 +92,10 @@ public class LoginDAO {
 			reply = "fail";		
 		else{
 			ps2 = connect.prepareStatement("INSERT INTO ehi.user_credentials "
-				+ "(username,password) VALUES (?,?)");
+				+ "(username,password,lastLogon) VALUES (?,?,?)");
 			ps2.setString(1, username);
 			ps2.setString(2, password);
+			ps2.setLong(3, logon);
 			ps2.executeUpdate();
 			reply = "success";
 		}

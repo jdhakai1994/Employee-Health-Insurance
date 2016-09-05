@@ -62,19 +62,19 @@ public class LoginController extends HttpServlet {
 		
 		System.out.println("Entering doPost() in LoginController Class");
 		
-		//this is retrieved from the hidden value passed while submitting the form
+		//this is retrieved from the url
 		String action = request.getParameter("action");
 		System.out.println("The action retreived is " + action);
 		
 		//retrieving username and password from loginForm.jsp
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
-		
+				
 		//making a login bean
 		Login input = new Login();
 		input.setUsername(username);
 		input.setPassword(password);
-				
+		
 		LoginService ls = new LoginService();
 		String login_reply = null;
 		String register_reply = null;
@@ -83,9 +83,9 @@ public class LoginController extends HttpServlet {
 		//if-else code block for action
 		if("login".equals(action)){
 			System.out.println("In login action if-else action block");
-			long logon = Long.parseLong(request.getParameter("logon"));
-			input.setLogon(logon);
 			try {
+				long logon = Long.parseLong(request.getParameter("logon"));
+				input.setLogon(logon);
 				login_reply = ls.loginUser(input);
 				
 				//if-else code block for the login_reply
@@ -125,6 +125,8 @@ public class LoginController extends HttpServlet {
 		else if("register".equals(action)){
 			System.out.println("In register action if-else block");
 			try {
+				long logon = Long.parseLong(request.getParameter("logon"));
+				input.setLogon(logon);
 				register_reply = ls.registerUser(input);
 				
 				//If-else code block for the register_reply
