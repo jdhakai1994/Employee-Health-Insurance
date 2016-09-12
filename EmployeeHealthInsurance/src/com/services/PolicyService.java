@@ -1,6 +1,6 @@
 package com.services;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.bean.*;
 import com.dao.PolicyDAO;
@@ -31,10 +31,10 @@ public class PolicyService {
 		return healthInsuranceId;
 	}
 
-	public ArrayList<EmployeeApproval> getUnapprovedEmployeePolicy() throws Exception{
+	public List<EmployeeApproval> getUnapprovedEmployeePolicy() throws Exception{
 		System.out.println("Entering getUnapprovedEmployeePolicy() in PolicyService Class");
 		PolicyDAO pdao = new PolicyDAO();
-		ArrayList<EmployeeApproval> unapprovedEmployeeList = pdao.getUnapprovedEmployeePolicy();
+		List<EmployeeApproval> unapprovedEmployeeList = pdao.getUnapprovedEmployeePolicy();
 		System.out.println("Exiting getUnapprovedEmployeePolicy() in PolicyService Class");
 		return unapprovedEmployeeList;		
 	}
@@ -47,10 +47,10 @@ public class PolicyService {
 		return count;
 	}
 
-	public ArrayList<DependentApproval> getUnapprovedDependentPolicy() throws Exception {
+	public List<DependentApproval> getUnapprovedDependentPolicy() throws Exception {
 		System.out.println("Entering getUnapprovedDependentPolicy() in PolicyService Class");
 		PolicyDAO pdao = new PolicyDAO();
-		ArrayList<DependentApproval> unapprovedDependentList = pdao.getUnapprovedDependentPolicy();
+		List<DependentApproval> unapprovedDependentList = pdao.getUnapprovedDependentPolicy();
 		System.out.println("Exiting getUnapprovedDependentPolicy() in PolicyService Class");
 		return unapprovedDependentList;
 	}
@@ -71,10 +71,10 @@ public class PolicyService {
 		return healthInsuranceId;
 	}
 
-	public ArrayList<Integer> fetchPolicyIdList(int employeeId) throws Exception {
+	public List<Integer> fetchPolicyIdList(int employeeId) throws Exception {
 		System.out.println("Entering fetchPolicyIdList(int) in PolicyService Class");
 		PolicyDAO pdao = new PolicyDAO();
-		ArrayList<Integer> list = pdao.fetchPolicyIdList(employeeId);
+		List<Integer> list = pdao.fetchPolicyIdList(employeeId);
 		System.out.println("Exiting fetchPolicyIdList(int) in PolicyService Class");
 		return list;
 	}

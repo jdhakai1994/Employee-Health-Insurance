@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.bean.Login;
+import com.services.EmployeeService;
 import com.services.LoginService;
 
 /**
@@ -76,6 +77,7 @@ public class LoginController extends HttpServlet {
 		input.setPassword(password);
 		
 		LoginService ls = new LoginService();
+		EmployeeService es = new EmployeeService();
 		String login_reply = null;
 		String register_reply = null;
 		
@@ -106,9 +108,17 @@ public class LoginController extends HttpServlet {
 				}
 				else if("member".equals(login_reply)){
 					System.out.println("In member if/else login_reply block");
+					
 					HttpSession session = request.getSession();
 					session.setAttribute("username", username);
 					session.setAttribute("role", "member");
+					
+					// to check if a personnel is successfully enrolled to the scheme
+					Boolean isEnrolled = es.checkIsEnrolled(username);
+					if(isEnrolled)
+						session.setAttribute("enrolled", "yes");
+					else
+						session.setAttribute("enrolled", "no");
 					rd = request.getRequestDispatcher("jsp/homepages/member.jsp");
 				}
 				else if("admin".equals(login_reply)){
@@ -132,6 +142,10 @@ public class LoginController extends HttpServlet {
 				//If-else code block for the register_reply
 				if("success".equals(register_reply)){
 					System.out.println("In success if/else register_reply block");
+					HttpSession session = request.getSession();
+					session.setAttribute("username", username);
+					session.setAttribute("role", "member");
+					session.setAttribute("enrolled", "no");
 					rd = request.getRequestDispatcher("jsp/homepages/member.jsp");
 				}
 				else if("fail".equals(register_reply)){
@@ -150,6 +164,7 @@ public class LoginController extends HttpServlet {
 			HttpSession session = request.getSession(false);
 			session.removeAttribute("username");
 			session.removeAttribute("role");
+			session.removeAttribute("enrolled");
 			session.invalidate();
 				
 			//redirecting the user to login page

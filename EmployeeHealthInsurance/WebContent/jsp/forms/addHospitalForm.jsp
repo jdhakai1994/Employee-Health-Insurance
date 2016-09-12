@@ -127,19 +127,18 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 						</form>
 					</div>
 					<!-- END FORM -->
-					
-					<!-- CONTENT FOOTER -->
-					<div class="content-footer">
-						<div class="container">
-							<div class="row">
-								<div class="col-sm-6 copyright"><strong>Copyright &#169; 2016.</strong> All Rights Reserved</div>
-								<div class="col-sm-6" style="text-align:right"><strong>Version</strong> 1.0</div>
-							</div>
+				</div>
+				<!-- END CONTENT BODY -->
+				<!-- CONTENT FOOTER -->
+				<div class="content-footer">
+					<div class="container">
+						<div class="row">
+							<div class="col-sm-6"><strong>Copyright &#169; 2016.</strong> All Rights Reserved</div>
+							<div class="col-sm-6" style="text-align:right"><strong>Version</strong> 1.0</div>
 						</div>
 					</div>
-					<!-- END CONTENT FOOTER -->				
 				</div>
-				<!-- END CONTENT BODY -->						
+				<!-- END CONTENT FOOTER -->						
 			</div>
 		</div>
 		<!-- END CONTENT -->		

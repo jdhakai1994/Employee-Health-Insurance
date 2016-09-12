@@ -41,10 +41,9 @@ $(function () {
                         if (req2.status == 200) {
                         	var relation = req2.responseText;
                         	$("#relation").val(relation);
-                        	console.log(relation);
-                        	if(relation == "father" || relation == "father-in-law")
+                        	if(relation == "Father" || relation == "Father-In-Law")
                         		$("#gender1").prop('checked', true);
-                        	else if(relation == "mother" || relation == "mother-in-law")
+                        	else if(relation == "Mother" || relation == "Mother-In-Law")
                         		$("#gender2").prop('checked', true);
                         }
                     }

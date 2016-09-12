@@ -28,4 +28,12 @@ public class EmployeeService {
 		return employee;
 	}
 
+	public Boolean checkIsEnrolled(String username) throws Exception {
+		System.out.println("Entering checkIsEnrolled(String) in EmployeeService Class");
+		EmployeeDAO edao = new EmployeeDAO();
+		Boolean isEnrolled = edao.checkIsEnrolled(username);
+		System.out.println("Exiting checkIsEnrolled(String) in EmployeeService Class");
+		return isEnrolled;
+	}
+
 }

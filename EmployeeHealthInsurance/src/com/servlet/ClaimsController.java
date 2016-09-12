@@ -45,6 +45,7 @@ public class ClaimsController extends HttpServlet {
 		if(username == null){
 			request.setAttribute("message", "Your session has expired, please login again to continue");
 			rd = request.getRequestDispatcher("jsp/forms/loginForm.jsp");
+			rd.forward(request, response);
 		}
 		else{
 			//the heading to be displayed on the result page
@@ -93,7 +94,7 @@ public class ClaimsController extends HttpServlet {
 							beneficiaryNameList.add(employee.getEmployeeName());
 							
 							//get the details of the dependents
-							ArrayList<Dependent> dependentList = new ArrayList<>();
+							List<Dependent> dependentList = new ArrayList<Dependent>();
 							dependentList = ds.fetchDependentDetails(employeeId);
 							for(Dependent dependent : dependentList){
 								//fetch health Insurance Id of dependents
@@ -160,7 +161,7 @@ public class ClaimsController extends HttpServlet {
 					DependentService ds = new DependentService();
 				
 					//initializing 
-					ArrayList<String> beneficiaryNameList = new ArrayList<>();
+					List<String> beneficiaryNameList = new ArrayList<String>();
 					Employee employee = null;
 					int employeeId = 0;
 					try {
@@ -182,7 +183,7 @@ public class ClaimsController extends HttpServlet {
 							beneficiaryNameList.add(employee.getEmployeeName());
 							
 							//get the details of the dependents
-							ArrayList<Dependent> dependentList = new ArrayList<>();
+							List<Dependent> dependentList = new ArrayList<Dependent>();
 							dependentList = ds.fetchDependentDetails(employeeId);
 							for(Dependent dependent : dependentList){
 								//fetch health Insurance Id of dependents
@@ -263,7 +264,7 @@ public class ClaimsController extends HttpServlet {
 					request.setAttribute("type", "list");
 				else{
 					request.setAttribute("type", "message");
-					request.setAttribute("message", " No domiciliary claims are pending for approval");
+					request.setAttribute("message", " No domiciliary claims are pending for approval.");
 				}
 				rd = request.getRequestDispatcher("/jsp/lists/unapprovedDomiciliaryClaimList.jsp");
 				rd.forward(request, response);
@@ -281,7 +282,7 @@ public class ClaimsController extends HttpServlet {
 					request.setAttribute("type", "list");
 				else{
 					request.setAttribute("type", "message");
-					request.setAttribute("message", " No hospitalization claims are pending for approval");
+					request.setAttribute("message", " No hospitalization claims are pending for approval.");
 				}
 				rd = request.getRequestDispatcher("/jsp/lists/unapprovedHospitalizationClaimList.jsp");
 				rd.forward(request, response);
@@ -309,7 +310,7 @@ public class ClaimsController extends HttpServlet {
 		EmployeeService es = new EmployeeService();
 		PolicyService ps = new PolicyService();
 				
-		//this is retrieved from the hidden value passed while submitting the form
+		//this is retrieved from the url mentioned in action attribute in form tag
 		String action = request.getParameter("action");
 		System.out.println("The action retreived is " + action);
 						
@@ -347,18 +348,18 @@ public class ClaimsController extends HttpServlet {
 					request.setAttribute("type", "success_message");
 					request.setAttribute("message", "Your claim have been successfully "
 							+ "noted. The claim is pending admin approval."
-							+ " The auto-generated claim no is "+claimNo);
+							+ " The auto-generated claim no is "+claimNo+".");
 				}
 				//case 2 - data couldn't be inserted into claims table
 				else{
 					request.setAttribute("type", "failure_message");
-					request.setAttribute("message", "The claim couldn't be noted successfully");
+					request.setAttribute("message", "The claim couldn't be noted successfully.");
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			
-			rd = request.getRequestDispatcher("/jsp/result.jsp");
+			rd = request.getRequestDispatcher("/jsp/report/claimReport.jsp");
 		}
 		else if("hospitalizationClaim".equals(action)){
 			System.out.println("In hospitalizationClaim action if-else block");
@@ -399,18 +400,18 @@ public class ClaimsController extends HttpServlet {
 					request.setAttribute("type", "success_message");
 					request.setAttribute("message", "Your claim have been successfully "
 							+ "noted. The claim is pending admin approval."
-							+ " The auto-generated claim no is "+claimNo);
+							+ " The auto-generated claim no is "+claimNo+".");
 				}
 				//case 2 - data couldn't be inserted into claims table
 				else{
 					request.setAttribute("type", "failure_message");
-					request.setAttribute("message", "The claim couldn't be noted successfully");
+					request.setAttribute("message", "The claim couldn't be noted successfully.");
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			
-			rd = request.getRequestDispatcher("/jsp/result.jsp");
+			rd = request.getRequestDispatcher("/jsp/report/claimReport.jsp");
 		}
 		else if("search_claim".equals(action)){
 			System.out.println("In search_claim action if-else block");
@@ -419,8 +420,8 @@ public class ClaimsController extends HttpServlet {
 			String action1 = request.getParameter("action1");
 			System.out.println("The action1 retreived is " + action1);
 			
-			ArrayList<Claim> claimList = new ArrayList<Claim>();
-			ArrayList<Integer> healthInsuranceIdList = new ArrayList<Integer>();
+			List<Claim> claimList = new ArrayList<Claim>();
+			List<Integer> healthInsuranceIdList = new ArrayList<Integer>();
 			Employee employee = null;
 			
 			//get reference to existing session
@@ -459,8 +460,8 @@ public class ClaimsController extends HttpServlet {
 					e.printStackTrace();
 				}
 				if(claimList.isEmpty()){
-					request.setAttribute("type", "message");
-					request.setAttribute("message", "You have no such claim corresponding to that details");
+					request.setAttribute("type", "failure_message");
+					request.setAttribute("message", "You have no such claim corresponding to that details.");
 				}
 				else{
 					request.setAttribute("type", "report");
@@ -479,8 +480,8 @@ public class ClaimsController extends HttpServlet {
 						e.printStackTrace();
 					}
 					if(claimList.isEmpty()){
-						request.setAttribute("type", "message");
-						request.setAttribute("message", "You have no such claim corresponding to that health insurance Id");
+						request.setAttribute("type", "failure_message");
+						request.setAttribute("message", "You have no such claim corresponding to that health insurance Id.");
 					}
 					else{
 						request.setAttribute("type", "report");
@@ -488,8 +489,8 @@ public class ClaimsController extends HttpServlet {
 					}
 				}
 				else{
-					request.setAttribute("type", "message");
-					request.setAttribute("message", "The health insurance Id entered doesn't belong to you or any of your dependents");
+					request.setAttribute("type", "failure_message");
+					request.setAttribute("message", "The health insurance Id entered doesn't belong to you or any of your dependents.");
 				}
 			}
 			rd = request.getRequestDispatcher("/jsp/report/claimReport.jsp");
@@ -513,11 +514,12 @@ public class ClaimsController extends HttpServlet {
 			
 			try {
 				int count = cs.approveDomiciliaryClaim(combinations, rejectedClaimNo);
-				request.setAttribute("message", count+" policies have been modified");
+				request.setAttribute("type", "success_message");
+				request.setAttribute("message", count+" policies have been modified.");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			rd = request.getRequestDispatcher("/jsp/report/approvalReport.jsp");
+			rd = request.getRequestDispatcher("/jsp/report/claimReport.jsp");
 		}
 		else if("approve_hospitalization_claim".equals(action)){
 			System.out.println("In approve_hospitalization_claim action if-else block");
@@ -538,15 +540,15 @@ public class ClaimsController extends HttpServlet {
 			
 			try {
 				int count = cs.approveHospitalizationClaim(combinations, rejectedClaimNo);
-				request.setAttribute("message", count+" policies have been modified");
+				request.setAttribute("type", "success_message");
+				request.setAttribute("message", count+" policies have been modified.");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			rd = request.getRequestDispatcher("/jsp/report/approvalReport.jsp");
+			rd = request.getRequestDispatcher("/jsp/report/claimReport.jsp");
 		}
 		
 		System.out.println("Exiting doPost() in ClaimsController Class");
-		
 		rd.forward(request, response);
 		
 	}

@@ -3,8 +3,10 @@ package com.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import com.bean.*;
 import com.util.DBConnection;
@@ -121,7 +123,7 @@ public class PolicyDAO {
 		return healthInsuranceId;
 	}
 
-	public ArrayList<EmployeeApproval> getUnapprovedEmployeePolicy() throws Exception{
+	public List<EmployeeApproval> getUnapprovedEmployeePolicy() throws SQLException{
 		System.out.println("Entering getUnapprovedEmployeePolicy() in PolicyDAO Class");
 		
 		connect = DBConnection.getConnection();
@@ -132,7 +134,7 @@ public class PolicyDAO {
 				+ "p.employeeId=e.employeeId AND p.dependentId=0 AND p.status=0");
 		resultSet = ps1.executeQuery();
 		
-		ArrayList<EmployeeApproval> unapprovedEmployeeList = new ArrayList<EmployeeApproval>();
+		List<EmployeeApproval> unapprovedEmployeeList = new ArrayList<EmployeeApproval>();
 
 		while(resultSet.next()){
 			int healthInsuranceId = resultSet.getInt("healthInsuranceId");
@@ -184,7 +186,7 @@ public class PolicyDAO {
 		return count;
 	}
 
-	public ArrayList<DependentApproval> getUnapprovedDependentPolicy() throws Exception {
+	public List<DependentApproval> getUnapprovedDependentPolicy() throws SQLException {
 		System.out.println("Entering getUnapprovedDependentPolicy() in PolicyDAO Class");
 		
 		connect = DBConnection.getConnection();
@@ -198,7 +200,7 @@ public class PolicyDAO {
 				+ "(SELECT employeeId FROM ehi.policy WHERE status=1)");
 		resultSet = ps1.executeQuery();
 		
-		ArrayList<DependentApproval> unapprovedDependentList = new ArrayList<DependentApproval>();
+		List<DependentApproval> unapprovedDependentList = new ArrayList<DependentApproval>();
 
 		while(resultSet.next()){
 			int healthInsuranceId = resultSet.getInt("healthInsuranceId");
@@ -241,7 +243,7 @@ public class PolicyDAO {
 		ECard ecard = new ECard();
 		ecard.setRelation(relation);
 		
-		if(relation.equals("self")){
+		if(relation.equals("Self")){
 			ps1 = connect.prepareStatement("SELECT p.healthInsuranceId,e.employeeName,"
 				+ "e.employeeId,e.dateofBirth FROM ehi.policy as p JOIN ehi.employee as e "
 				+ "ON e.employeeId=p.employeeId WHERE e.username=? AND p.dependentId=0");
@@ -337,12 +339,12 @@ public class PolicyDAO {
 		return healthInsuranceId;
 	}
 
-	public ArrayList<Integer> fetchPolicyIdList(int employeeId) throws Exception {
+	public List<Integer> fetchPolicyIdList(int employeeId) throws Exception {
 		System.out.println("Entering fetchPolicyIdList(int) in PolicyDAO Class");
 		
 		connect = DBConnection.getConnection();
 		
-		ArrayList<Integer> list = new ArrayList<Integer>();
+		List<Integer> list = new ArrayList<Integer>();
 		
 		ps1 = connect.prepareStatement("SELECT healthInsuranceId FROM ehi.policy WHERE employeeId=?");
 		ps1.setInt(1, employeeId);

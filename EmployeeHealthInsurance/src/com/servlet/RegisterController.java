@@ -2,6 +2,8 @@ package com.servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,8 +27,7 @@ public class RegisterController extends HttpServlet {
      */
     public RegisterController() {
         super();
-        // TODO Auto-generated constructor stub
-    }
+   }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -45,18 +46,25 @@ public class RegisterController extends HttpServlet {
 		if(username == null){
 			request.setAttribute("message", "Your session has expired, please login again to continue");
 			rd = request.getRequestDispatcher("jsp/forms/loginForm.jsp");
+			rd.forward(request, response);
 		}
 		else{
+			//the heading to be displayed on the result page
+			request.setAttribute("heading", "Registration Management");
 		
 			//this is retrieved from the URL
 			String action = request.getParameter("action");
 			System.out.println("The action retreived is " + action);
 		
 			//if-else code block for action
-			if("getRegisterEmployeeForm".equals(action))
+			if("getRegisterEmployeeForm".equals(action)){
 				rd = request.getRequestDispatcher("/jsp/forms/employeeRegisterForm.jsp");
-			else if("getDependentEmployeeForm".equals(action))
-				rd = request.getRequestDispatcher("/jsp/forms/dependentRegisterForm.jsp");				
+				rd.forward(request, response);
+			}
+			else if("getDependentEmployeeForm".equals(action)){
+				rd = request.getRequestDispatcher("/jsp/forms/dependentRegisterForm.jsp");
+				rd.forward(request, response);
+			}
 			else if("getECardForm".equals(action)){
 				
 				//reference to service classes
@@ -81,10 +89,10 @@ public class RegisterController extends HttpServlet {
 					 * one cannot generate e-card if approval is pending
 					 */
 					if(employeeHealthInsuranceId != -1){
-						list.add("self");
+						list.add("Self");
 						
 						//get the details of the dependents
-						ArrayList<Dependent> dependentList = new ArrayList<>();
+						List<Dependent> dependentList = new ArrayList<Dependent>();
 						dependentList = ds.fetchDependentDetails(employee.getEmployeeId());
 						for(Dependent dependent : dependentList){
 							//fetch health Insurance Id of dependents
@@ -98,37 +106,52 @@ public class RegisterController extends HttpServlet {
 						}
 					}
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				request.setAttribute("list", list);
 				
 				rd = request.getRequestDispatcher("/jsp/forms/e_CardForm.jsp");
+				rd.forward(request, response);
 			}
 			else if("getUnapprovedEmployeePolicyList".equals(action)){
 				PolicyService ps = new PolicyService();
+				List<EmployeeApproval> unapprovedEmployeeList = new ArrayList<EmployeeApproval>();
 				try {
-					ArrayList<EmployeeApproval> unapprovedEmployeeList = ps.getUnapprovedEmployeePolicy();
+					unapprovedEmployeeList = ps.getUnapprovedEmployeePolicy();
 					request.setAttribute("unapprovedEmployeeList", unapprovedEmployeeList);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				rd = request.getRequestDispatcher("/jsp/unapprovedEmployeePolicyList.jsp");
+				if(unapprovedEmployeeList.size() != 0)
+					request.setAttribute("type", "list");
+				else{
+					request.setAttribute("type", "message");
+					request.setAttribute("message", " No employee registrations are pending for approval.");
+				}
+				rd = request.getRequestDispatcher("/jsp/lists/unapprovedEmployeePolicyList.jsp");
+				rd.forward(request, response);
 			}
 			else if("getUnapprovedDependentPolicyList".equals(action)){
 				PolicyService ps = new PolicyService();
+				List<DependentApproval> unapprovedDependentList = new ArrayList<DependentApproval>();
 				try {
-					ArrayList<DependentApproval> unapprovedDependentList = ps.getUnapprovedDependentPolicy();
+					unapprovedDependentList = ps.getUnapprovedDependentPolicy();
 					request.setAttribute("unapprovedDependentList", unapprovedDependentList);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				rd = request.getRequestDispatcher("/jsp/unapprovedDependentPolicyList.jsp");
+				if(unapprovedDependentList.size() != 0)
+					request.setAttribute("type", "list");
+				else{
+					request.setAttribute("type", "message");
+					request.setAttribute("message", " No dependent registrations are pending for approval.");
+				}
+				rd = request.getRequestDispatcher("/jsp/lists/unapprovedDependentPolicyList.jsp");
+				rd.forward(request, response);
 			}
 		}
 		
 		System.out.println("Exiting doGet() in RegisterController Class");
-		rd.forward(request, response);
 	}
 
 	/**
@@ -138,18 +161,20 @@ public class RegisterController extends HttpServlet {
 		
 		System.out.println("Entering doPost() in RegisterController Class");
 
+		RequestDispatcher rd = null;
+		
+		//the heading to be displayed on the result page
+		request.setAttribute("heading", "Registration Management");
+
 		//service class references
 		PolicyService ps = new PolicyService();
 		EmployeeService es = new EmployeeService();
 		DependentService ds = new DependentService();
 		
-		//this is retrieved from the hidden value passed while submitting the form
+		//this is retrieved from the url mentioned in action attribute in form tag
 		String action = request.getParameter("action");
 		System.out.println("The action retreived is " + action);
-		
-		//the heading to be displayed on the result page
-		request.setAttribute("heading", "Registration Management");
-		
+				
 		//if-else code block for action
 		if("register_employee".equals(action)){
 			System.out.println("In register_employee action if-else block");
@@ -210,26 +235,31 @@ public class RegisterController extends HttpServlet {
 					String replyPolicy = ps.addPolicy(policy);
 					if("success".equals(replyPolicy)){
 						healthInsuranceId = ps.fetchPolicyId(employeeId, false);
+						request.setAttribute("type", "success_message");
 						request.setAttribute("message", "Your details have been successfully noted."
 							+ " The registration is pending admin approval."
 							+ " The auto-generated health insurance id is "+healthInsuranceId);
 					}
 				}
 				//case 2 - data couldn't be inserted in employee table
-				else if("fail".equals(replyEmployee))
+				else if("fail".equals(replyEmployee)){
+					request.setAttribute("type", "failure_message");
 					request.setAttribute("message", "The details couldn't be added");
+				}
 				/*case 3 - entry already exists in employee table
 				 * fetching healthInsuranceId and displaying
 				 */
 				else if("already exists".equals(replyEmployee)){
 					healthInsuranceId = ps.fetchPolicyId(employeeId, false);
+					request.setAttribute("type", "failure_message");
 					request.setAttribute("message", "Your details already exists "
 							+ "The registration is pending admin approval."
 							+ " The health insurance id is "+healthInsuranceId);
 				}
 			} catch (Exception e) {
 			e.printStackTrace();
-			}			
+			}
+			rd = request.getRequestDispatcher("/jsp/report/registrationReport.jsp");
 		}
 		else if("register_dependent".equals(action)){
 			System.out.println("In register_dependent action if-else block");
@@ -244,7 +274,6 @@ public class RegisterController extends HttpServlet {
 			String startDate = request.getParameter("policyStartDate");
 			int policyPeriod = Integer.parseInt(request.getParameter("policyPeriod"));
 			double totalSumInsured = Double.parseDouble(request.getParameter("totalSumInsured"));
-			double premiumAmount = Double.parseDouble(request.getParameter("premiumAmount"));
 			
 			//making a dependent bean
 			Dependent dependent = new Dependent();
@@ -279,20 +308,24 @@ public class RegisterController extends HttpServlet {
 						String replyPolicy = ps.addPolicy(policy);
 						if("success".equals(replyPolicy)){
 							healthInsuranceId = ps.fetchPolicyId(employeeId, dependentId, false);
+							request.setAttribute("type", "success_message");
 							request.setAttribute("message", "Your dependent details have been successfully noted."
 								+ " The registration is pending admin approval."
 								+ " The auto-generated health insurance id is "+healthInsuranceId);
 						}
 					}
-				    //case 2 - data couldn't be inserted in employee table
-					else if("fail".equals(replyDependent))
+				    //case 2 - data couldn't be inserted in dependent table
+					else if("fail".equals(replyDependent)){
+						request.setAttribute("type", "failure_message");
 						request.setAttribute("message", "The details couldn't be added");
+					}
 					/*case 3 - entry already exists in dependent table
 					 * fetching healthInsuranceId and displaying
 					 */
 					else if("already exists".equals(replyDependent)){
 						int dependentId = ds.fetchDependentId(employeeId, relation);
 						healthInsuranceId = ps.fetchPolicyId(employeeId, dependentId, false);
+						request.setAttribute("type", "failure_message");
 						request.setAttribute("message", "Your details already exists "
 								+ "The registration is pending admin approval."
 								+ " The health insurance id is "+healthInsuranceId);
@@ -301,6 +334,7 @@ public class RegisterController extends HttpServlet {
 					e.printStackTrace();
 				}				
 			}
+			rd = request.getRequestDispatcher("/jsp/report/registrationReport.jsp");
 		}
 		else if("approve_employee".equals(action)){
 			System.out.println("In approve_employee action if-else block");
@@ -310,10 +344,12 @@ public class RegisterController extends HttpServlet {
 
 			try {
 				int count = ps.approvePolicy(approvedHealthInsuranceId);
-				request.setAttribute("message", count+" policies have been approved");
+				request.setAttribute("type", "success_message");
+				request.setAttribute("message", count+" policies have been approved.");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			rd = request.getRequestDispatcher("/jsp/report/registrationReport.jsp");			
 		}
 		else if("approve_dependent".equals(action)){
 			System.out.println("In approve_dependent action if-else block");
@@ -322,16 +358,18 @@ public class RegisterController extends HttpServlet {
 			String approvedHealthInsuranceId [] = request.getParameterValues("approved");
 			try {
 				int count = ps.approvePolicy(approvedHealthInsuranceId);
-				request.setAttribute("message", count+" policies have been approved");
+				request.setAttribute("type", "success_message");
+				request.setAttribute("message", count+" policies have been approved.");
 				es.updatePremiumAmount(approvedHealthInsuranceId);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			rd = request.getRequestDispatcher("/jsp/report/registrationReport.jsp");			
 		}
 		else if("generate_eCard".equals(action)){
 			System.out.println("In generate_eCard action if-else block");
 			
-			String relation = request.getParameter("e-card");
+			String relation = request.getParameter("relation");
 			
 			//get reference to existing session
 			HttpSession session = request.getSession(false);
@@ -342,16 +380,14 @@ public class RegisterController extends HttpServlet {
 			try {
 				ecard = ps.getECardDetails(username, relation);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			request.setAttribute("type", "report");
-			request.setAttribute("ecard", ecard);			
+			request.setAttribute("details", ecard);
+			rd = request.getRequestDispatcher("/jsp/report/registrationReport.jsp");
 		}
 		
 		System.out.println("Exiting doPost() in RegisterController Class");
-
-		RequestDispatcher rd = request.getRequestDispatcher("/jsp/result.jsp");
 		rd.forward(request, response);
 	}
 }

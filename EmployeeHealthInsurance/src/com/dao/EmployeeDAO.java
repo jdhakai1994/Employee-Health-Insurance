@@ -3,6 +3,7 @@ package com.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import com.bean.Employee;
 import com.util.DBConnection;
@@ -85,7 +86,7 @@ public class EmployeeDAO {
 		return reply;
 	}
 
-	public void updatePremiumAmount(String[] approvedHealthInsuranceId) throws Exception {
+	public void updatePremiumAmount(String[] approvedHealthInsuranceId) throws SQLException {
 		System.out.println("Entering updatePremiumAmount(String []) in EmployeeDAO Class");
 		
 		connect = DBConnection.getConnection();
@@ -103,7 +104,7 @@ public class EmployeeDAO {
 		System.out.println("Exiting updatePremiumAmount(String []) in EmployeeDAO Class");
 	}
 
-	public Employee getEmployeeDetails(String username) throws Exception {
+	public Employee getEmployeeDetails(String username) throws SQLException {
 		System.out.println("Entering getEmployeeDetails(String) in EmployeeDAO Class");
 		
 		connect = DBConnection.getConnection();
@@ -133,6 +134,29 @@ public class EmployeeDAO {
 		DBConnection.closeConnection(connect);
 		System.out.println("Exiting getEmployeeDetails(String) in EmployeeDAO Class");
 		return employee;
+	}
+
+	public Boolean checkIsEnrolled(String username) throws SQLException {
+		System.out.println("Entering checkIsEnrolled(String) in EmployeeDAO Class");
+		
+		connect = DBConnection.getConnection();
+		
+		Boolean isEnrolled = false;
+		ps1 = connect.prepareStatement("SELECT count(*) FROM ehi.employee as e JOIN ehi.policy as p"
+				+ " ON e.employeeId=p.employeeId WHERE p.dependentId=0 AND p.status=1 AND e.username=?");
+		ps1.setString(1, username);
+		resultSet = ps1.executeQuery();
+		while(resultSet.next()){
+			int count = resultSet.getInt(1);
+			if(count == 0)
+				isEnrolled = false;
+			else
+				isEnrolled = true;
+		}
+		
+		DBConnection.closeConnection(connect);
+		System.out.println("Exiting checkIsEnrolled(String) in EmployeeDAO Class");
+		return isEnrolled;
 	}
 
 }

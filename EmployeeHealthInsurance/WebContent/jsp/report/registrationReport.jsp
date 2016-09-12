@@ -44,7 +44,7 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 				<c:import url="../navbars/admin_navbar.jsp" />
 			</c:otherwise>
 		</c:choose>
-			
+					
 		<!-- CONTENT -->
 		<div class="col-sm-9 no-gutter">
 			<div class="content">
@@ -57,63 +57,58 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 					</div>
 					
 					<div class="report-content">
-					<c:set var="type" value="${requestScope.type }"/>
-					<c:choose>
-						<c:when test='${type == "report"}'>
-							<table class="table table-bordered table-striped">
-								<thead class="thead-inverse">
-									<tr>
-										<th>CLAIM TYPE</th>
-										<th>CLAIM NO.</th>
-										<th>RAISED ON<br>(dd/mm/yyyy)</th>
-										<th>PATIENT NAME</th>
-										<th>RELATION</th>
-										<th>CLAIMED AMOUNT</th>
-										<th>APPROVED AMOUNT</th>
-										<th>CLAIM STATUS</th>
-									</tr>
-								</thead>
-								<tbody>
-									<c:forEach items="${requestScope.claimList}" var="current">
+						<c:set var="type" value="${requestScope.type }"/>
+						<c:choose>
+							<c:when test='${type == "report"}'>
+							<!-- REPORT CONTENT BODY -->
+							<div class="report-body">
+								<table class="table table-hover table-sm">
+									<caption style="font-weight:bold;font-size:15px">E-Card Report</caption>
+									<tbody>
 										<tr>
-											<td><c:out value="${current.claimType}" /></td>
-											<td><c:out value="${current.claimNo}" /></td>
-											<td><c:out value="${current.claimRaisedDate}" /></td>
-											<td><c:out value="${current.patientName}" /></td>
-											<td><c:out value="${current.relation}" /></td>
-											<td><c:out value="${current.claimAmount}" /></td>
-											<td><c:out value="${current.approvedAmount}" /></td>
-											<td>
-												<c:set var="status" value="${current.status }"/>
-												<c:choose>
-													<c:when test='${status == "0"}'>
-														<c:out value="Not Approved" />
-													</c:when>
-													<c:when test='${status == "1"}'>
-														<c:out value="Approved" />
-													</c:when>
-													<c:when test='${status == "2"}'>
-														<c:out value="Rejected" />
-													</c:when>
-												</c:choose>
-											</td>
+											<td>Beneficiary Name:</td>
+											<td><c:out value='${requestScope.details.beneficiaryName}'/></td>
 										</tr>
-									</c:forEach>
-								</tbody>
-							</table>
-						</c:when>
-						<c:when test='${type == "success_message"}'>
-							<p style="font-size:20px"><span class="glyphicon glyphicon-ok-circle" style="color:green"></span> <c:out value='${requestScope.message}'/></p>
-						</c:when>
-						<c:when test='${type == "failure_message"}'>
-							<p style="font-size:20px"><span class="glyphicon glyphicon-remove-circle" style="color:red"></span> <c:out value='${requestScope.message}'/></p>
-						</c:when>
-						<c:otherwise>
-							<p style="font-size:20px"><span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span> Something went wrong, please try again.</p>
-						</c:otherwise>
-					</c:choose>		
-					</div>
-					
+										<tr>
+											<td>Health Insurance ID (HI-ID):</td>
+											<td><c:out value='${requestScope.details.healthInsuranceId}'/></td>
+										</tr>
+										<tr>
+											<td>Employee Code:</td>
+											<td><c:out value='${requestScope.details.employeeCode}'/></td>
+										</tr>
+										<tr>
+											<td>Relation:</td>
+											<td><c:out value='${requestScope.details.relation}'/></td>
+										</tr>
+										<tr>
+											<td>Date Of Birth:</td>
+											<td><c:out value='${requestScope.details.dateOfBirth}'/></td>
+										</tr>
+										<tr>
+											<td>Primary Insured:</td>
+											<td><c:out value='${requestScope.details.primaryInsured}'/></td>
+										</tr>
+										<tr>
+											<td>Toll Free Number :</td>
+											<td>1800-0000-0000-0001/1800-0000-0000-0002</td>											
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<!-- END REPORT CONTENT BODY -->
+							</c:when>
+							<c:when test='${type == "success_message"}'>
+								<p style="font-size:20px"><span class="glyphicon glyphicon-ok-circle" style="color:green"></span> <c:out value='${requestScope.message}'/></p>
+							</c:when>
+							<c:when test='${type == "failure_message"}'>
+								<p style="font-size:20px"><span class="glyphicon glyphicon-remove-circle" style="color:red"></span> <c:out value='${requestScope.message}'/></p>
+							</c:when>
+							<c:otherwise>
+								<p style="font-size:20px"><span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span> Something went wrong, please try again.</p>
+							</c:otherwise>
+						</c:choose>
+					</div>					
 				</div>
 				<div class="content-footer">
 					<div class="container">

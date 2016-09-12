@@ -18,7 +18,7 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
 <!-- custom CSS -->
-<link href="<%=request.getContextPath()%>/css/employeeregister.css" rel="stylesheet" type="text/css" />
+<link href="<%=request.getContextPath()%>/css/common.css" rel="stylesheet" type="text/css" />
 
 <!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
@@ -142,14 +142,13 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 							
 							<div class="form-group">
 								<div class="pull-right col-sm-2">
-									<input type="hidden" name="action" value="approve_domiciliary_claim">
 									<input type="submit" name="submit" id="submit" class="form-control btn btn-primary" value="Submit">
 								</div>
 							</div>
 						</form>
 						</c:when>
 						<c:when test='${type == "message"}'>
-							<p><c:out value='${requestScope.message}'/></p>
+							<p style="font-size:20px"><span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span><c:out value='${requestScope.message}'/></p>
 						</c:when>
 					</c:choose>	
 					</div>
@@ -157,8 +156,8 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 				<div class="content-footer">
 					<div class="container">
 						<div class="row">
-							<div class="col-sm-6 copyright"><strong>Copyright &#169; 2016.</strong> All Rights Reserved</div>
-							<div class="col-sm-6 version"><strong>Version</strong> 1.0</div>
+							<div class="col-sm-6"><strong>Copyright &#169; 2016.</strong> All Rights Reserved</div>
+							<div class="col-sm-6" style="text-align:right"><strong>Version</strong> 1.0</div>
 						</div>
 					</div>
 				</div>

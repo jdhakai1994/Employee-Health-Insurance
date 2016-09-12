@@ -7,7 +7,7 @@ response.setHeader("Cache-Control","no-store"); //Directs caches not to store th
 response.setDateHeader("Expires", 0); //Causes the proxy cache to see the page as "stale"
 response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -15,28 +15,28 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 <title>Health Insurance Management</title>
 
 <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
 <!-- datepicker CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/css/bootstrap-datepicker3.css">
 
 <!-- custom CSS -->
-<link href="<%=request.getContextPath()%>/css/employeeregister.css" rel="stylesheet" type="text/css" />
+<link href="<%=request.getContextPath()%>/css/common.css" rel="stylesheet" type="text/css" />
 
 <!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 
 <!-- validation -->
-<script src="http://1000hz.github.io/bootstrap-validator/dist/validator.min.js"></script>
+<script src="https://1000hz.github.io/bootstrap-validator/dist/validator.min.js"></script>
 
 <!-- Latest compiled JavaScript -->
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
 <!-- datepicker JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/js/bootstrap-datepicker.js"></script>
 
 <!-- custom JavaScript -->
-<script type="text/javascript" src="<%=request.getContextPath()%>/js/employeeregister.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/js/register.js"></script>
 
 </head>
 
@@ -60,7 +60,7 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 				<!-- CONTENT BODY -->
 				<div class="content-body">
 					<div>
-						<h3>Employee Registration</h3>						
+						<h3><c:out value='${requestScope.heading}'/></h3>						
 					</div>
 					
 					<div class="form-content">
@@ -178,30 +178,28 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 							</div>							
 						</div>
 						<div class="form-group">
-							<label for="submit" class="col-sm-3 control-label">&nbsp</span></label>
+							<label for="submit" class="col-sm-3 control-label"><span>&#160;</span></label>
 							<div class="col-sm-3">
-								<input type="hidden" name="action" value="register_employee">
 								<input type="submit" name="submit" id="submit" tabindex="16" class="form-control btn btn-primary" value="Submit">
 							</div>							
 						</div>
 					</form>
 					</div>
 					<!-- END FORM -->
-					
-					<!-- CONTENT FOOTER -->
-					<div class="content-footer">
+				</div>
+				<!-- END CONTENT BODY -->
+				
+				<!-- CONTENT FOOTER -->
+				<div class="content-footer">
 					<div class="container">
 						<div class="row">
-							<div class="col-sm-6 copyright"><strong>Copyright &copy 2016.</strong> All Rights Reserved</div>
-							<div class="col-sm-6 version"><strong>Version</strong> 1.0</div>
+							<div class="col-sm-6"><strong>Copyright &#169; 2016.</strong> All Rights Reserved</div>
+							<div class="col-sm-6" style="text-align:right"><strong>Version</strong> 1.0</div>
 						</div>
 					</div>
 				</div>
 				<!-- END CONTENT FOOTER -->
-				
-				</div>
-				<!-- END CONTENT BODY -->
-						
+										
 			</div>
 		</div>
 		<!-- END CONTENT -->

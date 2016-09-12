@@ -18,7 +18,7 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
 <!-- custom CSS -->
-<link href="<%=request.getContextPath()%>/css/employeeregister.css" rel="stylesheet" type="text/css" />
+<link href="<%=request.getContextPath()%>/css/common.css" rel="stylesheet" type="text/css" />
 
 <!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>

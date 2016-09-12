@@ -24,18 +24,18 @@ public class ClaimsService {
 		return claimNo;
 	}
 
-	public ArrayList<Claim> searchClaim(String claimType, String relation, int[] healthInsuranceIdArray) throws Exception {
+	public List<Claim> searchClaim(String claimType, String relation, int[] healthInsuranceIdArray) throws Exception {
 		System.out.println("Entering searchClaim(String,String) in ClaimsService Class");
 		ClaimDAO cdao = new ClaimDAO();
-		ArrayList<Claim> claimList = cdao.searchClaim(claimType, relation, healthInsuranceIdArray);
+		List<Claim> claimList = cdao.searchClaim(claimType, relation, healthInsuranceIdArray);
 		System.out.println("Exiting searchClaim(String,String) in ClaimsService Class");
 		return claimList;
 	}
 
-	public ArrayList<Claim> searchClaimByHealthInsuranceId(int healthInsuranceId) throws Exception {
+	public List<Claim> searchClaimByHealthInsuranceId(int healthInsuranceId) throws Exception {
 		System.out.println("Entering searchClaim(int) in ClaimsService Class");
 		ClaimDAO cdao = new ClaimDAO();
-		ArrayList<Claim> claimList = cdao.searchClaimByHealthInsuranceId(healthInsuranceId);
+		List<Claim> claimList = cdao.searchClaimByHealthInsuranceId(healthInsuranceId);
 		System.out.println("Exiting searchClaim(int) in ClaimsService Class");
 		return claimList;
 	}

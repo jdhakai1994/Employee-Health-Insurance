@@ -1,6 +1,7 @@
 package com.services;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.bean.Dependent;
 import com.dao.DependentDAO;
@@ -23,10 +24,10 @@ public class DependentService {
 		return dependentId;
 	}
 
-	public ArrayList<Dependent> fetchDependentDetails(int employeeId) throws Exception {
+	public List<Dependent> fetchDependentDetails(int employeeId) throws Exception {
 		System.out.println("Entering fetchDependentDetails(int) in DependentService Class");
 		DependentDAO ddao = new DependentDAO();
-		ArrayList<Dependent> dependentList = new ArrayList<>();
+		List<Dependent> dependentList = new ArrayList<Dependent>();
 		dependentList = ddao.fetchDependentDetails(employeeId);
 		System.out.println("Exiting fetchDependentDetails(int) in DependentService Class");
 		return dependentList;

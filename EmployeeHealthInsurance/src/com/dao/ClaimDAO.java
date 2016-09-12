@@ -106,7 +106,6 @@ public class ClaimDAO {
 		DBConnection.closeConnection(connect);
 		System.out.println("Exiting submitDomiciliaryClaim(DomiciliaryClaim) in ClaimDAO Class");
 		
-		System.out.println(claimNo);
 		return claimNo;
 	}
 
@@ -183,12 +182,12 @@ public class ClaimDAO {
 		return claimNo;
 	}
 
-	public ArrayList<Claim> searchClaim(String claimType, String relation, int[] healthInsuranceIdArray) throws Exception {
+	public List<Claim> searchClaim(String claimType, String relation, int[] healthInsuranceIdArray) throws Exception {
 
 		System.out.println("Entering searchClaim(String,String,int []) in ClaimDAO Class");
 		connect = DBConnection.getConnection();
 
-		ArrayList<Claim> claimList = new ArrayList<Claim>();
+		List<Claim> claimList = new ArrayList<Claim>();
 		
 		//converting the array to a comma separated string to be use in IN statement
 		String healthInsuranceId = Arrays.toString(healthInsuranceIdArray);
@@ -235,11 +234,11 @@ public class ClaimDAO {
 		return claimList;
 	}
 
-	public ArrayList<Claim> searchClaimByHealthInsuranceId(int healthInsuranceId) throws Exception {
+	public List<Claim> searchClaimByHealthInsuranceId(int healthInsuranceId) throws Exception {
 		System.out.println("Entering searchClaim(int) in ClaimDAO Class");
 		connect = DBConnection.getConnection();
 
-		ArrayList<Claim> claimList = new ArrayList<Claim>();
+		List<Claim> claimList = new ArrayList<Claim>();
 		
 		ps1 = connect.prepareStatement("SELECT * FROM ehi.claim WHERE healthInsuranceId=?");
 		ps1.setInt(1, healthInsuranceId);

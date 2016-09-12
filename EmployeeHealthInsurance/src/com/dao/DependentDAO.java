@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
+
 import com.bean.Dependent;
 import com.util.DBConnection;
 
@@ -92,7 +94,7 @@ public class DependentDAO {
 		return id;
 	}
 
-	public ArrayList<Dependent> fetchDependentDetails(int employeeId) throws Exception {
+	public List<Dependent> fetchDependentDetails(int employeeId) throws Exception {
 		System.out.println("Entering fetchDependentDetails(int) in DependentDAO Class");
 		
 		connect = DBConnection.getConnection();
@@ -101,7 +103,7 @@ public class DependentDAO {
 				+ "WHERE employeeId=? AND status=1");
 		ps1.setInt(1, employeeId);
 		resultSet = ps1.executeQuery();
-		ArrayList<Dependent> dependentList = new ArrayList<>();
+		List<Dependent> dependentList = new ArrayList<Dependent>();
 		while(resultSet.next()){
 			int dependentId = resultSet.getInt("dependentId");
 			String beneficiaryName = resultSet.getString("beneficiaryName");
@@ -137,7 +139,7 @@ public class DependentDAO {
 		int noOfRows = resultSet.getRow();
 		
 		if(noOfRows == 0)
-			relation = "self";
+			relation = "Self";
 		else
 			relation = resultSet.getString("relation");
 		

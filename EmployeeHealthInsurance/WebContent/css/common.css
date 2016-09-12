@@ -30,8 +30,8 @@ body {
 }
 
 .content-body {
-    max-height: calc(100vh - 50px);
-    min-height: calc(100vh - 90px); 
+	max-height: calc(100vh - 50px);
+    min-height: calc(100vh - 90px);
     overflow-y: auto;
     overflow-x: hidden;
     top: 50px !important;
@@ -47,8 +47,11 @@ body {
 	border-width: 3px 1px 1px 1px;
 	border-color: #ffc720 #ffffff #ffffff #ffffff;
 	background: #ffffff;
+	max-height: calc(100vh - 160px);
+	overflow-y: auto;
+	overflow-x: hidden;
 	padding-top: 15px;
-	margin: 0px 15px 15px 15px;
+	margin: 0px 0px 0px 15px;
 }
 
 .content-footer {
