@@ -69,7 +69,7 @@ public class ClaimsController extends HttpServlet {
 					DependentService ds = new DependentService();
 				
 					//initializing 
-					ArrayList<String> beneficiaryNameList = new ArrayList<>();
+					List<String> beneficiaryNameList = new ArrayList<String>();
 					String mobNo = "";
 					String altEmailId = "";
 					int employeeId = 0;
@@ -133,9 +133,9 @@ public class ClaimsController extends HttpServlet {
 					} catch (Exception e) {
 						
 						e.printStackTrace();
-					}					
-					response.setContentType("text/xml");
-					response.setHeader("Cache-Control", "no-cache");
+					}
+					response.setContentType("text/plain");
+					response.setCharacterEncoding("UTF-8");
 					response.getWriter().write(Integer.toString(healthInsuranceId));
 				}
 			}
@@ -150,7 +150,7 @@ public class ClaimsController extends HttpServlet {
 					String state[] = {"Andaman and Nicobar Islands","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chandigarh",
 							"Chhattisgarh","Dadra and Nagar Haveli","Daman and Diu","Delhi","Goa","Gujarat","Haryana","Himachal Pradesh",
 							"Jammu and Kashmir","Jharkhand","Karnataka","Kerala","Lakshadweep","Madhya Pradesh","Maharashtra","Manipur",
-							"Meghalaya","Mizoram","Nagaland","Orissa","Pondicherry","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana",
+							"Meghalaya","Mizoram","Nagaland","Odisha","Pondicherry","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana",
 							"Tripura","Uttaranchal","Uttar Pradesh","West Bengal"};
 					
 					ArrayList<String> stateList = new ArrayList<String>(Arrays.asList(state));
@@ -212,9 +212,9 @@ public class ClaimsController extends HttpServlet {
 				else{
 					//this is retrieved from URL
 					int employeeId = Integer.parseInt(request.getParameter("employeeId"));
-					
 					String value = request.getParameter("value");
 					
+					System.out.println("Reached Here");
 					if("healthInsuranceId".equals(value)){
 						PolicyService ps = new PolicyService();
 					
@@ -225,8 +225,8 @@ public class ClaimsController extends HttpServlet {
 						
 							e.printStackTrace();
 						}					
-						response.setContentType("text/xml");
-						response.setHeader("Cache-Control", "no-cache");
+						response.setContentType("text/plain");
+						response.setCharacterEncoding("UTF-8");
 						response.getWriter().write(Integer.toString(healthInsuranceId));
 					}
 					else if("relation".equals(value)){
@@ -240,8 +240,8 @@ public class ClaimsController extends HttpServlet {
 
 							e.printStackTrace();
 						}
-						response.setContentType("text/xml");
-						response.setHeader("Cache-Control", "no-cache");
+						response.setContentType("text/plain");
+						response.setCharacterEncoding("UTF-8");
 						response.getWriter().write(relation);
 					}
 				}
