@@ -40,15 +40,16 @@ public class RegisterController extends HttpServlet {
 		
 		//get reference to existing session
 		HttpSession session = request.getSession(false);
-		String username = (String) session.getAttribute("username");
 				
 		//redirecting the user to login page if session has expired
-		if(username == null){
+		if(session == null){
 			request.setAttribute("message", "Your session has expired, please login again to continue");
 			rd = request.getRequestDispatcher("jsp/forms/loginForm.jsp");
 			rd.forward(request, response);
 		}
 		else{
+			String username = (String) session.getAttribute("username");
+			
 			//the heading to be displayed on the result page
 			request.setAttribute("heading", "Registration Management");
 		
@@ -68,20 +69,18 @@ public class RegisterController extends HttpServlet {
 			}
 			else if("getRegisterDependentForm".equals(action)){
 				
-				if(username != null){
-					//get employee details corresponding to username
-					Employee employee = null;
-					try {
-						employee = es.getEmployeeDetails(username);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-			
-					//retrieve employeeId which is supposed to be auto-populated in the form
-					int employeeId = employee.getEmployeeId();
-				
-					request.setAttribute("employeeId", employeeId);
+				//get employee details corresponding to username
+				Employee employee = null;
+				try {
+					employee = es.getEmployeeDetails(username);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
+			
+				//retrieve employeeId which is supposed to be auto-populated in the form
+				int employeeId = employee.getEmployeeId();
+				
+				request.setAttribute("employeeId", employeeId);
 				rd = request.getRequestDispatcher("/jsp/forms/dependentRegisterForm.jsp");
 				rd.forward(request, response);
 			}

@@ -39,15 +39,16 @@ public class ClaimsController extends HttpServlet {
 		
 		//get reference to existing session
 		HttpSession session = request.getSession(false);
-		String username = (String) session.getAttribute("username");
-				
+						
 		//redirecting the user to login page if session has expired
-		if(username == null){
+		if(session == null){
 			request.setAttribute("message", "Your session has expired, please login again to continue");
 			rd = request.getRequestDispatcher("jsp/forms/loginForm.jsp");
 			rd.forward(request, response);
 		}
 		else{
+			String username = (String) session.getAttribute("username");
+			
 			//the heading to be displayed on the result page
 			request.setAttribute("heading", "Claims Management");
 			
