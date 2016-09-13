@@ -54,7 +54,7 @@
                		</li>
                		<ul class="sub-menu collapse in" id="registration">
                    		<li><a href="<%=request.getContextPath()%>/RegisterController?action=getRegisterEmployeeForm">Employee Registration</a></li>
-                   		<li><a href="<%=request.getContextPath()%>/RegisterController?action=getDependentEmployeeForm">Dependent Registration</a></li>
+                   		<li><a href="<%=request.getContextPath()%>/RegisterController?action=getRegisterDependentForm">Dependent Registration</a></li>
                    		<li><a href="<%=request.getContextPath()%>/RegisterController?action=getECardForm">Generate E-Card</a></li>
                    	</ul>
                    	<li data-toggle="collapse" data-target="#claims">

@@ -68,8 +68,8 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 									<select class="form-control" name="claimType" id="claimType" tabindex="1" required>
 										<option value="">Select Type</option>
 										<option value="all">All</option>
-										<option value="domiciliary">Domiciliary</option>
-										<option value="hospitalization">Hospitalization</option>
+										<option value="Domiciliary">Domiciliary</option>
+										<option value="Hospitalization">Hospitalization</option>
 									</select>
 									<span class="glyphicon form-control-feedback"></span>
 								</div>
@@ -80,8 +80,8 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 										<option value="Father">Father</option>
   										<option value="Mother">Mother</option>
   										<option value="Spouse">Spouse</option>
-  										<option value="Father-In-Law">Father-in-Law</option>
-  										<option value="Mother-In-Law">Mother-in-Law</option>
+  										<option value="Father-In-Law">Father-In-Law</option>
+  										<option value="Mother-In-Law">Mother-In-Law</option>
 									</select>
 									<span class="glyphicon form-control-feedback"></span>
 								</div>

@@ -72,11 +72,10 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 							<c:otherwise>							
 								<!-- FORM -->
 								<form id="dependentRegisterForm" action="<%=request.getContextPath()%>/RegisterController?action=register_dependent" method="post" role="form" class="form-horizontal" data-toggle="validator">
-								<div class="form-group has-feedback">
+								<div class="form-group">
 									<label for="employeeId" class="col-sm-3 control-label">Employee ID  <span style="color:red;">*</span></label>
 									<div class="col-sm-4">
-										<input type="text" pattern="[0-9]{1,}" name="employeeId" id="employeeId" class="form-control" tabindex="1" placeholder="eg:- 962975" required>
-										<span class="glyphicon form-control-feedback"></span>
+										<input type="text" name="employeeId" id="employeeId" class="form-control" value='<c:out value='${requestScope.employeeId}'></c:out>' readonly>
 									</div>							
 								</div>
 								<div class="form-group has-feedback">
@@ -94,8 +93,8 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
   											<option value="Father">Father</option>
   											<option value="Mother">Mother</option>
   											<option value="Spouse">Spouse</option>
-  											<option value="Father-In-Law">Father-in-Law</option>
-  											<option value="Mother-In-Law">Mother-in-Law</option>
+  											<option value="Father-In-Law">Father-In-Law</option>
+  											<option value="Mother-In-Law">Mother-In-Law</option>
   										</select>
 	  								</div>
 	  							</div>

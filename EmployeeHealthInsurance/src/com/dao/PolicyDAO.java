@@ -253,7 +253,8 @@ public class PolicyDAO {
 				int healthInsuranceId = resultSet.getInt("healthInsuranceId");
 				String employeeName = resultSet.getString("employeeName");
 				int employeeId = resultSet.getInt("employeeId");
-				String dateOfBirth = resultSet.getString("dateOfBirth");
+				String dob = resultSet.getString("dateOfBirth");
+				String dateOfBirth = dob.substring(8, 10) + "/" + dob.substring(5, 7) + "/" + dob.substring(0, 4);
 				
 				ecard.setBeneficiaryName(employeeName);
 				ecard.setHealthInsuranceId(healthInsuranceId);

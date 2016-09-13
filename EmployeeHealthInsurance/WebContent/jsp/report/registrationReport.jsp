@@ -82,7 +82,7 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 											<td><c:out value='${requestScope.details.relation}'/></td>
 										</tr>
 										<tr>
-											<td>Date Of Birth:</td>
+											<td>Date Of Birth (dd/mm/yyyy):</td>
 											<td><c:out value='${requestScope.details.dateOfBirth}'/></td>
 										</tr>
 										<tr>

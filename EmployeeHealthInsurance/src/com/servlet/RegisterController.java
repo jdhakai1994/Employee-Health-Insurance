@@ -55,25 +55,40 @@ public class RegisterController extends HttpServlet {
 			//this is retrieved from the URL
 			String action = request.getParameter("action");
 			System.out.println("The action retreived is " + action);
-		
+			
+			//reference to service classes
+			EmployeeService es = new EmployeeService();
+			PolicyService ps = new PolicyService();
+			DependentService ds = new DependentService();
+			
 			//if-else code block for action
 			if("getRegisterEmployeeForm".equals(action)){
 				rd = request.getRequestDispatcher("/jsp/forms/employeeRegisterForm.jsp");
 				rd.forward(request, response);
 			}
-			else if("getDependentEmployeeForm".equals(action)){
+			else if("getRegisterDependentForm".equals(action)){
+				
+				if(username != null){
+					//get employee details corresponding to username
+					Employee employee = null;
+					try {
+						employee = es.getEmployeeDetails(username);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+			
+					//retrieve employeeId which is supposed to be auto-populated in the form
+					int employeeId = employee.getEmployeeId();
+				
+					request.setAttribute("employeeId", employeeId);
+				}
 				rd = request.getRequestDispatcher("/jsp/forms/dependentRegisterForm.jsp");
 				rd.forward(request, response);
 			}
 			else if("getECardForm".equals(action)){
 				
-				//reference to service classes
-				EmployeeService es = new EmployeeService();
-				PolicyService ps = new PolicyService();
-				DependentService ds = new DependentService();
-				
 				//initializing 
-				ArrayList<String> list = new ArrayList<>();
+				List<String> list = new ArrayList<>();
 				int employeeId = 0;
 				try {
 					//get employee details corresponding to username
@@ -114,7 +129,7 @@ public class RegisterController extends HttpServlet {
 				rd.forward(request, response);
 			}
 			else if("getUnapprovedEmployeePolicyList".equals(action)){
-				PolicyService ps = new PolicyService();
+				ps = new PolicyService();
 				List<EmployeeApproval> unapprovedEmployeeList = new ArrayList<EmployeeApproval>();
 				try {
 					unapprovedEmployeeList = ps.getUnapprovedEmployeePolicy();
@@ -132,7 +147,7 @@ public class RegisterController extends HttpServlet {
 				rd.forward(request, response);
 			}
 			else if("getUnapprovedDependentPolicyList".equals(action)){
-				PolicyService ps = new PolicyService();
+				ps = new PolicyService();
 				List<DependentApproval> unapprovedDependentList = new ArrayList<DependentApproval>();
 				try {
 					unapprovedDependentList = ps.getUnapprovedDependentPolicy();
@@ -238,13 +253,13 @@ public class RegisterController extends HttpServlet {
 						request.setAttribute("type", "success_message");
 						request.setAttribute("message", "Your details have been successfully noted."
 							+ " The registration is pending admin approval."
-							+ " The auto-generated health insurance id is "+healthInsuranceId);
+							+ " The auto-generated health insurance id is "+healthInsuranceId+".");
 					}
 				}
 				//case 2 - data couldn't be inserted in employee table
 				else if("fail".equals(replyEmployee)){
 					request.setAttribute("type", "failure_message");
-					request.setAttribute("message", "The details couldn't be added");
+					request.setAttribute("message", "The details couldn't be added.");
 				}
 				/*case 3 - entry already exists in employee table
 				 * fetching healthInsuranceId and displaying
@@ -254,7 +269,7 @@ public class RegisterController extends HttpServlet {
 					request.setAttribute("type", "failure_message");
 					request.setAttribute("message", "Your details already exists "
 							+ "The registration is pending admin approval."
-							+ " The health insurance id is "+healthInsuranceId);
+							+ " The health insurance id is "+healthInsuranceId+".");
 				}
 			} catch (Exception e) {
 			e.printStackTrace();
@@ -311,13 +326,13 @@ public class RegisterController extends HttpServlet {
 							request.setAttribute("type", "success_message");
 							request.setAttribute("message", "Your dependent details have been successfully noted."
 								+ " The registration is pending admin approval."
-								+ " The auto-generated health insurance id is "+healthInsuranceId);
+								+ " The auto-generated health insurance id is "+healthInsuranceId+".");
 						}
 					}
 				    //case 2 - data couldn't be inserted in dependent table
 					else if("fail".equals(replyDependent)){
 						request.setAttribute("type", "failure_message");
-						request.setAttribute("message", "The details couldn't be added");
+						request.setAttribute("message", "The details couldn't be added.");
 					}
 					/*case 3 - entry already exists in dependent table
 					 * fetching healthInsuranceId and displaying
@@ -328,7 +343,7 @@ public class RegisterController extends HttpServlet {
 						request.setAttribute("type", "failure_message");
 						request.setAttribute("message", "Your details already exists "
 								+ "The registration is pending admin approval."
-								+ " The health insurance id is "+healthInsuranceId);
+								+ " The health insurance id is "+healthInsuranceId+".");
 					}
 				}catch (Exception e) {
 					e.printStackTrace();

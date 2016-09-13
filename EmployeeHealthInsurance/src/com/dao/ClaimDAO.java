@@ -38,7 +38,7 @@ public class ClaimDAO {
 		double totalClaimAmount = domiciliaryClaim.getTotalClaimAmount();
 		String typeOfInjury = domiciliaryClaim.getTypeOfInjury();
 		
-		String typeOfClaim = "domiciliary";
+		String typeOfClaim = "Domiciliary";
 		
 		//to get the date when the claim was raised
 		Date curDate = new Date();
@@ -131,7 +131,7 @@ public class ClaimDAO {
 		String alcoholInvolved = hospitalizationClaim.getAlcoholInvolved();
 		String relation = hospitalizationClaim.getRelation();
 		
-		String typeOfClaim = "hospitalization";
+		String typeOfClaim = "Hospitalization";
 		
 		//to get the date when the claim was raised
 		Date curDate = new Date();
@@ -192,7 +192,7 @@ public class ClaimDAO {
 		//converting the array to a comma separated string to be use in IN statement
 		String healthInsuranceId = Arrays.toString(healthInsuranceIdArray);
 		healthInsuranceId = healthInsuranceId.substring(1, healthInsuranceId.length() - 1);
-		if("all".equals(claimType)){
+		if("All".equals(claimType)){
 			ps1 = connect.prepareStatement("SELECT * FROM ehi.claim WHERE relation=? AND "
 					+ "healthInsuranceId IN ("+healthInsuranceId+")");
 			ps1.setString(1, relation);
