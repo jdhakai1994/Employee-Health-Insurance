@@ -84,10 +84,28 @@ public class RegisterController extends HttpServlet {
 				rd = request.getRequestDispatcher("/jsp/forms/dependentRegisterForm.jsp");
 				rd.forward(request, response);
 			}
+			else if("getDeleteDependentForm".equals(action)){
+				
+				//get employee details corresponding to username
+				Employee employee = null;
+				try {
+					employee = es.getEmployeeDetails(username);
+					ds.fetchDependentDetails(employee.getEmployeeId());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			
+				//retrieve employeeId which is supposed to be auto-populated in the form
+				int employeeId = employee.getEmployeeId();
+				
+				request.setAttribute("employeeId", employeeId);
+				rd = request.getRequestDispatcher("/jsp/forms/dependentDeleteForm.jsp");
+				rd.forward(request, response);
+			}
 			else if("getECardForm".equals(action)){
 				
 				//initializing 
-				List<String> list = new ArrayList<>();
+				List<String> list = new ArrayList<String>();
 				int employeeId = 0;
 				try {
 					//get employee details corresponding to username
@@ -348,6 +366,45 @@ public class RegisterController extends HttpServlet {
 					e.printStackTrace();
 				}				
 			}
+			rd = request.getRequestDispatcher("/jsp/report/registrationReport.jsp");
+		}
+		else if("delete_dependent".equals(action)){
+			System.out.println("In delete_dependent action if-else block");
+			
+			//retrieving input values from the dependentDeleteForm.jsp			
+			int employeeId = Integer.parseInt(request.getParameter("employeeId"));
+			String relation = request.getParameter("relation");
+			
+			int dependentId = 0;
+			try {
+				dependentId = ds.deleteDependent(employeeId, relation);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			/*case 1 - successfully deleted from dependent table
+			 *data needs to be deleted from policy table 
+			 */
+			if(dependentId != -1){
+				String replyPolicy = null;
+				try {
+					replyPolicy = ps.deletePolicy(employeeId, dependentId);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				if("success".equals(replyPolicy)){
+					request.setAttribute("type", "success_message");
+					request.setAttribute("message", "Your dependent details have been successfully deleted.");
+				}
+				else{
+					request.setAttribute("type", "failure_message");
+					request.setAttribute("message", "Your dependent details could not be deleted.");
+				}
+			}
+			//case 2 - data couldn't be found in dependent table
+			else if(dependentId == -1){
+				request.setAttribute("type", "failure_message");
+				request.setAttribute("message", "The details doesn't exist.");
+			}			
 			rd = request.getRequestDispatcher("/jsp/report/registrationReport.jsp");
 		}
 		else if("approve_employee".equals(action)){

@@ -53,8 +53,9 @@
     	       			<a href="#"><span class="glyphicon glyphicon-user"></span>  Registration Management</a>
                		</li>
                		<ul class="sub-menu collapse in" id="registration">
-                   		<li><a href="<%=request.getContextPath()%>/RegisterController?action=getRegisterEmployeeForm">Employee Registration</a></li>
-                   		<li><a href="<%=request.getContextPath()%>/RegisterController?action=getRegisterDependentForm">Dependent Registration</a></li>
+                   		<li><a href="<%=request.getContextPath()%>/RegisterController?action=getRegisterEmployeeForm">Register Employee</a></li>
+                   		<li><a href="<%=request.getContextPath()%>/RegisterController?action=getRegisterDependentForm">Register Dependent</a></li>
+                   		<li><a href="<%=request.getContextPath()%>/RegisterController?action=getDeleteDependentForm">Delete Dependent</a></li>
                    		<li><a href="<%=request.getContextPath()%>/RegisterController?action=getECardForm">Generate E-Card</a></li>
                    	</ul>
                    	<li data-toggle="collapse" data-target="#claims">

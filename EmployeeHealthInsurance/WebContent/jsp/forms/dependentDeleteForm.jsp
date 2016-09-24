@@ -67,28 +67,21 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 						<c:set var="isEnrolled" value="${sessionScope.enrolled }"/>
 						<c:choose>
 							<c:when test='${isEnrolled.equals("no")}'>
-								<p style="font-size:20px"><span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span> Your employee registration must be approved before you can register a dependent, please click on Employee Registration on the left panel.</p>
+								<p style="font-size:20px"><span class="glyphicon glyphicon-exclamation-sign" style="color:red"></span> Your dependent registration must be pending for approval or you may not have any registered dependent, please click on Add Dependent on the left panel to register.</p>
 							</c:when>
 							<c:otherwise>							
 								<!-- FORM -->
-								<form id="dependentRegisterForm" action="<%=request.getContextPath()%>/RegisterController?action=register_dependent" method="post" role="form" class="form-horizontal" data-toggle="validator">
+								<form id="dependentDeleteForm" action="<%=request.getContextPath()%>/RegisterController?action=delete_dependent" method="post" role="form" class="form-horizontal" data-toggle="validator">
 								<div class="form-group">
 									<label for="employeeId" class="col-sm-3 control-label">Employee ID  <span style="color:red;">*</span></label>
 									<div class="col-sm-4">
 										<input type="text" name="employeeId" id="employeeId" class="form-control" value='<c:out value='${requestScope.employeeId}'></c:out>' readonly>
 									</div>							
 								</div>
-								<div class="form-group has-feedback">
-									<label for="beneficiaryName" class="col-sm-3 control-label">Beneficiary Name  <span style="color:red;">*</span></label>
-									<div class="col-sm-6">
-										<input type="text" pattern="[A-z\s]{1,}" name="beneficiaryName" id="beneficiaryName" class="form-control" tabindex="2" placeholder="eg:- Firstname Lastname" required>
-										<span class="glyphicon form-control-feedback"></span>
-									</div>							
-								</div>
 								<div class="form-group">
   									<label for="relation"  class="col-sm-3 control-label">Relation  <span style="color:red;">*</span></label>
 	  								<div class="col-sm-3">
-  										<select class="form-control" name="relation" id="relation" tabindex="3" required>
+  										<select class="form-control" name="relation" id="relation" tabindex="1" required>
   											<option value="">None</option>
   											<option value="Father">Father</option>
   											<option value="Mother">Mother</option>
@@ -99,62 +92,9 @@ response.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
 	  								</div>
 	  							</div>
 								<div class="form-group">
-									<label for="dateOfBirth" class="col-sm-3 control-label">Date Of Birth  <span style="color:red;">*</span></label>
-									<div class="col-sm-4"> 
-										<div class="input-group date" id="datepicker">
-											<input type="text" name="dateOfBirth" id="dateOfBirth" class="form-control" tabindex="4" placeholder="DD-MM-YYYY" required>
-											<div class="input-group-addon">
-												<span class="glyphicon glyphicon-th"></span>
-											</div>
-										</div>					
-									</div>		
-								</div>
-								<div class="form-group has-feedback">
-									<label for="gender" class="col-sm-3 control-label">Gender  <span style="color:red;">*</span></label>
-									<div class="col-sm-6">
-										<label class="radio-inline">
-											<input type="radio" name="gender" tabindex="5" value="M" required>Male
-										</label>
-										<label class="radio-inline">
-											<input type="radio" name="gender" tabindex="6" value="F" required>Female
-										</label>
-									</div>							
-								</div>
-								<div class="form-group">
-									<label for="policyStartDate" class="col-sm-3 control-label">Policy Start Date  <span style="color:red;">*</span></label>
-									<div class="col-sm-4"> 
-										<div class="input-group date" id="datepicker">
-											<input type="text" name="policyStartDate" id="policyStartDate" class="form-control" tabindex="7" placeholder="DD-MM-YYYY" required>
-											<div class="input-group-addon">
-												<span class="glyphicon glyphicon-th"></span>
-											</div>
-										</div>					
-									</div>		
-								</div>
-								<div class="form-group has-feedback">
-									<label for="policyPeriod" class="col-sm-3 control-label">Policy Period  <span style="color:red;">*</span></label>
-									<div class="col-sm-3">
-										<input type="text" pattern="[0-9]{1,2}" class="form-control" name="policyPeriod" id="policyPeriod" tabindex="8" placeholder="eg:- 1-99" required>
-										<span class="glyphicon form-control-feedback"></span>
-									</div>							
-								</div>
-								<div class="form-group has-feedback">
-									<label for="totalSumInsured" class="col-sm-3 control-label">Total Sum Insured (per year)  <span style="color:red;">*</span></label>
-									<div class="col-sm-4">
-										<input type="text" pattern="[0-9]+[.]+[0-9]{2}" class="form-control" name="totalSumInsured" id="totalSumInsured" tabindex="9" placeholder="eg:- XXXXX.XX" required>
-										<span class="glyphicon form-control-feedback"></span>
-									</div>							
-								</div>
-								<div class="form-group">
-									<label for="premiumAmount" class="col-sm-3 control-label">Premium Amount (per year)</label>
-									<div class="col-sm-4">
-										<input type="text" class="form-control" name="premiumAmount" id="premiumAmount" readonly>
-									</div>							
-								</div>
-								<div class="form-group">
 									<label for="submit" class="col-sm-3 control-label"><span>&#160;</span></label>
 									<div class="col-sm-2">
-										<input type="submit" name="submit" id="submit" tabindex="10" class="form-control btn btn-primary" value="Add">
+										<input type="submit" name="submit" id="submit" tabindex="2" class="form-control btn btn-danger" value="Delete">
 									</div>
 								</div>
 							</form>

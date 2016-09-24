@@ -3,6 +3,7 @@ package com.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +46,6 @@ public class DependentDAO {
 				ps2.setInt(1, employeeId);
 				ps2.setString(2, relation);
 				ps2.executeUpdate();
-				System.out.println("Done");
 				reply = "success";
 			}
 			else if(status == 1){
@@ -79,7 +79,7 @@ public class DependentDAO {
 		connect = DBConnection.getConnection();
 		
 		ps1 = connect.prepareStatement("SELECT dependentId FROM ehi.dependent "
-				+ "WHERE employeeId=? and relation=?");
+				+ "WHERE employeeId=? AND relation=? AND status=1");
 		ps1.setInt(1, employeeId);
 		ps1.setString(2, relation);
 		resultSet = ps1.executeQuery();
@@ -99,8 +99,7 @@ public class DependentDAO {
 		
 		connect = DBConnection.getConnection();
 		
-		ps1 = connect.prepareStatement("SELECT dependentId,beneficiaryName,relation FROM ehi.dependent "
-				+ "WHERE employeeId=? AND status=1");
+		ps1 = connect.prepareStatement("SELECT * FROM ehi.dependent WHERE employeeId=? AND status=1");
 		ps1.setInt(1, employeeId);
 		resultSet = ps1.executeQuery();
 		List<Dependent> dependentList = new ArrayList<Dependent>();
@@ -131,7 +130,7 @@ public class DependentDAO {
 		String relation = "";
 		
 		ps1 = connect.prepareStatement("SELECT relation FROM ehi.dependent WHERE employeeId=? "
-				+ "AND beneficiaryName=?");
+				+ "AND beneficiaryName=? AND status=1");
 		ps1.setInt(1, employeeId);
 		ps1.setString(2, name);
 		resultSet = ps1.executeQuery();
@@ -147,5 +146,35 @@ public class DependentDAO {
 		System.out.println("Exiting fetchRelation(int,String) in DependentDAO Class");
 		
 		return relation;
+	}
+
+	public int deleteDependent(int employeeId, String relation) throws SQLException {
+		System.out.println("Entering deleteDependent(int, String) in DependentDAO Class");
+		
+		connect = DBConnection.getConnection();
+		
+		int dependentId = 0;
+		ps1 = connect.prepareStatement("UPDATE ehi.dependent SET status=0 WHERE"
+				+ " employeeId=? AND relation=? AND status=1");
+		ps1.setInt(1, employeeId);
+		ps1.setString(2, relation);
+		int rowcount = ps1.executeUpdate();
+		if(rowcount == 0){
+			dependentId = -1;
+		}
+		else{
+			ps2 = connect.prepareStatement("SELECT dependentId FROM ehi.dependent WHERE"
+					+ " employeeId=? AND relation=? AND status=0");
+			ps2.setInt(1, employeeId);
+			ps2.setString(2, relation);
+			resultSet = ps2.executeQuery();
+			while(resultSet.next()){
+				dependentId = resultSet.getInt("dependentId");
+			}			
+		}
+		
+		DBConnection.closeConnection(connect);
+		System.out.println("Exiting deleteDependent(int,String) in DependentDAO Class");
+		return dependentId;
 	}
 }

@@ -1,6 +1,5 @@
 package com.services;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.bean.Dependent;
@@ -27,8 +26,7 @@ public class DependentService {
 	public List<Dependent> fetchDependentDetails(int employeeId) throws Exception {
 		System.out.println("Entering fetchDependentDetails(int) in DependentService Class");
 		DependentDAO ddao = new DependentDAO();
-		List<Dependent> dependentList = new ArrayList<Dependent>();
-		dependentList = ddao.fetchDependentDetails(employeeId);
+		List<Dependent> dependentList = ddao.fetchDependentDetails(employeeId);
 		System.out.println("Exiting fetchDependentDetails(int) in DependentService Class");
 		return dependentList;
 		
@@ -40,6 +38,14 @@ public class DependentService {
 		String relation = ddao.fetchRelation(employeeId, name);
 		System.out.println("Exiting fetchRelation(int,String) in DependentService Class");
 		return relation;
+	}
+
+	public int deleteDependent(int employeeId, String relation) throws Exception {
+		System.out.println("Entering deleteDependent(int, String) in DependentService Class");
+		DependentDAO ddao = new DependentDAO();
+		int dependentId = ddao.deleteDependent(employeeId, relation);
+		System.out.println("Exiting deleteDependent(int, String) in DependentService Class");
+		return dependentId;
 	}
 
 }

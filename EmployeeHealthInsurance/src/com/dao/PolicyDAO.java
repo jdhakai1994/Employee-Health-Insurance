@@ -360,4 +360,25 @@ public class PolicyDAO {
 		
 		return list;
 	}
+
+	public String deletePolicy(int employeeId, int dependentId) throws SQLException {
+		System.out.println("Entering deletePolicy(int, int) in PolicyDAO Class");
+		
+		connect = DBConnection.getConnection();
+		
+		String reply = null;
+		ps1 = connect.prepareStatement("UPDATE ehi.policy SET status=2 WHERE"
+				+ " employeeId=? AND dependentId=?");
+		ps1.setInt(1, employeeId);
+		ps1.setInt(2, dependentId);
+		int rowcount = ps1.executeUpdate();
+		if(rowcount == 0)
+			reply = "fail";
+		else
+			reply = "success";
+				
+		DBConnection.closeConnection(connect);
+		System.out.println("Exiting deletePolicy(int, int) in PolicyDAO Class");
+		return reply;		
+	}
 }

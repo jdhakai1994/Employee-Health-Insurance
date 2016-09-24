@@ -78,4 +78,12 @@ public class PolicyService {
 		System.out.println("Exiting fetchPolicyIdList(int) in PolicyService Class");
 		return list;
 	}
+
+	public String deletePolicy(int employeeId, int dependentId) throws Exception {
+		System.out.println("Entering deletePolicy(int, int) in PolicyService Class");
+		PolicyDAO pdao = new PolicyDAO();
+		String reply = pdao.deletePolicy(employeeId, dependentId);
+		System.out.println("Exiting deletePolicy(int, int) in PolicyService Class");
+		return reply;
+		}
 }
